@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debug - Button Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    .log { background: #f5f5f5; padding: 10px; margin-top: 10px; font-family: monospace; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Button Debug Test</h1>
+  <p>Open browser console (F12) to see detailed logs</p>
+
+  <div class="test-section">
+    <h2>Test 1: Check if app.js is loading</h2>
+    <div id="js-load-test" class="log">Waiting...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 2: Back to Home Button</h2>
+    <button id="back-to-home-btn">← Home</button>
+    <div id="home-test" class="log">Waiting...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 3: Bank Alert Button</h2>
+    <button id="trigger-bank-alert-btn">🔔 Bank Alert</button>
+    <div id="bank-test" class="log">Waiting...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 4: Interpretation Back Button</h2>
+    <button onclick="showInterpretationSelection()">Back to Selection (Interpretation)</button>
+    <div id="interpretation-test" class="log">Waiting...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 5: Finance Back Button</h2>
+    <button onclick="showFinanceSelection()">Back to Selection (Finance)</button>
+    <div id="finance-test" class="log">Waiting...</div>
+  </div>
+
+  <!-- Load app.js -->
+  <script src="app.js"></script>
+
+  <script>
+    // Test if app.js loaded
+    window.addEventListener('load', () => {
+      const jsTest = document.getElementById('js-load-test');
+      jsTest.innerHTML = '✅ app.js loaded (check console for logs)';
+      jsTest.className = 'log success';
+    });
+
+    // Override functions for testing
+    window.navigate_to_page_landing_called = false;
+    window.showInterpretationSelection = function() {
+      console.log('✅ showInterpretationSelection called');
+      const el = document.getElementById('interpretation-test');
+      el.innerHTML = '✅ showInterpretationSelection works!';
+      el.className = 'log success';
+    };
+
+    window.showFinanceSelection = function() {
+      console.log('✅ showFinanceSelection called');
+      const el = document.getElementById('finance-test');
+      el.innerHTML = '✅ showFinanceSelection works!';
+      el.className = 'log success';
+    };
+
+    // Manual test for buttons
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🟢 Debug page DOM ready');
+
+      // Test home button manually
+      const homeBtn = document.getElementById('back-to-home-btn');
+      if (homeBtn) {
+        homeBtn.addEventListener('click', () => {
+          console.log('✅ Home button clicked (manual listener)');
+          const el = document.getElementById('home-test');
+          el.innerHTML = '✅ Home button works with manual listener!';
+          el.className = 'log success';
+        });
+      }
+
+      // Test bank button manually
+      const bankBtn = document.getElementById('trigger-bank-alert-btn');
+      if (bankBtn) {
+        bankBtn.addEventListener('click', () => {
+          console.log('✅ Bank button clicked (manual listener)');
+          const el = document.getElementById('bank-test');
+          el.innerHTML = '✅ Bank button works with manual listener!';
+          el.className = 'log success';
+        });
+      }
+
+      console.log('🔍 All manual listeners attached');
+    });
+  </script>
+</body>
+</html>

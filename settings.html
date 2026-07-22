@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - JOSEPH AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Calibri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <!-- Settings Topbar -->
+  <header class="settings-topbar">
+    <div class="topbar-left">
+      <a href="home.html" class="back-btn" id="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Dashboard
+      </a>
+      <h1>Settings</h1>
+    </div>
+    <button class="settings-save-btn" onclick="saveAllSettings()">Save All Changes</button>
+  </header>
+
+  <!-- Settings Container -->
+  <div class="settings-container">
+    <!-- Settings Navigation -->
+    <aside class="settings-nav">
+      <button class="settings-nav-item active" data-section="account">
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+        <span class="nav-text">Account</span>
+      </button>
+      <button class="settings-nav-item" data-section="business">
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"/>
+            <path d="M5 21V7l8-4 8 4v14"/>
+            <path d="M9 10a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/>
+          </svg>
+        </span>
+        <span class="nav-text">Business</span>
+      </button>
+      <button class="settings-nav-item" data-section="appearance">
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a10 10 0 0 1 10 10"/>
+            <path d="M12 12v6"/>
+            <path d="M12 18h.01"/>
+          </svg>
+        </span>
+        <span class="nav-text">Appearance</span>
+      </button>
+      <button class="settings-nav-item" data-section="language">
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </span>
+        <span class="nav-text">Language</span>
+      </button>
+      <button class="settings-nav-item" data-section="notifications">
+        <span class="nav-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </span>
+        <span class="nav-text">Notifications</span>
+      </button>
+    </aside>
+
+    <!-- Settings Content -->
+    <main class="settings-content">
+      <!-- 1. ACCOUNT DETAILS SECTION -->
+      <section class="settings-section active" id="section-account">
+        <h2>Account Details</h2>
+        <p class="section-desc">Manage your personal information and account preferences</p>
+
+        <form class="settings-form" id="account-form">
+          <div class="avatar-upload">
+            <div class="avatar-circle">
+              <span id="settings-avatar">U</span>
+              <label class="avatar-label">
+                <input type="file" accept="image/*" id="avatar-input">
+                <i class="fa-solid fa-camera"></i>
+              </label>
+            </div>
+            <p class="avatar-hint">Click to change profile photo</p>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="account-name" placeholder="Enter your full name" value="">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="account-email" placeholder="Enter your email" value="">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="account-phone" placeholder="+234 XXX XXX XXXX" value="">
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="account-dob" value="">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Bio / About</label>
+            <textarea id="account-bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+          </div>
+
+          <div class="form-divider">Password</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Current Password</label>
+              <input type="password" id="current-password" placeholder="Enter current password">
+            </div>
+            <div class="form-group"></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>New Password</label>
+              <input type="password" id="new-password" placeholder="Enter new password">
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" id="confirm-password" placeholder="Confirm new password">
+            </div>
+          </div>
+
+          <div class="form-divider">WhatsApp Assistant</div>
+          <div class="setting-item" style="flex-direction: column; align-items: flex-start; gap: 1rem;">
+            <div class="setting-info" style="margin-bottom: 1rem;">
+              <h3>Connect WhatsApp Bot</h3>
+              <p>Link your account to our WhatsApp Assistant for easy access to your finances.</p>
+            </div>
+            
+            <div id="whatsapp-link-container" style="display: none; width: 100%; text-align: center; background: var(--bg-hover); padding: 1.5rem; border-radius: 12px;">
+              <h4 style="margin-bottom: 1rem;">Scan with WhatsApp</h4>
+              <div id="qrcode" style="display: inline-block; margin-bottom: 1.5rem; padding: 10px; background: white; border-radius: 8px;"></div>
+              <p style="margin-bottom: 1rem; color: var(--text-secondary);">Or click the link below if you are on your phone:</p>
+              <a id="wa-link-btn" href="#" target="_blank" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: auto; padding: 0.75rem 1.5rem;">
+                <i class="fa-brands fa-whatsapp" style="margin-right: 0.5rem; font-size: 1.2rem;"></i> Open WhatsApp
+              </a>
+              <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-tertiary);">This link expires in 15 minutes.</p>
+            </div>
+
+            <button type="button" class="btn-secondary" id="generate-wa-btn" onclick="generateWhatsAppLink()">Generate Linking Code</button>
+          </div>
+
+          <button type="button" class="btn-primary" onclick="updateAccountDetails()" style="margin-top: 2rem; width: 100%;">Update Account Details</button>
+        </form>
+      </section>
+
+      <!-- 2. BUSINESS PROFILE SECTION -->
+      <section class="settings-section" id="section-business">
+        <h2>Business Profile</h2>
+        <p class="section-desc">Configure your business information and preferences</p>
+
+        <form class="settings-form" id="business-form">
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="business-name" placeholder="Enter your business name" value="">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Business Category</label>
+              <select id="business-category">
+                <option value="">Select category</option>
+                <option value="retail">Retail / General Store</option>
+                <option value="food">Food & Beverages</option>
+                <option value="fashion">Fashion & Clothing</option>
+                <option value="electronics">Electronics & Gadgets</option>
+                <option value="services">Services</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Business Type</label>
+              <select id="business-type">
+                <option value="micro">Micro Business</option>
+                <option value="small">Small Business</option>
+                <option value="medium">Medium Business</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Business Phone</label>
+              <input type="tel" id="business-phone" placeholder="Business contact number">
+            </div>
+            <div class="form-group">
+              <label>Business Email</label>
+              <input type="email" id="business-email" placeholder="Business email address">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Business Address</label>
+            <input type="text" id="business-address" placeholder="Street address">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="business-city" placeholder="City">
+            </div>
+            <div class="form-group">
+              <label>State</label>
+              <select id="business-state">
+                <option value="">Select state</option>
+                <option value="lagos">Lagos</option>
+                <option value="abuja">Abuja</option>
+                <option value="kano">Kano</option>
+                <option value="ibadan">Ibadan</option>
+                <option value="port-harcourt">Port Harcourt</option>
+                <option value="benin">Benin City</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn-secondary" onclick="updateBusinessProfile()">Update Business Profile</button>
+        </form>
+      </section>
+
+      <!-- 3. APPEARANCE SECTION -->
+      <section class="settings-section" id="section-appearance">
+        <h2>Appearance</h2>
+        <p class="section-desc">Customize how the app looks and feels</p>
+
+        <div class="settings-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Dark Mode</h3>
+              <p>Switch between light and dark theme</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="dark-mode-toggle-setting" onchange="toggleDarkModeFromSettings()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Accent Color</h3>
+              <p>Choose your preferred accent color</p>
+            </div>
+            <div class="color-options">
+              <button class="color-btn active" data-color="navy" onclick="setAccentColor('navy')"></button>
+              <button class="color-btn" data-color="blue" onclick="setAccentColor('blue')"></button>
+              <button class="color-btn" data-color="purple" onclick="setAccentColor('purple')"></button>
+              <button class="color-btn" data-color="green" onclick="setAccentColor('green')"></button>
+              <button class="color-btn" data-color="orange" onclick="setAccentColor('orange')"></button>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Font Size</h3>
+              <p>Adjust text size for better readability</p>
+            </div>
+            <select id="font-size-select" onchange="setFontSize(this.value)">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. LANGUAGE SECTION -->
+      <section class="settings-section" id="section-language">
+        <h2>Language & Region</h2>
+        <p class="section-desc">Choose your preferred language and regional settings</p>
+
+        <div class="settings-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>App Language</h3>
+              <p>Select the language you want to use</p>
+            </div>
+            <select id="language-select" onchange="setLanguage(this.value)">
+              <option value="en">English</option>
+              <option value="pcm">Nigerian Pidgin</option>
+              <option value="ha">Hausa</option>
+              <option value="yo">Yoruba</option>
+              <option value="ig">Igbo</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Currency</h3>
+              <p>Choose your preferred currency display</p>
+            </div>
+            <select id="currency-select" onchange="setCurrency(this.value)">
+              <option value="ngn">₦ Nigerian Naira (NGN)</option>
+              <option value="usd">$ US Dollar (USD)</option>
+              <option value="gbp">£ British Pound (GBP)</option>
+              <option value="eur">€ Euro (EUR)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Date Format</h3>
+              <p>Choose how dates are displayed</p>
+            </div>
+            <select id="dateformat-select" onchange="setDateFormat(this.value)">
+              <option value="dmy">DD/MM/YYYY</option>
+              <option value="mdy">MM/DD/YYYY</option>
+              <option value="ymd">YYYY/MM/DD</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. NOTIFICATIONS SECTION -->
+      <section class="settings-section" id="section-notifications">
+        <h2>Notifications</h2>
+        <p class="section-desc">Manage how and when you receive notifications</p>
+
+        <div class="settings-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Push Notifications</h3>
+              <p>Receive notifications on your device</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="push-notifications" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Email Notifications</h3>
+              <p>Receive updates via email</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="email-notifications" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="form-divider">Alert Preferences</div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Low Balance Alert</h3>
+              <p>Notify when your balance falls below threshold</p>
+            </div>
+            <div class="threshold-input">
+              <input type="number" id="low-balance-threshold" value="5000" placeholder="₦">
+              <span>₦</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Spending Alert</h3>
+              <p>Alert when you exceed daily budget</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="spending-alert" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Goal Progress Updates</h3>
+              <p>Weekly updates on your savings goals</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="goal-updates" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Runway Warning</h3>
+              <p>Alert when business runway is low</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="runway-warning" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Credit Payment Reminders</h3>
+              <p>Remind you about overdue credit payments</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="credit-reminders" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <button type="button" class="btn-secondary" onclick="saveNotificationSettings()">Save Notification Preferences</button>
+      </section>
+    </main>
+  </div>
+
+  <!-- Logout Button (Fixed at bottom) -->
+  <div class="settings-footer">
+    <button class="btn-logout" onclick="logout()">
+      <i class="fa-solid fa-sign-out-alt"></i>
+      Logout
+    </button>
+  </div>
+
+  <script src="frontend-api-client.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Settings Page Navigation
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Check if API client is available
+      if (!window.JosephAPI) {
+        console.error('Joseph API not loaded');
+        return;
+      }
+
+      // Load saved data from API
+      await loadAccountData();
+      await loadBusinessData();
+      await loadNotificationSettings();
+      await loadAppearanceSettings();
+
+      // Navigation click handlers
+      const navItems = document.querySelectorAll('.settings-nav-item');
+      const sections = document.querySelectorAll('.settings-section');
+
+      navItems.forEach(item => {
+        item.addEventListener('click', function() {
+          const sectionId = this.getAttribute('data-section');
+
+          // Update active nav
+          navItems.forEach(nav => nav.classList.remove('active'));
+          this.classList.add('active');
+
+          // Show corresponding section
+          sections.forEach(section => {
+            section.classList.remove('active');
+            if (section.id === 'section-' + sectionId) {
+              section.classList.add('active');
+            }
+          });
+        });
+      });
+    });
+
+    // Load Account Data
+    async function loadAccountData() {
+      try {
+        const user = window.JosephAPI.auth.getStoredUser();
+        if (user) {
+          document.getElementById('account-name').value = user.name || '';
+          document.getElementById('account-email').value = user.email || '';
+          document.getElementById('account-phone').value = user.phone || '';
+          document.getElementById('account-dob').value = user.dob ? new Date(user.dob).toISOString().split('T')[0] : '';
+          document.getElementById('account-bio').value = user.bio || '';
+
+          const name = user.name || 'U';
+          document.getElementById('settings-avatar').textContent = name.charAt(0).toUpperCase();
+        }
+      } catch (error) {
+        console.error('Error loading account data:', error);
+        // Fallback to localStorage
+        document.getElementById('account-name').value = localStorage.getItem('userName') || '';
+        document.getElementById('account-email').value = localStorage.getItem('userEmail') || '';
+        document.getElementById('account-phone').value = localStorage.getItem('userPhone') || '';
+      }
+    }
+
+    // Load Business Data
+    async function loadBusinessData() {
+      try {
+        // For now, use localStorage fallback - this will be connected to API when business profile endpoint is ready
+        document.getElementById('business-name').value = localStorage.getItem('userBusiness') || '';
+        document.getElementById('business-category').value = localStorage.getItem('businessCategory') || '';
+        document.getElementById('business-type').value = localStorage.getItem('businessType') || 'micro';
+        document.getElementById('business-phone').value = localStorage.getItem('businessPhone') || '';
+        document.getElementById('business-email').value = localStorage.getItem('businessEmail') || '';
+        document.getElementById('business-address').value = localStorage.getItem('businessAddress') || '';
+        document.getElementById('business-city').value = localStorage.getItem('businessCity') || '';
+        document.getElementById('business-state').value = localStorage.getItem('businessState') || '';
+      } catch (error) {
+        console.error('Error loading business data:', error);
+      }
+    }
+
+    // Load Notification Settings from API
+    async function loadNotificationSettings() {
+      try {
+        const settings = await window.JosephAPI.notifications.getSettings();
+        document.getElementById('push-notifications').checked = settings.pushNotifications ?? true;
+        document.getElementById('email-notifications').checked = settings.emailNotifications ?? true;
+        document.getElementById('low-balance-threshold').value = settings.lowBalanceThreshold || 5000;
+        document.getElementById('spending-alert').checked = settings.spendingAlert ?? true;
+        document.getElementById('goal-updates').checked = settings.goalUpdates ?? true;
+        document.getElementById('runway-warning').checked = settings.runwayWarning ?? true;
+        document.getElementById('credit-reminders').checked = settings.creditReminders ?? true;
+      } catch (error) {
+        console.error('Error loading notification settings:', error);
+        // Fallback to localStorage
+        const settings = JSON.parse(localStorage.getItem('notificationSettings') || '{}');
+        document.getElementById('push-notifications').checked = settings.push !== false;
+        document.getElementById('email-notifications').checked = settings.email !== false;
+        document.getElementById('low-balance-threshold').value = settings.lowBalanceThreshold || 5000;
+        document.getElementById('spending-alert').checked = settings.spendingAlert !== false;
+        document.getElementById('goal-updates').checked = settings.goalUpdates !== false;
+        document.getElementById('runway-warning').checked = settings.runwayWarning !== false;
+        document.getElementById('credit-reminders').checked = settings.creditReminders !== false;
+      }
+    }
+
+    // Load Appearance Settings from API
+    async function loadAppearanceSettings() {
+      try {
+        const prefs = await window.JosephAPI.preferences.getPreferences();
+
+        // Apply dark mode
+        if (prefs.darkMode) {
+          document.body.classList.add('dark-mode');
+          document.getElementById('dark-mode-toggle-setting').checked = true;
+        }
+
+        // Apply accent color
+        const savedColor = prefs.accentColor || 'navy';
+        document.querySelectorAll('.color-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.color === savedColor) {
+            btn.classList.add('active');
+          }
+        });
+
+        // Apply font size
+        const fontSize = prefs.fontSize || 'medium';
+        document.getElementById('font-size-select').value = fontSize;
+        document.documentElement.style.fontSize = fontSize === 'small' ? '14px' : fontSize === 'large' ? '18px' : '16px';
+
+        // Apply date format
+        if (prefs.dateFormat) {
+          document.getElementById('dateformat-select').value = prefs.dateFormat;
+        }
+      } catch (error) {
+        console.error('Error loading appearance settings:', error);
+        // Fallback to localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+          document.body.classList.add('dark-mode');
+          document.getElementById('dark-mode-toggle-setting').checked = true;
+        }
+
+        const savedColor = localStorage.getItem('accentColor') || 'navy';
+        document.querySelectorAll('.color-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.color === savedColor) {
+            btn.classList.add('active');
+          }
+        });
+
+        const fontSize = localStorage.getItem('fontSize') || 'medium';
+        document.getElementById('font-size-select').value = fontSize;
+        document.documentElement.style.fontSize = fontSize === 'small' ? '14px' : fontSize === 'large' ? '18px' : '16px';
+      }
+    }
+
+    // Update Account Details
+    async function updateAccountDetails() {
+      const name = document.getElementById('account-name').value;
+      const email = document.getElementById('account-email').value;
+      const phone = document.getElementById('account-phone').value;
+      const dob = document.getElementById('account-dob').value;
+      const bio = document.getElementById('account-bio').value;
+      const currentPass = document.getElementById('current-password').value;
+      const newPass = document.getElementById('new-password').value;
+      const confirmPass = document.getElementById('confirm-password').value;
+
+      if (!name || !email) {
+        alert('Name and email are required!');
+        return;
+      }
+
+      try {
+        // Update via API (endpoint to be implemented)
+        // For now, store locally
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userPhone', phone);
+        localStorage.setItem('userDob', dob);
+        localStorage.setItem('userBio', bio);
+
+        // Update avatar
+        document.getElementById('settings-avatar').textContent = name.charAt(0).toUpperCase();
+
+        // Handle password change if provided
+        if (newPass) {
+          if (newPass !== confirmPass) {
+            alert('New passwords do not match!');
+            return;
+          }
+          // Password change via API (to be implemented)
+          localStorage.setItem('userPassword', newPass);
+        }
+
+        alert('Account details updated successfully!');
+      } catch (error) {
+        console.error('Error updating account:', error);
+        alert('Failed to update account details. Please try again.');
+      }
+    }
+
+    // Generate WhatsApp Link
+    async function generateWhatsAppLink() {
+      const btn = document.getElementById('generate-wa-btn');
+      const container = document.getElementById('whatsapp-link-container');
+      const qrDiv = document.getElementById('qrcode');
+      const linkBtn = document.getElementById('wa-link-btn');
+      
+      btn.textContent = 'Generating...';
+      btn.disabled = true;
+
+      try {
+        const response = await window.JosephAPI.whatsapp.generateLinkToken();
+        
+        if (response.success) {
+          const token = response.data.token;
+          const botPhone = '2347073735341'; // JOSEPH AI bot number
+          const waUrl = `https://wa.me/${botPhone}?text=${token}`;
+          
+          // Clear previous QR
+          qrDiv.innerHTML = '';
+          
+          // Generate new QR
+          new QRCode(qrDiv, {
+            text: waUrl,
+            width: 200,
+            height: 200,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+          });
+
+          linkBtn.href = waUrl;
+          
+          container.style.display = 'block';
+          btn.style.display = 'none';
+        } else {
+          alert('Failed to generate link. ' + (response.message || ''));
+          btn.textContent = 'Generate Linking Code';
+          btn.disabled = false;
+        }
+      } catch (error) {
+        console.error('Error generating WA link:', error);
+        alert('An error occurred. Please try again.');
+        btn.textContent = 'Generate Linking Code';
+        btn.disabled = false;
+      }
+    }
+
+    // Update Business Profile
+    async function updateBusinessProfile() {
+      const name = document.getElementById('business-name').value;
+      const category = document.getElementById('business-category').value;
+      const type = document.getElementById('business-type').value;
+      const phone = document.getElementById('business-phone').value;
+      const email = document.getElementById('business-email').value;
+      const address = document.getElementById('business-address').value;
+      const city = document.getElementById('business-city').value;
+      const state = document.getElementById('business-state').value;
+
+      try {
+        // Store in localStorage for now (API endpoint to be implemented)
+        localStorage.setItem('userBusiness', name);
+        localStorage.setItem('businessCategory', category);
+        localStorage.setItem('businessType', type);
+        localStorage.setItem('businessPhone', phone);
+        localStorage.setItem('businessEmail', email);
+        localStorage.setItem('businessAddress', address);
+        localStorage.setItem('businessCity', city);
+        localStorage.setItem('businessState', state);
+
+        alert('Business profile updated successfully!');
+      } catch (error) {
+        console.error('Error updating business profile:', error);
+        alert('Failed to update business profile. Please try again.');
+      }
+    }
+
+    // Toggle Dark Mode from Settings
+    async function toggleDarkModeFromSettings() {
+      const isDark = document.getElementById('dark-mode-toggle-setting').checked;
+      document.body.classList.toggle('dark-mode', isDark);
+
+      try {
+        await window.JosephAPI.preferences.setDarkMode(isDark);
+        localStorage.setItem('darkMode', isDark); // Fallback
+      } catch (error) {
+        console.error('Error saving dark mode:', error);
+        localStorage.setItem('darkMode', isDark);
+      }
+    }
+
+    // Set Accent Color
+    async function setAccentColor(color) {
+      document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.color-btn[data-color="${color}"]`).classList.add('active');
+
+      // Apply color to CSS variables
+      const colorMap = {
+        navy: { primary: '#24248f', dark: '#1A1A75', tint: '#e8e8ff' },
+        blue: { primary: '#2563eb', dark: '#1d4ed8', tint: '#dbeafe' },
+        purple: { primary: '#7c3aed', dark: '#6d28d9', tint: '#ede9fe' },
+        green: { primary: '#059669', dark: '#047857', tint: '#d1fae5' },
+        orange: { primary: '#ea580c', dark: '#c2410c', tint: '#ffedd5' }
+      };
+
+      const colors = colorMap[color];
+      if (colors) {
+        document.documentElement.style.setProperty('--navy-deep', colors.primary);
+        document.documentElement.style.setProperty('--navy-dark', colors.dark);
+        document.documentElement.style.setProperty('--navy-tint', colors.tint);
+      }
+
+      try {
+        await window.JosephAPI.preferences.setAccentColor(color);
+        localStorage.setItem('accentColor', color); // Fallback
+      } catch (error) {
+        console.error('Error saving accent color:', error);
+        localStorage.setItem('accentColor', color);
+      }
+    }
+
+    // Set Font Size
+    async function setFontSize(size) {
+      document.documentElement.style.fontSize = size === 'small' ? '14px' : size === 'large' ? '18px' : '16px';
+
+      try {
+        await window.JosephAPI.preferences.setFontSize(size);
+        localStorage.setItem('fontSize', size); // Fallback
+      } catch (error) {
+        console.error('Error saving font size:', error);
+        localStorage.setItem('fontSize', size);
+      }
+    }
+
+    // Set Language
+    function setLanguage(lang) {
+      localStorage.setItem('language', lang);
+      alert(`Language set to ${lang}. Translation coming soon!`);
+    }
+
+    // Set Currency
+    function setCurrency(currency) {
+      localStorage.setItem('currency', currency);
+      alert(`Currency set to ${currency}`);
+    }
+
+    // Set Date Format
+    async function setDateFormat(format) {
+      try {
+        await window.JosephAPI.preferences.updatePreferences({ dateFormat: format });
+        localStorage.setItem('dateFormat', format); // Fallback
+      } catch (error) {
+        console.error('Error saving date format:', error);
+        localStorage.setItem('dateFormat', format);
+      }
+    }
+
+    // Save Notification Settings
+    async function saveNotificationSettings() {
+      const settings = {
+        pushNotifications: document.getElementById('push-notifications').checked,
+        emailNotifications: document.getElementById('email-notifications').checked,
+        lowBalanceThreshold: parseFloat(document.getElementById('low-balance-threshold').value),
+        spendingAlert: document.getElementById('spending-alert').checked,
+        goalUpdates: document.getElementById('goal-updates').checked,
+        runwayWarning: document.getElementById('runway-warning').checked,
+        creditReminders: document.getElementById('credit-reminders').checked
+      };
+
+      try {
+        await window.JosephAPI.notifications.updateSettings(settings);
+        localStorage.setItem('notificationSettings', JSON.stringify(settings)); // Fallback
+        alert('Notification preferences saved!');
+      } catch (error) {
+        console.error('Error saving notification settings:', error);
+        localStorage.setItem('notificationSettings', JSON.stringify(settings));
+        alert('Notification preferences saved locally!');
+      }
+    }
+
+    // Save All Settings
+    async function saveAllSettings() {
+      await updateAccountDetails();
+      await updateBusinessProfile();
+      await saveNotificationSettings();
+      alert('All settings saved successfully!');
+    }
+
+    // Logout
+    async function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        try {
+          await window.JosephAPI.auth.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+        }
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOSEPH AI | Economic Operating System for Everyone</title>
+  <meta name="description"
+    content="JOSEPH AI — The indispensable FP&A financial copilot providing economic intelligence at your fingertips.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #floating-wa-btn:hover {
+      background: #1EBE5D !important;
+      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5) !important;
+      transform: translateY(-1px);
+    }
+    #floating-wa-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px rgba(37, 211, 102, 0.2) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       SIDEBAR NAVIGATION
+       ============================================ -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">J</div>
+        <div>
+          <div class="sidebar-brand-name">JOSEPH <span>AI</span></div>
+          <div class="sidebar-brand-sub">Economic Operating System</div>
+        </div>
+      </div>
+      <button class="sidebar-close" id="sidebar-close-btn" aria-label="Close menu">&#x2715;</button>
+    </div>
+
+    <div class="sidebar-section-label">Financial Modules</div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link" data-page="dream" href="#dream">
+        <span class="sidebar-link-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.5 19c0-1.7-1.3-3-3-3h-11c-1.7 0-3 1.3-3 3v1h17v-1z" />
+            <path d="M11 12c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4z" />
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+          </svg>
+        </span>
+        <div class="sidebar-link-info">
+          <span class="sidebar-link-title">Dream</span>
+          <span class="sidebar-link-sub">Economic Radar & Market Outlook</span>
+        </div>
+        <span class="sidebar-arrow">›</span>
+      </a>
+      <a class="sidebar-link" data-page="interpretation" href="#interpretation">
+        <span class="sidebar-link-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18h6" />
+            <path d="M10 22h4" />
+            <path d="M12 2v1" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="m4.93 19.07 1.41-1.41" />
+            <path d="M12 22v-2" />
+            <path d="m16.95 4.93 1.41-1.41" />
+            <path d="M22 12h-2" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M12 14.5a2.5 2.5 0 0 0 2.5-2.5v-6a2.5 2.5 0 0 0-5 0v6a2.5 2.5 0 0 0 2.5 2.5z" />
+          </svg>
+        </span>
+        <div class="sidebar-link-info">
+          <span class="sidebar-link-title">Interpretation</span>
+          <span class="sidebar-link-sub">Batch Cost & Calendar Modeler</span>
+        </div>
+        <span class="sidebar-arrow">›</span>
+      </a>
+      <a class="sidebar-link" data-page="finance" href="#finance">
+        <span class="sidebar-link-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="14" x="2" y="5" rx="2" />
+            <line x1="2" x2="22" y1="10" y2="10" />
+          </svg>
+        </span>
+        <div class="sidebar-link-info">
+          <span class="sidebar-link-title">Finance</span>
+          <span class="sidebar-link-sub">Live Ledger, Vault & Burn Rate</span>
+        </div>
+        <span class="sidebar-arrow">›</span>
+      </a>
+      <a class="sidebar-link" data-page="strategy" href="#strategy">
+        <span class="sidebar-link-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="6" />
+            <circle cx="12" cy="12" r="2" />
+          </svg>
+        </span>
+        <div class="sidebar-link-info">
+          <span class="sidebar-link-title">Updated Strategy</span>
+          <span class="sidebar-link-sub">Pricing, Break-Even & Procurement</span>
+        </div>
+        <span class="sidebar-arrow">›</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-card">
+        <div class="sfc-icon" id="user-avatar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+        <div>
+          <div class="sfc-name" id="user-display-name">User Name</div>
+          <div class="sfc-sub" id="user-display-email">user@email.com</div>
+        </div>
+        <a href="settings.html" class="settings-btn" id="settings-btn" aria-label="Settings">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================================
+       GLOBAL TOPBAR (shown on all module pages)
+       ============================================ -->
+  <header class="topbar" id="topbar" style="display:none;">
+    <div class="topbar-left">
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-brand" id="topbar-brand">
+        <span class="topbar-brand-name">JOSEPH <span>AI</span></span>
+      </div>
+    </div>
+    <div class="topbar-center">
+      <span class="topbar-module-label" id="topbar-module-label">Module 1: Dream</span>
+    </div>
+    <div class="topbar-right" style="display: flex; align-items: center; gap: 1rem;">
+      <div class="live-indicator"><span class="live-dot"></span> Live</div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       PAGE: LANDING
+       ============================================ -->
+  <main class="page active" id="page-landing">
+
+    <!-- Landing Topbar -->
+    <div class="landing-topbar">
+      <div class="landing-brand">
+        <div class="landing-logo-mark">J</div>
+        <span class="landing-brand-text">JOSEPH <strong>AI</strong></span>
+      </div>
+      <a href="login.html" class="landing-login-btn" id="landing-login-btn"
+        onclick="console.log('Login clicked'); window.location.href='login.html'; return true;"
+        style="pointer-events: auto !important; z-index: 10000 !important; position: relative !important;">Login</a>
+      <button class="hamburger-btn landing-hamburger" id="landing-hamburger-btn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" style="pointer-events: auto !important;">
+      <div class="hero-content"
+        style="pointer-events: auto !important; position: relative !important; z-index: 1 !important;">
+        <div class="hero-badge">
+          <span class="badge-dot"></span> Economic Intelligence at your Fingertips
+        </div>
+        <h1 class="hero-headline">
+          You Deserve<br>
+          <span class="hero-headline-accent">a CFO.</span>
+        </h1>
+        <p class="hero-subtext">
+          JOSEPH AI is the indispensable economic operating system for Individuals, Families and Businesses.
+          Stop guessing your margins. Start living healthy.
+        </p>
+        <div class="hero-actions"
+          style="pointer-events: auto !important; position: relative !important; z-index: 10000 !important;">
+          <a href="signup.html" class="btn btn-hero-primary" id="landing-signup-btn"
+            style="text-decoration: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; pointer-events: auto !important; z-index: 10000 !important; position: relative !important;"
+            onclick="console.log('Signup clicked'); window.location.href='signup.html'; return true;">
+            Create Account <span class="btn-arrow">→</span>
+          </a>
+          <a href="login.html" class="btn btn-hero-ghost" id="landing-login-hero-btn"
+            style="text-decoration: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; pointer-events: auto !important; z-index: 10000 !important; position: relative !important;"
+            onclick="console.log('Login clicked'); window.location.href='login.html'; return true;">
+            Login
+          </a>
+          <button class="btn btn-hero-ghost" id="hero-open-dashboard-btn">
+            Open Dashboard
+          </button>
+          <button class="btn btn-hero-ghost" id="hero-learn-btn">
+            How it works ↓
+          </button>
+        </div>
+
+        <!-- Survival Metrics Strip -->
+        <div class="survival-metrics">
+          <div class="sm-item">
+            <span class="sm-val" id="hero-vault">₦24,000</span>
+            <span class="sm-lbl">🔒 Restock Vault</span>
+          </div>
+          <div class="sm-divider"></div>
+          <div class="sm-item">
+            <span class="sm-val" id="hero-profit">₦11,000</span>
+            <span class="sm-lbl">✨ Spendable Profit</span>
+          </div>
+          <div class="sm-divider"></div>
+          <div class="sm-item">
+            <span class="sm-val" id="hero-runway">14 Days</span>
+            <span class="sm-lbl">⏳ Cash Runway</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card-stack">
+          <div class="hcs-card hcs-top">
+            <div class="hcs-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18" />
+                <path d="m19 9-5 5-4-4-3 3" />
+              </svg>
+            </div>
+            <div class="hcs-label">Break-Even Today</div>
+            <div class="hcs-val green">₦22,000 / ₦30,000</div>
+            <div class="hcs-bar">
+              <div class="hcs-bar-fill" style="width:73%"></div>
+            </div>
+          </div>
+          <div class="hcs-card hcs-mid">
+            <div class="hcs-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+              </svg>
+            </div>
+            <div class="hcs-label">Restock Vault Protected</div>
+            <div class="hcs-val white">68% of balance locked</div>
+          </div>
+          <div class="hcs-card hcs-btm">
+            <div class="hcs-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                <path d="M12 9v4" />
+                <path d="M12 17h.01" />
+              </svg>
+            </div>
+            <div class="hcs-label">Exam Week Ahead</div>
+            <div class="hcs-val gold">Save ₦350 / bottle</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Pillars -->
+    <section class="pillars" id="how-it-works">
+      <div class="section-header">
+        <h2>Three Pillars That Keep Your Finances Healthy</h2>
+        <p>JOSEPH AI translates complex economic intelligence into clear insights you can act on today.</p>
+      </div>
+      <div class="pillars-grid">
+        <div class="pillar-card" data-page="finance">
+          <div class="pillar-number">01</div>
+          <div class="pillar-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+          </div>
+          <h3>Capital Protection</h3>
+          <p>Auto-separates every sale into your Restock Vault and spendable profit so you never accidentally eat your
+            capital.</p>
+          <div class="pillar-features">
+            <span>Batch-Cost Calculator</span>
+            <span>Restock Vault</span>
+            <span>Credit Ledger</span>
+          </div>
+        </div>
+        <div class="pillar-card" data-page="dream">
+          <div class="pillar-number">02</div>
+          <div class="pillar-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12h20" />
+              <path d="M2 12c0-5.5 4.5-10 10-10s10 4.5 10 10" />
+              <path d="M14 10a2 2 0 0 0-2-2 2 2 0 0 0-2 2" />
+              <path d="M14 14a2 2 0 0 1-2 2 2 2 0 0 1-2-2" />
+              <path d="M2 12c0 5.5 4.5 10 10 10s10-4.5 10-10" />
+              <path d="M8 12a4 4 0 0 1 4-4 4 4 0 0 1 4 4" />
+              <path d="M8 12a4 4 0 0 0 4 4 4 4 0 0 0 4-4" />
+            </svg>
+          </div>
+          <h3>Predictive Strategy</h3>
+          <p>Stress-tests market shocks before they hit you. Syncs your academic calendar to forecast revenue droughts.
+          </p>
+          <div class="pillar-features">
+            <span>Volatility Sliders</span>
+            <span>Drought Modeler</span>
+            <span>Supplier Advisor</span>
+          </div>
+        </div>
+        <div class="pillar-card" data-page="strategy">
+          <div class="pillar-number">03</div>
+          <div class="pillar-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <circle cx="12" cy="12" r="2" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+          </div>
+          <h3>Actionable Execution</h3>
+          <p>Tells you exactly how many bottles to sell, at what price, to hit your personal survival target this month.
+          </p>
+          <div class="pillar-features">
+            <span>Break-Even Gauge</span>
+            <span>Pricing Blueprints</span>
+            <span>Burn Rate Clock</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9 Features Strip -->
+    <section class="features-strip">
+      <div class="section-header">
+        <h2>9 Indispensable Features</h2>
+        <p>Everything you need to understand your economy and make smarter decisions — nothing you don't.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feat-item" data-page="interpretation"><span>🧮</span>
+          <p>Batch-Cost Calculator</p>
+        </div>
+        <div class="feat-item" data-page="finance"><span>📱</span>
+          <p>Bank Alert Parser</p>
+        </div>
+        <div class="feat-item" data-page="finance"><span>🔒</span>
+          <p>Restock Vault Tracker</p>
+        </div>
+        <div class="feat-item" data-page="dream"><span>📈</span>
+          <p>Economic Stress Tester</p>
+        </div>
+        <div class="feat-item" data-page="interpretation"><span>📅</span>
+          <p>Calendar Drought Modeler</p>
+        </div>
+        <div class="feat-item" data-page="strategy"><span>🚚</span>
+          <p>Supplier Procurement Advisor</p>
+        </div>
+        <div class="feat-item" data-page="finance"><span>⏳</span>
+          <p>Live Burn Rate Tracker</p>
+        </div>
+        <div class="feat-item" data-page="strategy"><span>📊</span>
+          <p>Break-Even Progress Gauge</p>
+        </div>
+        <div class="feat-item" data-page="strategy"><span>🎯</span>
+          <p>Bottom-Up Pricing Engine</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+      <div class="cta-content">
+        <h2>Stop Running on Pocket Accounting.</h2>
+        <p>Your finances deserve the same economic intelligence as a Fortune 500 CFO — delivered in 3 taps.</p>
+        <button class="btn btn-hero-primary" id="cta-open-btn">Launch JOSEPH AI →</button>
+      </div>
+    </section>
+
+    <footer class="landing-footer">
+      <p>JOSEPH AI Economic Operating System • Economic Intelligence at your Fingertips</p>
+    </footer>
+
+  </main>
+
+
+  <!-- ============================================
+       PAGE: MODULE 1 — DREAM
+       ============================================ -->
+  <main class="page" id="page-dream">
+    <div class="module-page-content">
+      <div class="module-page-hero dream-hero">
+        <div class="mph-badge"><span class="mph-num">Module 1</span></div>
+        <h2 class="mph-title">☁️ Dream</h2>
+        <p class="mph-sub">Economic Radar & Market Outlook. See commodity price shocks before they destroy your margin.
+        </p>
+      </div>
+
+      <!-- NEW: Indicator Ticker (GitHub app feature) -->
+      <div class="indicator-ticker">
+        <div class="ticker-content">
+          <div class="ticker-item">
+            <span class="ticker-label">Inflation Rate</span>
+            <span class="ticker-value">31.7%</span>
+            <span class="ticker-change positive">+0.8%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-label">FX Rate</span>
+            <span class="ticker-value">₦1,650/$</span>
+            <span class="ticker-change negative">+2.3%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-label">Commodity Index</span>
+            <span class="ticker-value">₦142,000</span>
+            <span class="ticker-change positive">+5.2%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-label">Pump Price</span>
+            <span class="ticker-value">₦680/L</span>
+            <span class="ticker-change negative">+0.5%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-label">MPCI</span>
+            <span class="ticker-value">68.2</span>
+            <span class="ticker-change negative">-1.2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Quick Stats Cards (GitHub app style) -->
+      <div class="quick-stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Economic Health</div>
+          <div class="stat-value">72<span class="stat-indicator orange"></span></div>
+          <div class="stat-sub">Moderate Stress • Monitor Closely</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Market Volatility</div>
+          <div class="stat-value">High<span class="stat-indicator slate"></span></div>
+          <div class="stat-sub">Above 30-day average</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">News Stories</div>
+          <div class="stat-value">8<span class="stat-indicator blue"></span></div>
+          <div class="stat-sub">Last 24 hours</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Next Event</div>
+          <div class="stat-value">6 Days<span class="stat-indicator green"></span></div>
+          <div class="stat-sub">CBN MPC Meeting</div>
+        </div>
+      </div>
+
+      <div class="module-features-grid grid-2col">
+
+
+        <!-- Feature 1: Economic Stress Tester -->
+        <div class="feat-card">
+          <div class="feat-card-header">
+            <div class="feat-badge">Feature 1</div>
+            <h3>📊 Economic Stress Tester</h3>
+            <span class="pill pill-gold">Auto-Updated Daily</span>
+          </div>
+          <p class="feat-desc">Live economic stress projections based on real-time market data from the Interpretation
+            module. Updates every 24 hours.</p>
+
+          <div class="economic-stress-dashboard">
+            <!-- Last Updated Indicator -->
+            <div class="stress-last-updated">
+              <span class="update-icon">🔄</span>
+              <span class="update-text">Last updated: <span id="stress-update-time">Today, 9:00 AM</span></span>
+              <span class="update-status">Live</span>
+            </div>
+
+            <!-- Stress Indicators -->
+            <div class="stress-indicators">
+              <div class="stress-indicator">
+                <div class="indicator-icon inflation">📈</div>
+                <div class="indicator-content">
+                  <div class="indicator-label">Inflation Pressure</div>
+                  <div class="indicator-value" id="inflation-pressure">Moderate (31.7%)</div>
+                  <div class="indicator-trend" id="inflation-trend">↑ Rising</div>
+                </div>
+              </div>
+              <div class="stress-indicator">
+                <div class="indicator-icon currency">💱</div>
+                <div class="indicator-content">
+                  <div class="indicator-label">FX Rate Impact</div>
+                  <div class="indicator-value" id="fx-impact">High (₦1,650/$)</div>
+                  <div class="indicator-trend" id="fx-trend">→ Stable</div>
+                </div>
+              </div>
+              <div class="stress-indicator">
+                <div class="indicator-icon raw">🥜</div>
+                <div class="indicator-content">
+                  <div class="indicator-label">Raw Material Cost</div>
+                  <div class="indicator-value" id="raw-cost">₦220/kg (↑12%)</div>
+                  <div class="indicator-trend" id="raw-trend">↑ Increasing</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Stress Output -->
+            <div class="impact-box">
+              <h4>⚡ Live Stress Output</h4>
+              <div class="stress-projection">
+                <div class="projection-header">
+                  <span>What-If Scenario Analysis</span>
+                  <span class="projection-badge" id="projection-badge">Moderate Risk</span>
+                </div>
+                <div class="projection-grid">
+                  <div class="projection-item">
+                    <span class="proj-label">Current COGS</span>
+                    <span class="proj-value current">₦500/bottle</span>
+                  </div>
+                  <div class="proj-arrow">→</div>
+                  <div class="projection-item">
+                    <span class="proj-label">Projected COGS</span>
+                    <span class="proj-value projected" id="proj-cogs">₦560/bottle</span>
+                  </div>
+                </div>
+                <div class="projection-grid">
+                  <div class="projection-item">
+                    <span class="proj-label">Current Profit</span>
+                    <span class="proj-value current">₦1,000/bottle</span>
+                  </div>
+                  <div class="proj-arrow">→</div>
+                  <div class="projection-item">
+                    <span class="proj-label">Projected Profit</span>
+                    <span class="proj-value projected" id="proj-profit">₦940/bottle</span>
+                  </div>
+                </div>
+                <div class="impact-directive" id="economic-recommendation">
+                  💡 <strong>Moderate Stress Detected:</strong> Essential costs up 12% due to harvest delays. Consider:
+                  <ul>
+                    <li>Adjust budget by ₦50-₦100 to maintain balance</li>
+                    <li>Lock in bulk essential purchases before further hikes</li>
+                    <li>Optimize consumption patterns to reduce waste</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2: Commodity & Economic Feed -->
+        <div class="feat-card">
+          <div class="feat-card-header">
+            <div class="feat-badge">Feature 2</div>
+            <h3>📰 Local Commodity & Economic Feed</h3>
+            <span class="pill pill-blue">Market Radar</span>
+          </div>
+          <p class="feat-desc">Real-time market intelligence affecting your finances, costs, and economic environment.
+          </p>
+
+          <div class="news-list">
+            <div class="news-item urgent">
+              <div class="news-meta"><span class="news-tag">🔴 Scarcity Alert</span><span class="news-time">2 hrs
+                  ago</span></div>
+              <h4>Commodity Harvest Season Delays</h4>
+              <p>Heavy rainfall in key agricultural regions has extended drying times by 2 weeks. Expect 15-20%
+                wholesale price hikes across food markets.</p>
+            </div>
+            <div class="news-item info">
+              <div class="news-meta"><span class="news-tag">🔵 Packaging Market</span><span class="news-time">1 day
+                  ago</span></div>
+              <h4>Import Tariff Adjustments</h4>
+              <p>Improved FX liquidity reported across manufacturing sectors. Packaging costs showing downward trends in
+                major markets.</p>
+            </div>
+            <div class="news-item success">
+              <div class="news-meta"><span class="news-tag">🟢 Seasonal Trends</span><span class="news-time">2 days
+                  ago</span></div>
+              <h4>Seasonal Demand Surge Expected</h4>
+              <p>Seasonal patterns show spending increases of 2.4× during active periods. Plan inventory accordingly.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ============================================
+       PAGE: MODULE 2 — INTERPRETATION
+       ============================================ -->
+  <main class="page" id="page-interpretation">
+
+    <!-- CURTAIN OVERLAY FOR PAGE TRANSITIONS -->
+    <div class="curtain-overlay" id="interpretation-curtain-overlay">
+      <div style="text-align: center;">
+        <div style="font-size: 48px; margin-bottom: 1rem;">💡</div>
+        <div style="color: white; font-size: 18px; font-weight: 600;">Loading Interpretation Module...</div>
+      </div>
+    </div>
+
+    <!-- INTERPRETATION SELECTION SCREEN (Initial View) -->
+    <div class="interpretation-selection-screen" id="interpretation-selection-screen">
+      <h1 class="interpretation-selection-title">Choose Your Economic Interpretation</h1>
+      <p class="interpretation-selection-subtitle">Explore micro-level financial insights or macro-level economic trends
+        affecting your finances</p>
+
+      <div class="interpretation-selection-boxes">
+        <!-- MICRO ECONOMIC INTERPRETATION BOX -->
+        <div class="interpretation-selection-box micro" onclick="showInterpretationSection('micro')">
+          <div class="interpretation-box-icon micro-wallet">
+            <i class="fa-solid fa-wallet" style="color: #8B4513; font-size: 36px;"></i>
+          </div>
+          <h3 class="interpretation-box-title">Micro Economic Interpretation</h3>
+          <p class="interpretation-box-description">Analyze your unit-level costs, pricing decisions, and operational
+            efficiencies. Understand your true cost per unit.</p>
+          <div class="interpretation-box-features">
+            <span class="interpretation-box-feature-tag">🧮 Unit Cost Analysis</span>
+            <span class="interpretation-box-feature-tag">📦 Batch Calculator</span>
+            <span class="interpretation-box-feature-tag">💰 COGS Tracking</span>
+            <span class="interpretation-box-feature-tag">📊 Profit Margins</span>
+            <span class="interpretation-box-feature-tag">🎯 Pricing Strategy</span>
+          </div>
+          <div class="interpretation-box-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- MACRO ECONOMIC INTERPRETATION BOX -->
+        <div class="interpretation-selection-box macro" onclick="showInterpretationSection('macro')">
+          <div class="interpretation-box-icon macro-globe">
+            🌍
+          </div>
+          <h3 class="interpretation-box-title">Macro Economic Interpretation</h3>
+          <p class="interpretation-box-description">Model broader economic factors like inflation, seasonal calendar
+            patterns, and market drought periods.</p>
+          <div class="interpretation-box-features">
+            <span class="interpretation-box-feature-tag">📅 Calendar Drought Modeler</span>
+            <span class="interpretation-box-feature-tag">📈 Inflation Impact</span>
+            <span class="interpretation-box-feature-tag">🌡️ Economic Stress Test</span>
+            <span class="interpretation-box-feature-tag">📆 Seasonal Planning</span>
+            <span class="interpretation-box-feature-tag">🎯 Market Timing</span>
+          </div>
+          <div class="interpretation-box-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MICRO ECONOMIC INTERPRETATION CONTENT SECTION -->
+    <div class="interpretation-content-section" id="interpretation-micro-content">
+      <div class="module-page-content">
+        <div class="interpretation-type-header micro">
+          <div class="interpretation-type-info">
+            <div class="interpretation-type-icon">
+              <i class="fa-solid fa-wallet" style="color: #8B4513; font-size: 28px;"></i>
+            </div>
+            <div class="interpretation-type-title">
+              <h2>Micro Economic Interpretation</h2>
+              <p>Analyze your unit-level costs, pricing decisions, and operational efficiencies</p>
+            </div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="window.showInterpretationSelection();"
+          style="position: relative; z-index: 999; pointer-events: auto !important; cursor: pointer !important; display: inline-flex; align-items: center; gap: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--r-md); margin-bottom: 1rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back to Selection
+        </button>
+
+        <!-- MICRO ECONOMIC INTERPRETATION SCROLL -->
+        <div class="ancient-scroll" id="micro-scroll">
+          <div class="scroll-top-rolldown"></div>
+          <div class="scroll-paper">
+            <div class="scroll-header-ancient">
+              <div class="scroll-header-left">
+                <h3>📘 Finance Module — Plain English Interpretation</h3>
+                <p class="scroll-subtitle">What your numbers actually mean for your wallet, your family, and your
+                  finances</p>
+              </div>
+              <button class="scroll-fold-btn" data-scroll="micro-scroll" aria-label="Fold/Unfold scroll"
+                style="cursor: pointer !important;">
+                <span class="fold-icon">📜</span>
+                <span class="fold-text">Fold</span>
+              </button>
+              <div class="scroll-divider"></div>
+            </div>
+
+            <div class="scroll-body">
+              <div class="scroll-section">
+                <p class="scroll-intro"
+                  style="font-size: 16px; line-height: 1.8; color: var(--text-primary); margin-bottom: 1.5rem;">
+                  Quick pulse check on your money. No scolding, just the pure facts so you can vibe safely this week. 🤝
+                </p>
+
+                <h4 class="scroll-section-title">🏠 The 50:30:20 Split</h4>
+                <p class="scroll-intro">We split your <span class="dynamic-value"
+                    data-value-source="personal-life-balance">₦15,000</span> budget into three zones so you stay
+                  protected:</p>
+
+                <ol class="numbered-interpretations">
+                  <li class="interpretation-item">
+                    <span class="item-number">1</span>
+                    <span class="item-content">
+                      <strong>The Essentials:</strong> Your hostel rent (<span class="dynamic-value"
+                        data-value-source="personal-rent">₦3,500</span>) and food/groceries (<span class="dynamic-value"
+                        data-value-source="personal-food">₦1,780</span>) are fully cleared. You've used <span
+                        class="dynamic-value" data-value-source="personal-needs-spent"
+                        data-calculate="needs">₦5,280</span> out of your <span class="dynamic-value"
+                        data-value-source="split-needs">₦7,500</span> stash. <span
+                        class="item-implication success">Totally safe here.</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">2</span>
+                    <span class="item-content">
+                      <strong>Guilt-Free Flex:</strong> You've only used <span class="dynamic-value"
+                        data-value-source="personal-wants-spent" data-calculate="wants">₦1,890</span> out of your <span
+                        class="dynamic-value" data-value-source="split-wants">₦4,500</span> fun fund (Data subscription
+                      took <span class="dynamic-value" data-value-source="personal-data">₦1,200</span>; snacks took
+                      <span class="dynamic-value" data-value-source="personal-snacks">₦690</span>). <span
+                        class="item-implication success">You have plenty of room left to spoil yourself.</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">3</span>
+                    <span class="item-content">
+                      <strong>Future Armor:</strong> You've successfully locked away <span class="dynamic-value"
+                        data-value-source="personal-savings">₦2,100</span> of your <span class="dynamic-value"
+                        data-value-source="split-savings">₦3,000</span> savings goal. <span class="dynamic-value"
+                        data-value-source="personal-emergency">₦1,500</span> is in your Emergency Fund and <span
+                        class="dynamic-value" data-value-source="personal-tech">₦600</span> is in Tech Savings. <span
+                        class="item-implication success">Big moves.</span>
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">💳 Your Financial Radar</h4>
+
+                <ol class="numbered-interpretations" start="4">
+                  <li class="interpretation-item">
+                    <span class="item-number">4</span>
+                    <span class="item-content">
+                      <strong>Your Score:</strong> Your financial health score is looking strong. <span
+                        class="item-implication success">Zero danger zones.</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">5</span>
+                    <span class="item-content">
+                      <strong>Safe-to-Spend:</strong> You have <span class="dynamic-value"
+                        data-value-source="personal-safe-to-spend">₦620</span> left of pure, guilt-free pocket money.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">6</span>
+                    <span class="item-content">
+                      <strong>The Daily Green-Light:</strong> You have <span class="dynamic-value"
+                        data-value-source="days-remaining">15</span> days left in the month, which means you can safely
+                      spend <span class="dynamic-value" data-value-source="personal-daily-safe-spend"
+                        data-calculate="daily-safe">₦41</span> a day (<span class="dynamic-value"
+                        data-value-source="personal-safe-to-spend">₦620</span> ÷ <span class="dynamic-value"
+                        data-value-source="days-remaining">15</span> days).
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">7</span>
+                    <span class="item-content">
+                      <strong>Pace:</strong> ✅ On pace. You're managing this perfectly. Go enjoy your day.
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">⏳ The Clock</h4>
+                <p class="scroll-intro">How your money is moving:</p>
+
+                <ol class="numbered-interpretations" start="8">
+                  <li class="interpretation-item">
+                    <span class="item-number">8</span>
+                    <span class="item-content">
+                      <strong>Total Outflow:</strong> You've spent a total of <span class="dynamic-value"
+                        data-value-source="personal-total-outflow">₦7,170</span> this month.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">9</span>
+                    <span class="item-content">
+                      <strong>Your Burn Speed:</strong> Right now, your life is costing you an average of <span
+                        class="dynamic-value" data-value-source="personal-burn-rate">₦850</span> a day (bills + fun
+                      combined).
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">10</span>
+                    <span class="item-content">
+                      <strong>Your Runway:</strong> At this current rate of spending, your money will last you <span
+                        class="dynamic-value" data-value-source="personal-runway">18</span> days. <span
+                        class="item-implication success">No need to panic at all</span>, but that's your clock for when
+                      you need to bring in your next cash injection.
+                    </span>
+                  </li>
+                </ol>
+
+                <hr style="border: none; border-top: 2px solid var(--border-color); margin: 2rem 0;">
+
+                <h3
+                  style="font-size: 18px; font-weight: bold; color: var(--text-primary); margin-bottom: 1rem; text-align: center;">
+                  Business Finance</h3>
+
+                <h4 class="scroll-section-title">💼 Your Sales & The Vault</h4>
+                <p class="scroll-intro">You made <span class="dynamic-value"
+                    data-value-source="business-balance">₦20,000</span> in total sales this month. Here is how that
+                  money splits up:</p>
+
+                <ol class="numbered-interpretations" start="11">
+                  <li class="interpretation-item">
+                    <span class="item-number">11</span>
+                    <span class="item-content">
+                      <strong>Restock Vault (70%):</strong> <span class="dynamic-value"
+                        data-value-source="fin-locked-vault">₦14,000</span> is set aside to buy your next batch of
+                      goods.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">12</span>
+                    <span class="item-content">
+                      <strong>Available Cash (30%):</strong> <span class="dynamic-value"
+                        data-value-source="business-available">₦6,000</span> is left for your daily business expenses.
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">💳 Your Safe Spending</h4>
+
+                <ol class="numbered-interpretations" start="13">
+                  <li class="interpretation-item">
+                    <span class="item-number">13</span>
+                    <span class="item-content">
+                      <strong>Money Ready to Use:</strong> You have <span class="dynamic-value"
+                        data-value-source="business-available">₦6,000</span> available for business needs.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">14</span>
+                    <span class="item-content">
+                      <strong>Daily Safe Spend:</strong> You can safely spend <span class="dynamic-value"
+                        data-value-source="business-daily-safe-spend" data-calculate="business-daily-safe">₦333</span> a
+                      day for the next <span class="dynamic-value" data-value-source="fin-runway-days">18</span> days
+                      (<span class="dynamic-value" data-value-source="business-available">₦6,000</span> ÷ <span
+                        class="dynamic-value" data-value-source="fin-runway-days">18</span> days).
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">15</span>
+                    <span class="item-content">
+                      <strong>Pace:</strong> ✅ On pace. Your daily spending is right where it should be.
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">⏳ Expenses & Your Runway</h4>
+
+                <ol class="numbered-interpretations" start="16">
+                  <li class="interpretation-item">
+                    <span class="item-number">16</span>
+                    <span class="item-content">
+                      <strong>Total Spent:</strong> You spent <span class="dynamic-value"
+                        data-value-source="business-total-spent">₦6,000</span> on business costs this month (Restock:
+                      <span class="dynamic-value" data-value-source="business-expense-restock">₦2,500</span>, Transport:
+                      <span class="dynamic-value" data-value-source="business-expense-transport">₦1,500</span>,
+                      Marketing: <span class="dynamic-value" data-value-source="business-expense-marketing">₦800</span>,
+                      Packaging: <span class="dynamic-value" data-value-source="business-expense-packaging">₦700</span>,
+                      Fees: <span class="dynamic-value" data-value-source="business-expense-fees">₦500</span>).
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">17</span>
+                    <span class="item-content">
+                      <strong>Daily Burn:</strong> Running your business costs you an average of <span
+                        class="dynamic-value" data-value-source="business-burn-rate">₦1,111</span> a day.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">18</span>
+                    <span class="item-content">
+                      <strong>Your Runway:</strong> At this current rate of spending, your money will last you <span
+                        class="dynamic-value" data-value-source="fin-runway-days">18</span> days.
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">⚠️ People Who Owe You</h4>
+
+                <ol class="numbered-interpretations" start="19">
+                  <li class="interpretation-item">
+                    <span class="item-number">19</span>
+                    <span class="item-content">
+                      <strong>Total Owed:</strong> Customers owe you <span class="dynamic-value"
+                        data-value-source="credit-total-owed">₦8,500</span>.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">20</span>
+                    <span class="item-content">
+                      <strong>Overdue:</strong> <span class="dynamic-value"
+                        data-value-source="credit-chinedu-amount">₦2,500</span> is late from Chinedu Okonkwo (by <span
+                        class="dynamic-value" data-value-source="credit-chinedu-days">5</span> days).
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">21</span>
+                    <span class="item-content">
+                      <strong>Coming Up:</strong> <span class="dynamic-value"
+                        data-value-source="credit-fatima-amount">₦3,000</span> is due from Fatima Abdullahi in <span
+                        class="dynamic-value" data-value-source="credit-fatima-days">2</span> days.
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">22</span>
+                    <span class="item-content">
+                      <strong>Tip:</strong> Collecting this money will give you more cash and make your <span
+                        class="dynamic-value" data-value-source="fin-runway-days">18</span> days last longer.
+                    </span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="scroll-bottom-rollup"></div>
+        </div>
+
+        <!-- Bottom Line Summary -->
+        <div class="bottom-line-summary">
+          <h4>📌 The Bottom Line</h4>
+          <ul class="summary-list">
+            <li>✅ <strong>Personal:</strong> You're crushing it. Your 50:30:20 budget is working perfectly, and you've
+              actually saved <span class="dynamic-value" data-value-source="personal-savings">₦2,100</span> this month.
+            </li>
+            <li>✅ <strong>Business:</strong> Your vault system protected <span class="dynamic-value"
+                data-value-source="fin-locked-vault">₦14,000</span> — your next batch is secured.</li>
+            <li>⚠️ <strong>Action:</strong> Chinedu Okonkwo owes you <span class="dynamic-value"
+                data-value-source="credit-chinedu-amount">₦2,500</span> (<span class="dynamic-value"
+                data-value-source="credit-chinedu-days">5</span> days late). Collect that to extend your runway.</li>
+            <li>🎯 <strong>Vibe:</strong> You're on pace. No panic needed. Just keep doing what you're doing.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- MACRO ECONOMIC INTERPRETATION CONTENT SECTION -->
+    <div class="interpretation-content-section" id="interpretation-macro-content">
+      <div class="module-page-content">
+        <div class="interpretation-type-header macro">
+          <div class="interpretation-type-info">
+            <div class="interpretation-type-icon">
+              🌍
+            </div>
+            <div class="interpretation-type-title">
+              <h2>Macro Economic Interpretation</h2>
+              <p>Model broader economic factors like inflation, seasonal patterns, and market drought periods</p>
+            </div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="window.showInterpretationSelection();"
+          style="position: relative; z-index: 999; pointer-events: auto !important; cursor: pointer !important; display: inline-flex; align-items: center; gap: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--r-md); margin-bottom: 1rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back to Selection
+        </button>
+
+        <!-- MACRO ECONOMIC INTERPRETATION SCROLL -->
+        <div class="ancient-scroll" id="macro-scroll">
+          <div class="scroll-top-rolldown"></div>
+          <div class="scroll-paper">
+            <div class="scroll-header-ancient">
+              <div class="scroll-header-left">
+                <h3>🌍 Dream Module — Plain English Interpretation</h3>
+                <p class="scroll-subtitle">What the big picture economy means for your finances and your future</p>
+              </div>
+              <button class="scroll-fold-btn" data-scroll="macro-scroll" aria-label="Fold/Unfold scroll"
+                style="cursor: pointer !important;">
+                <span class="fold-icon">📜</span>
+                <span class="fold-text">Fold</span>
+              </button>
+              <div class="scroll-divider"></div>
+            </div>
+
+            <div class="scroll-body">
+              <div class="scroll-section">
+                <h4 class="scroll-section-title">📊 The Economic Weather Report</h4>
+                <p class="scroll-intro">Right now, the economy is at "72/100" — moderate stress. Here's what's happening
+                  around you and why it matters:</p>
+
+                <ol class="numbered-interpretations">
+                  <li class="interpretation-item">
+                    <span class="item-number">1</span>
+                    <span class="item-content">
+                      <strong>📈 Inflation at 31.7% and Rising</strong> — Prices are going up fast. Things that cost
+                      ₦100 last year now cost about ₦132. This isn't just statistics — it's your wallet getting lighter.
+                      <span class="item-implication warning">[What This Means: Your ₦1,500 daily budget won't buy as
+                        much next month. Essential commodities already cost 12% more. Plan to adjust your spending or
+                        find ways to increase your income.]</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">2</span>
+                    <span class="item-content">
+                      <strong>💱 FX Rate at ₦1,650 per Dollar</strong> — The currency is weak against the dollar,
+                      affecting everything imported including household goods and essential materials. <span
+                        class="item-implication">[What This Means: Your costs might increase unexpectedly. Keep an eye
+                        on prices and consider buying in bulk when prices dip to protect your budget.]</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">3</span>
+                    <span class="item-content">
+                      <strong>🥜 Commodity Price Index Rising</strong> — Essential food commodities are getting
+                      expensive, up 5.2% recently. Weather events in key regions have delayed harvests by 2 weeks,
+                      causing supply issues. <span class="item-implication warning">[Immediate Action: Expect 15-20%
+                        price hikes in markets soon. Your costs might jump significantly. Consider buying in bulk NOW
+                        before the hike, or adjust your budget accordingly.]</span>
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">📰 Market Intelligence That Affects You</h4>
+                <p class="scroll-intro">These aren't just news headlines — they're signals for your financial decisions:
+                </p>
+
+                <ol class="numbered-interpretations" start="4">
+                  <li class="interpretation-item">
+                    <span class="item-number">4</span>
+                    <span class="item-content">
+                      <strong>🔴 Scarcity Alert: Harvest Delays</strong> — Heavy rains in key agricultural regions have
+                      extended drying times by 2 weeks. The harvest that should have flooded the market is delayed.
+                      <span class="item-implication warning">[Strategic Implication: This is a temporary shortage, not
+                        permanent. Lock in essential purchases now at current prices before the 15-20% hike.
+                        Alternative: Adjust to alternatives not affected by this shortage.]</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">5</span>
+                    <span class="item-content">
+                      <strong>🔵 Good News: Import Costs Dropping</strong> — Better FX liquidity means imported goods
+                      are cheaper. Essential costs are down ₦5 per unit in major markets. <span
+                        class="item-implication success">[Opportunity: Your costs just decreased. Use this extra margin
+                        to save more, absorb price increases elsewhere, or invest in growing your income.]</span>
+                    </span>
+                  </li>
+
+                  <li class="interpretation-item">
+                    <span class="item-number">6</span>
+                    <span class="item-content">
+                      <strong>🟢 Seasonal Demand Surge Coming</strong> — Seasonal patterns show increased activity
+                      starting next week. Historically, spending jumps 2.4× during the first two weeks of active
+                      periods. <span class="item-implication success">[Golden Opportunity: Prepare extra resources NOW.
+                        This surge can help build extra reserves to cushion future price changes.]</span>
+                    </span>
+                  </li>
+                </ol>
+
+                <h4 class="scroll-section-title">🧪 What-If Scenarios: Stress Test Results</h4>
+                <p class="scroll-intro">If current economic trends continue, here's what happens to your finances:</p>
+
+                <ol class="numbered-interpretations" start="7">
+                  <li class="interpretation-item">
+                    <span class="item-number">7</span>
+                    <span class="item-content">
+                      <strong>📊 If Essential Prices Rise 15%</strong> — Your current costs jump significantly, and your
+                      surplus drops by 15%. <span class="item-implication warning">[The Bottom Line: Your purchasing
+                        power will decrease unless you act. Options: Adjust budget, find alternatives, or increase
+                        income streams to offset the loss.]</span>
+                    </span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="scroll-bottom-rollup"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+
+
+  <!-- ==========================================
+     PAGE: MODULE 3 — FINANCE
+     ============================================ -->
+  <main class="page" id="page-finance">
+
+    <!-- CURTAIN OVERLAY FOR PAGE TRANSITIONS -->
+    <div class="curtain-overlay" id="curtain-overlay">
+      <div style="text-align: center;">
+        <div style="font-size: 48px; margin-bottom: 1rem;">💳</div>
+        <div style="color: white; font-size: 18px; font-weight: 600;">Loading Finance Module...</div>
+      </div>
+    </div>
+
+    <!-- FINANCE SELECTION SCREEN (Initial View) -->
+    <div class="finance-selection-screen" id="finance-selection-screen">
+      <h1 class="finance-selection-title">Choose Your Finance View</h1>
+      <p class="finance-selection-subtitle">Select between Personal Finance for your daily needs or Business Finance for
+        your operations</p>
+
+      <div class="finance-selection-boxes">
+        <!-- PERSONAL FINANCE BOX -->
+        <div class="finance-selection-box personal" onclick="showFinanceSection('personal')">
+          <div class="finance-box-icon">
+            🧍
+          </div>
+          <h3 class="finance-box-title">Personal Finance</h3>
+          <p class="finance-box-description">Track your personal expenses, budget buckets, savings goals, and daily
+            spending patterns.</p>
+          <div class="finance-box-features">
+            <span class="finance-box-feature-tag">💰 Safe-to-Spend</span>
+            <span class="finance-box-feature-tag">📊 Budget Buckets</span>
+            <span class="finance-box-feature-tag">🏠 Needs Tracker</span>
+            <span class="finance-box-feature-tag">🎯 Wants Monitor</span>
+            <span class="finance-box-feature-tag">🏦 Savings Goals</span>
+          </div>
+          <div class="finance-box-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- BUSINESS FINANCE BOX -->
+        <div class="finance-selection-box business" onclick="showFinanceSection('business')">
+          <div class="finance-box-icon">
+            💼
+          </div>
+          <h3 class="finance-box-title">Business Finance</h3>
+          <p class="finance-box-description">Monitor business revenue, working capital, vault protection, and runway
+            metrics.</p>
+          <div class="finance-box-features">
+            <span class="finance-box-feature-tag">💵 Revenue Tracker</span>
+            <span class="finance-box-feature-tag">🔒 Vault System</span>
+            <span class="finance-box-feature-tag">⏳ Runway Clock</span>
+            <span class="finance-box-feature-tag">📱 Bank Parser</span>
+            <span class="finance-box-feature-tag">🏦 Credit Ledger</span>
+          </div>
+          <div class="finance-box-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERSONAL FINANCE CONTENT SECTION -->
+    <div class="finance-content-section" id="finance-personal-content">
+      <div class="module-page-content">
+        <div class="finance-type-header personal">
+          <div class="finance-type-info">
+            <div class="finance-type-icon">🧍</div>
+            <div class="finance-type-title">
+              <h2>Personal Finance</h2>
+              <p>Track your personal budget, spending, and savings goals</p>
+            </div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="window.showFinanceSelection();"
+          style="position: relative; z-index: 999; pointer-events: auto !important; cursor: pointer !important; display: inline-flex; align-items: center; gap: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--r-md); margin-bottom: 1rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back to Selection
+        </button>
+
+        <!-- PERSONAL FINANCE DASHBOARD -->
+        <div class="survival-bar">
+          <div class="sb-item" data-ledger="life">
+            <div class="sb-icon life">🧍</div>
+            <div><span class="sb-val" id="personal-life-balance">₦15,000</span><span class="sb-lbl">Personal
+                Balance</span></div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon wallet">💳</div>
+            <div><span class="sb-val" id="personal-safe-to-spend">₦620</span><span class="sb-lbl">Safe-to-Spend</span>
+            </div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon budget">📊</div>
+            <div><span class="sb-val" id="personal-daily-budget">₦1,500</span><span class="sb-lbl">Daily Budget</span>
+            </div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon savings">🏦</div>
+            <div><span class="sb-val" id="personal-savings">₦2,100</span><span class="sb-lbl">Savings</span></div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon health">❤️</div>
+            <div><span class="sb-val health-score" id="personal-health-score" data-score="72">72</span><span
+                class="sb-lbl">Health Score</span></div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon spent">💸</div>
+            <div><span class="sb-val" id="personal-total-spent">₦4,000</span><span class="sb-lbl">Total Spent</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Safe-to-Spend Ring -->
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+          <div class="feat-card" style="padding: 1.25rem;">
+            <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">
+              Safe-to-Spend</h4>
+            <div class="safe-to-spend-ring">
+              <svg class="ring-svg" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                <circle class="ring-fill good" cx="50" cy="50" r="40" stroke-dasharray="175.93 251.33"
+                  stroke-dashoffset="0"></circle>
+              </svg>
+              <div
+                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 20px; font-weight: 800; color: var(--text-primary);">₦620</div>
+                <div style="font-size: 10px; color: var(--text-tertiary);">Safe to Spend</div>
+              </div>
+            </div>
+            <div class="ring-status good">Healthy</div>
+            <div style="margin-top: 0.75rem; font-size: 12px; color: var(--success); text-align: center;">You're within
+              budget. Keep it up!</div>
+          </div>
+
+          <!-- Status Quo Gauge -->
+          <div class="feat-card" style="padding: 1.25rem;">
+            <div class="gauge-header">
+              <div>
+                <div class="gauge-title">Status Quo Gauge</div>
+                <div class="gauge-subtitle">Spending velocity this month</div>
+              </div>
+            </div>
+            <div class="gauge-track-horizontal">
+              <div class="gauge-fill-horizontal safe" style="width: 62%;"></div>
+            </div>
+            <div class="gauge-labels-horizontal">
+              <span>₦0</span>
+              <span>Daily Budget: ₦1,500</span>
+            </div>
+            <div class="gauge-message" style="margin-top: 0.75rem;">
+              You've spent ₦930 today. ₦570 remaining safe-to-spend.
+            </div>
+
+            <!-- Spending Velocity Section -->
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
+              <div
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                  <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 0.25rem;">Daily Safe Spend
+                  </div>
+                  <div style="font-size: 28px; font-weight: 700; color: var(--text-primary);">₦41</div>
+                </div>
+                <div style="text-align: right;">
+                  <span
+                    style="display: inline-flex; align-items: center; gap: 0.25rem; background: var(--bg-success); color: var(--success); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                    ✅ On pace
+                  </span>
+                </div>
+              </div>
+
+              <div
+                style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--r-md); margin-bottom: 0.75rem;">
+                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0.25rem;">Remaining
+                  Safe-to-Spend</div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">
+                  You have <strong style="color: var(--success);">₦620</strong> available
+                </div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 0.25rem;">
+                  for the next <strong>15 days</strong> (₦41.33/day)
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 13px; color: var(--success);">
+                <span style="font-size: 16px;">📊</span>
+                <span>₦620 ÷ 15 days = <strong>₦41/day</strong> budget</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget Buckets (Personal) -->
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">📊 Budget
+            Buckets (50:30:20)</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            <!-- Needs Bucket -->
+            <div class="budget-bucket" onclick="this.classList.toggle('expanded')">
+              <div class="budget-bucket-header">
+                <div class="bucket-label">
+                  <div class="bucket-icon needs">🏠</div>
+                  <div class="bucket-title">Needs (50%)</div>
+                </div>
+                <div class="bucket-percentage">50%</div>
+              </div>
+              <div class="budget-bucket-stats">
+                <div class="bucket-allocated">₦7,500 allocated</div>
+                <div class="bucket-spent">₦5,280 spent</div>
+              </div>
+              <div class="bucket-progress-bar">
+                <div class="bucket-progress-fill needs" style="width: 70.4%;"></div>
+              </div>
+              <div class="budget-bucket-transactions">
+                <div class="bucket-transaction-item">
+                  <span class="bucket-transaction-name">Hostel Rent</span>
+                  <span class="bucket-transaction-amount">₦3,500</span>
+                </div>
+                <div class="bucket-transaction-item">
+                  <span class="bucket-transaction-name">Food & Groceries</span>
+                  <span class="bucket-transaction-amount">₦1,780</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: center; margin-top: 0.5rem;">
+                <span class="bucket-expand-icon">▼</span>
+              </div>
+            </div>
+
+            <!-- Wants Bucket -->
+            <div class="budget-bucket" onclick="this.classList.toggle('expanded')">
+              <div class="budget-bucket-header">
+                <div class="bucket-label">
+                  <div class="bucket-icon wants">🎯</div>
+                  <div class="bucket-title">Wants (30%)</div>
+                </div>
+                <div class="bucket-percentage">30%</div>
+              </div>
+              <div class="budget-bucket-stats">
+                <div class="bucket-allocated">₦4,500 allocated</div>
+                <div class="bucket-spent">₦1,890 spent</div>
+              </div>
+              <div class="bucket-progress-bar">
+                <div class="bucket-progress-fill wants" style="width: 42%;"></div>
+              </div>
+              <div class="budget-bucket-transactions">
+                <div class="bucket-transaction-item">
+                  <span class="bucket-transaction-name">Data Subscription</span>
+                  <span class="bucket-transaction-amount">₦1,200</span>
+                </div>
+                <div class="bucket-transaction-item">
+                  <span class="bucket-transaction-name">Snacks</span>
+                  <span class="bucket-transaction-amount">₦690</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: center; margin-top: 0.5rem;">
+                <span class="bucket-expand-icon">▼</span>
+              </div>
+            </div>
+
+            <!-- Future Bucket -->
+            <div class="budget-bucket" onclick="this.classList.toggle('expanded')">
+              <div class="budget-bucket-header">
+                <div class="bucket-label">
+                  <div class="bucket-icon future">🏦</div>
+                  <div class="bucket-title">Savings (20%)</div>
+                </div>
+                <div class="bucket-percentage">20%</div>
+              </div>
+              <div class="budget-bucket-stats">
+                <div class="bucket-allocated">₦3,000 allocated</div>
+                <div class="bucket-spent">₦2,100 saved</div>
+              </div>
+              <div class="bucket-progress-bar">
+                <div class="bucket-progress-fill future" style="width: 70%;"></div>
+              </div>
+              <div class="budget-bucket-transactions">
+                <div class="bucket-transaction-item">
+                  <span class="bucket-transaction-name">Emergency Fund</span>
+                  <span class="bucket-transaction-amount">₦1,500</span>
+                </div>
+                <div class="bucket-transaction-item">
+                  <span class="bucket-transaction-name">Tech Savings</span>
+                  <span class="bucket-transaction-amount">₦600</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: center; margin-top: 0.5rem;">
+                <span class="bucket-expand-icon">▼</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Burn Rate Tracker (Personal) -->
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+        <!-- Burn Rate Card -->
+        <div class="feat-card" style="padding: 1.25rem;">
+          <div class="gauge-header">
+            <div>
+              <div class="gauge-title">⏳ Live Burn Rate Tracker</div>
+              <div class="gauge-subtitle">Daily personal spending rate</div>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; text-align: center;">
+            <div style="font-size: 36px; font-weight: 800; color: var(--text-primary);">₦850</div>
+            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 0.25rem;">per day</div>
+          </div>
+          <div class="gauge-track-horizontal" style="margin-top: 1rem;">
+            <div class="gauge-fill-horizontal safe" style="width: 56%;"></div>
+          </div>
+          <div class="gauge-labels-horizontal">
+            <span>18 days runway</span>
+            <span>Monthly: ₦25,500</span>
+          </div>
+          <div class="gauge-message" style="margin-top: 0.75rem;">
+            💡 Your burn rate is healthy. You're spending 56% of your daily budget.
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget by Category -->
+      <div style="margin-bottom: 2rem;">
+        <style>
+          .finance-table-container { overflow-x: auto; border: 1px solid var(--border-light); border-radius: var(--r-md); background: var(--bg-secondary); }
+          .finance-table { width: 100%; border-collapse: collapse; text-align: left; }
+          .finance-table th { padding: 1rem; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; border-bottom: 1px solid var(--border-light); background: var(--bg-tertiary); white-space: nowrap; }
+          .finance-table td { padding: 1rem; font-size: 14px; font-weight: 500; color: var(--text-primary); border-bottom: 1px solid var(--border-light); white-space: nowrap; }
+          .finance-table tr:last-child td { border-bottom: none; }
+          .progress-cell { display: flex; align-items: center; gap: 0.75rem; }
+          .circ-progress { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; position: relative; }
+          .circ-progress::before { content: ""; position: absolute; inset: 4px; background: var(--bg-secondary); border-radius: 50%; }
+          .circ-value { position: relative; z-index: 1; }
+          
+          /* Colors based on status */
+          .status-good { color: #84cc16; }
+          .status-warn { color: var(--warning); }
+          .status-danger { color: var(--danger); }
+        </style>
+        
+        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">Budget by Category</h3>
+        
+        <div class="finance-table-container">
+          <table class="finance-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Budget</th>
+                <th>Spent</th>
+                <th>Percentage Spent</th>
+                <th>Balance</th>
+              </tr>
+            </thead>
+            <tbody id="dynamic-budget-table">
+              <tr>
+                <td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary)">
+                  Loading budget data...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Your Financial Goals -->
+      <div style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary);">Your Financial Goals</h3>
+          <button style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: var(--r-md); font-size: 13px; font-weight: 500; cursor: pointer;">
+            <span>+</span> Add Goal
+          </button>
+        </div>
+        
+        <div class="finance-table-container">
+          <table class="finance-table">
+            <thead>
+              <tr>
+                <th>Goal</th>
+                <th>Target</th>
+                <th>Saved</th>
+                <th>Progress</th>
+                <th>Remaining</th>
+              </tr>
+            </thead>
+            <tbody id="dynamic-goals-table">
+              <tr>
+                <td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary)">
+                  Loading goals...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Finance History (Personal) -->
+      <div class="feat-card">
+        <div class="feat-card-header">
+          <div class="feat-badge">Finance History</div>
+          <h3>📜 Transaction History</h3>
+          <span class="pill pill-blue">Personal Ledger</span>
+        </div>
+        <p class="feat-desc">Complete record of your personal income and expenses synced via Mono.</p>
+
+        <div class="finance-history-table">
+          <div class="finance-history-section incoming">
+            <div class="finance-history-header">
+              <span class="finance-history-icon">📥</span>
+              <span class="finance-history-title">Incoming</span>
+              <span class="finance-history-total" id="dynamic-incoming-total">Total: —</span>
+            </div>
+            <div class="finance-history-list" id="dynamic-incoming-list">
+              <div style="padding:1rem;color:var(--text-secondary);font-size:13px;">Loading transactions...</div>
+            </div>
+          </div>
+
+          <div class="finance-history-section outgoing">
+            <div class="finance-history-header">
+              <span class="finance-history-icon">📤</span>
+              <span class="finance-history-title">Outgoing</span>
+              <div class="finance-history-item outgoing">
+                <span class="finance-history-amount">890</span>
+                <span class="finance-history-desc">(Airtime)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance Summary (Plain English Report) -->
+      <div class="feat-card" style="margin-bottom: 1.5rem; padding: 1.5rem; background: var(--bg-secondary);">
+        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">📋 Your Finance
+          Summary</h3>
+        <div id="personal-finance-summary" style="font-size: 14px; line-height: 1.8; color: var(--text-secondary);">
+          <!-- Dynamic content will be inserted here by JavaScript -->
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- BUSINESS FINANCE CONTENT SECTION -->
+    <div class="finance-content-section" id="finance-business-content">
+      <div class="module-page-content">
+        <div class="finance-type-header business">
+          <div class="finance-type-info">
+            <div class="finance-type-icon">💼</div>
+            <div class="finance-type-title">
+              <h2>Business Finance</h2>
+              <p>Monitor business revenue, vault, and runway metrics</p>
+            </div>
+          </div>
+        </div>
+        <button class="back-btn" onclick="window.showFinanceSelection();"
+          style="position: relative; z-index: 999; pointer-events: auto !important; cursor: pointer !important; display: inline-flex; align-items: center; gap: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: var(--r-md); margin-bottom: 1rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back to Selection
+        </button>
+
+        <!-- BUSINESS FINANCE DASHBOARD -->
+        <div class="survival-bar">
+          <div class="sb-item" data-ledger="business">
+            <div class="sb-icon business">💼</div>
+            <div><span class="sb-val" id="business-balance">₦20,000</span><span class="sb-lbl">Business Ledger</span>
+            </div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon vault">🏦</div>
+            <div><span class="sb-val emerald" id="fin-locked-vault">₦14,000</span><span class="sb-lbl">Working
+                Capital</span></div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon clock">⏳</div>
+            <div><span class="sb-val gold" id="fin-runway-days">18 Days</span><span class="sb-lbl">Runway</span></div>
+          </div>
+          <div class="sb-item">
+            <div class="sb-icon available">💵</div>
+            <div><span class="sb-val" id="business-available">₦6,000</span><span class="sb-lbl">Available</span></div>
+          </div>
+        </div>
+
+        <!-- Business Metrics -->
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+          <!-- Safe-to-Spend (Business) -->
+          <div class="feat-card" style="padding: 1.25rem;">
+            <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">Available
+              Capital</h4>
+            <div class="safe-to-spend-ring">
+              <svg class="ring-svg" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                <circle class="ring-fill good" cx="50" cy="50" r="40" stroke-dasharray="100.53 251.33"
+                  stroke-dashoffset="0"></circle>
+              </svg>
+              <div
+                style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <div style="font-size: 20px; font-weight: 800; color: var(--text-primary);">₦6,000</div>
+                <div style="font-size: 10px; color: var(--text-tertiary);">Available</div>
+              </div>
+            </div>
+            <div class="ring-status good">70% in Vault Protected</div>
+          </div>
+
+          <!-- Runway Gauge -->
+          <div class="feat-card" style="padding: 1.25rem;">
+            <div class="gauge-header">
+              <div>
+                <div class="gauge-title">Burn Rate Tracker</div>
+                <div class="gauge-subtitle">Daily operational expenses</div>
+              </div>
+            </div>
+            <div class="gauge-track-horizontal">
+              <div class="gauge-fill-horizontal safe" style="width: 45%;"></div>
+            </div>
+            <div class="gauge-labels-horizontal">
+              <span>18 days left</span>
+              <span>Daily Burn: ₦1,111</span>
+            </div>
+            <div class="gauge-message" style="margin-top: 0.75rem;">
+              💡 Increase sales velocity to extend runway above 21 days.
+            </div>
+          </div>
+        </div>
+
+        <!-- Restock Vault Tracker -->
+        <div class="feat-card" style="margin-bottom: 1.5rem;">
+          <div class="feat-card-header">
+            <div class="feat-badge">Feature 6</div>
+            <h3>🔒 Restock Vault Tracker</h3>
+            <span class="pill pill-green">Pocket Separation</span>
+          </div>
+          <p class="feat-desc">Every sale is automatically split. Your next batch capital is locked and protected —
+            untouchable.</p>
+
+          <div class="vault-visual">
+            <div class="vault-donut">
+              <svg viewBox="0 0 36 36">
+                <path class="donut-bg"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="donut-fill" id="vault-circle-path" stroke-dasharray="68, 100"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="donut-center">
+                <div class="donut-value">₦14,000</div>
+                <div class="donut-label">Locked Vault</div>
+              </div>
+            </div>
+            <div class="vault-stats">
+              <div class="vault-stat">
+                <span class="vault-stat-label">Total Sales</span>
+                <span class="vault-stat-value">₦20,000</span>
+              </div>
+              <div class="vault-stat">
+                <span class="vault-stat-label">Vault Split (70%)</span>
+                <span class="vault-stat-value">₦14,000</span>
+              </div>
+              <div class="vault-stat">
+                <span class="vault-stat-label">Available (30%)</span>
+                <span class="vault-stat-value">₦6,000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Burn Rate & Spending Gauge (Business) -->
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+        <!-- Burn Rate Card -->
+        <div class="feat-card" style="padding: 1.25rem;">
+          <div class="gauge-header">
+            <div>
+              <div class="gauge-title">⏳ Live Burn Rate Tracker</div>
+              <div class="gauge-subtitle">Daily operational expenses</div>
+            </div>
+          </div>
+          <div style="margin-top: 1rem; text-align: center;">
+            <div style="font-size: 36px; font-weight: 800; color: var(--text-primary);">₦1,111</div>
+            <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 0.25rem;">per day</div>
+          </div>
+          <div class="gauge-track-horizontal" style="margin-top: 1rem;">
+            <div class="gauge-fill-horizontal safe" style="width: 45%;"></div>
+          </div>
+          <div class="gauge-labels-horizontal">
+            <span>18 days runway</span>
+            <span>Monthly: ₦33,330</span>
+          </div>
+          <div class="gauge-message" style="margin-top: 0.75rem;">
+            💡 Your business burn rate gives you 18 days of runway. Increase sales to extend above 21 days.
+          </div>
+        </div>
+
+        <!-- Spending Gauge (Business) -->
+        <div class="feat-card" style="padding: 1.25rem;">
+          <div class="gauge-header">
+            <div>
+              <div class="gauge-title">📊 Status Quo Gauge</div>
+              <div class="gauge-subtitle">Revenue vs Expenses this month</div>
+            </div>
+          </div>
+          <div class="gauge-track-horizontal">
+            <div class="gauge-fill-horizontal safe" style="width: 67%;"></div>
+          </div>
+          <div class="gauge-labels-horizontal">
+            <span>₦20,000 Revenue</span>
+            <span>67% Collected</span>
+          </div>
+          <div class="gauge-message" style="margin-top: 0.75rem;">
+            💵 You've collected ₦20,000 this month. ₦6,000 available for operations.
+          </div>
+
+          <!-- Spending Velocity Section -->
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
+            <div
+              style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+              <div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 0.25rem;">Daily Safe Spend
+                </div>
+                <div style="font-size: 28px; font-weight: 700; color: var(--text-primary);">₦333</div>
+              </div>
+              <div style="text-align: right;">
+                <span
+                  style="display: inline-flex; align-items: center; gap: 0.25rem; background: var(--bg-success); color: var(--success); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                  ✅ On pace
+                </span>
+              </div>
+            </div>
+
+            <div
+              style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--r-md); margin-bottom: 0.75rem;">
+              <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 0.25rem;">Remaining Working
+                Capital</div>
+              <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">
+                You have <strong style="color: var(--success);">₦6,000</strong> available
+              </div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 0.25rem;">
+                for the next <strong>18 days</strong> (₦333/day)
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 13px; color: var(--success);">
+              <span style="font-size: 16px;">📈</span>
+              <span>On track with <strong>₦1,111</strong> daily burn rate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance History (Business) -->
+      <div class="feat-card">
+        <div class="feat-card-header">
+          <div class="feat-badge">Finance History</div>
+          <h3>📜 Transaction History</h3>
+          <span class="pill pill-gold">Business Ledger</span>
+        </div>
+        <p class="feat-desc">Complete record of your business revenue and expenses synced via Mono.</p>
+
+        <div class="finance-history-table">
+          <div class="finance-history-section incoming">
+            <div class="finance-history-header">
+              <span class="finance-history-title">Incoming (Revenue)</span>
+              <span class="finance-history-total" id="business-incoming-total">Total: —</span>
+            </div>
+            <div class="finance-history-list" id="business-incoming-list">
+              <div style="padding:1rem;color:var(--text-secondary);font-size:13px;">Loading transactions...</div>
+            </div>
+          </div>
+
+          <div class="finance-history-section outgoing">
+            <div class="finance-history-header">
+              <span class="finance-history-title">Outgoing (Expenses)</span>
+              <span class="finance-history-total" id="business-outgoing-total">Total: —</span>
+            </div>
+            <div class="finance-history-list" id="business-outgoing-list">
+              <div style="padding:1rem;color:var(--text-secondary);font-size:13px;">Loading transactions...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transaction Simulation -->
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button class="btn btn-sm btn-primary" id="sim-credit-btn" style="flex: 1;">
+            ➕ Simulate Credit (Sale)
+          </button>
+          <button class="btn btn-sm btn-outline" id="sim-debit-btn" style="flex: 1;">
+            ➖ Simulate Debit (Expense)
+          </button>
+        </div>
+      </div>
+
+      <!-- Credit Sales Ledger (Business) -->
+      <div class="feat-card" style="margin-top: 1.5rem;">
+        <div class="feat-card-header">
+          <div class="feat-badge">Feature 7</div>
+          <h3>📒 Credit Sales Ledger</h3>
+          <span class="pill pill-red">Peer-to-Peer Tracking</span>
+        </div>
+        <p class="feat-desc">Track "book me" sales. Auto-detects credit from transaction notes. Alerts on overdue
+          payments.</p>
+
+        <div class="credit-ledger-preview">
+          <div class="credit-ledger-stats">
+            <div class="credit-stat">
+              <span class="credit-stat-label">Total Credit</span>
+              <span class="credit-stat-value credit-owed">₦8,500</span>
+            </div>
+            <div class="credit-stat">
+              <span class="credit-stat-label">Overdue</span>
+              <span class="credit-stat-value credit-overdue">₦2,500</span>
+            </div>
+            <div class="credit-stat">
+              <span class="credit-stat-label">Due This Week</span>
+              <span class="credit-stat-value credit-due">₦3,000</span>
+            </div>
+          </div>
+
+          <div class="credit-entries-preview">
+            <div class="credit-entry overdue">
+              <div class="credit-entry-info">
+                <span class="credit-entry-name">Chinedu Okonkwo</span>
+                <span class="credit-entry-amount">₦2,500</span>
+              </div>
+              <span class="credit-entry-status">Overdue by 5 days</span>
+            </div>
+            <div class="credit-entry">
+              <div class="credit-entry-info">
+                <span class="credit-entry-name">Fatima Abdullahi</span>
+                <span class="credit-entry-amount">₦3,000</span>
+              </div>
+              <span class="credit-entry-status">Due in 2 days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance Insights Summary -->
+      <div class="feat-card"
+        style="margin-top: 1.5rem; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: none;">
+        <div class="feat-card-header">
+          <h3 style="color: #92400e;">💡 Business Finance Insights</h3>
+        </div>
+        <div style="color: #92400e; line-height: 1.8;">
+          <p>✅ <strong>Healthy Vault:</strong> 70% of sales (₦14,000) safely locked for restock.</p>
+          <p>✅ <strong>Good Runway:</strong> 18 days of operational coverage maintained.</p>
+          <p>⚠️ <strong>Action Needed:</strong> ₦2,500 in overdue credit — follow up with Chinedu Okonkwo.</p>
+        </div>
+      </div>
+
+      <!-- Business Finance Summary (Plain English Report) -->
+      <div class="feat-card" style="margin-top: 1.5rem; padding: 1.5rem; background: var(--bg-secondary);">
+        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">📋 Business
+          Finance Summary</h3>
+        <div id="business-finance-summary" style="font-size: 14px; line-height: 1.8; color: var(--text-secondary);">
+          <!-- Dynamic content will be inserted here by JavaScript -->
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+
+
+  <!-- ============================================
+       PAGE: MODULE 4 — STRATEGY
+       ============================================ -->
+  <main class="page" id="page-strategy">
+    <div class="module-page-content">
+      <div class="module-page-hero strategy-hero">
+        <div class="mph-badge"><span class="mph-num">Module 4</span></div>
+        <h2 class="mph-title">🎯 Updated Strategy</h2>
+        <p class="mph-sub">Actionable commercial engine. Tells you exactly what price to charge, how many bottles to
+          sell, and when to scale.</p>
+      </div>
+
+      <!-- NEW: Strategy Advice Hub (GitHub app feature) -->
+      <div class="strategy-advice-hub">
+        <h3 style="margin-bottom: 1rem; font-size: 18px; font-weight: 700;">🧠 AI Strategy Recommendations</h3>
+
+        <div class="advice-card high">
+          <div class="advice-content">
+            <div class="advice-title">Inflation is Eating Your Savings</div>
+            <div class="advice-reason">Food inflation at 31.7% is eroding your purchasing power. Your savings are losing
+              value daily.</div>
+            <div class="advice-impact">Potential loss: ₦12,500/month if unaddressed</div>
+          </div>
+          <div class="advice-actions">
+            <div class="advice-status unread">New</div>
+          </div>
+        </div>
+
+        <div class="advice-card medium">
+          <div class="advice-content">
+            <div class="advice-title">Opportunity: Rising Seasonal Demand</div>
+            <div class="advice-reason">Seasonal patterns next week typically drive 2.4× spending velocity increase.
+            </div>
+            <div class="advice-impact">Potential gain: +₦18,000 from prepared inventory</div>
+          </div>
+          <div class="advice-actions">
+            <div class="advice-status unread">New</div>
+          </div>
+        </div>
+
+        <div class="advice-card low">
+          <div class="advice-content">
+            <div class="advice-title">Fuel Price Stabilizing</div>
+            <div class="advice-reason">Pump price has held steady at ₦680/L for 2 weeks. Transport costs are
+              predictable.</div>
+            <div class="advice-impact">Maintain current logistics budget</div>
+          </div>
+          <div class="advice-actions">
+            <div class="advice-status">Reviewed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Strategy Snapshot (GitHub app feature) -->
+      <div class="strategy-snapshot">
+        <div class="snapshot-header">
+          <div>
+            <div class="snapshot-goal">Build ₦500k Emergency Fund</div>
+            <div class="snapshot-target">Current: ₦320,000 / Target: ₦500,000</div>
+          </div>
+          <div class="snapshot-status">
+            <span>✓</span> On Track
+          </div>
+        </div>
+
+        <div class="snapshot-progress">
+          <div class="progress-item">
+            <div class="progress-value">64%</div>
+            <div class="progress-label">Completed</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-value">₦180k</div>
+            <div class="progress-label">Remaining</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-value">6 mo</div>
+            <div class="progress-label">Timeline</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Optimization Card (GitHub app feature) -->
+      <div class="optimization-card glowing">
+        <div class="optimization-header">
+          <div class="optimization-title">✨ New Budget Optimization Available</div>
+          <div class="optimization-reason">Based on your spending patterns and current economic indicators</div>
+        </div>
+
+        <div class="optimization-comparison">
+          <div class="optimization-side old">
+            <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 0.75rem;">Current Allocation</h4>
+            <div class="allocation-row">
+              <span class="allocation-label">Needs (50%)</span>
+              <span class="allocation-value">₦22,500</span>
+            </div>
+            <div class="allocation-row">
+              <span class="allocation-label">Wants (30%)</span>
+              <span class="allocation-value">₦13,500</span>
+            </div>
+            <div class="allocation-row">
+              <span class="allocation-label">Savings (20%)</span>
+              <span class="allocation-value">₦9,000</span>
+            </div>
+          </div>
+          <div class="optimization-side new">
+            <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 0.75rem;">Optimized Allocation</h4>
+            <div class="allocation-row">
+              <span class="allocation-label">Needs (50%)</span>
+              <span class="allocation-value">₦22,500</span>
+            </div>
+            <div class="allocation-row">
+              <span class="allocation-label">Wants (25%)</span>
+              <span class="allocation-value">₦11,250</span>
+            </div>
+            <div class="allocation-row">
+              <span class="allocation-label">Savings (25%)</span>
+              <span class="allocation-value">₦11,250</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="optimization-impact">
+          💡 This optimization could add <strong>+₦2,250/month</strong> to your savings while maintaining your survival
+          needs.
+        </div>
+
+        <div class="optimization-actions">
+          <button class="btn btn-primary" id="accept-optimization-btn">Accept Optimization</button>
+          <button class="btn btn-outline" id="edit-optimization-btn">Edit Manually</button>
+        </div>
+      </div>
+
+      <!-- NEW: Forecast Horizon (GitHub app feature) -->
+      <div class="forecast-horizon">
+        <div class="forecast-header">
+          <div class="forecast-title">📅 6-Month Wealth Projection Timeline</div>
+          <div class="forecast-toggle">
+            <button class="forecast-toggle-btn active" data-forecast="7" id="forecast-7-btn">7 Days</button>
+            <button class="forecast-toggle-btn" data-forecast="30" id="forecast-30-btn">30 Days</button>
+          </div>
+        </div>
+
+        <div class="timeline-events">
+          <div class="timeline-event reached">
+            <div class="timeline-event-check">✓</div>
+            <div class="timeline-event-date">Week 1</div>
+            <div class="timeline-event-milestone">₦1,000 Milestone</div>
+            <div class="timeline-event-amount">Achieved</div>
+            <div class="timeline-event-description">First savings milestone unlocked</div>
+          </div>
+          <div class="timeline-event reached">
+            <div class="timeline-event-check">✓</div>
+            <div class="timeline-event-date">Week 2</div>
+            <div class="timeline-event-milestone">₦2,500 Accumulated</div>
+            <div class="timeline-event-amount">On Track</div>
+            <div class="timeline-event-description">Ahead of schedule by 3 days</div>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-event-date">Week 4</div>
+            <div class="timeline-event-milestone">₦5,000 Target</div>
+            <div class="timeline-event-amount">Pending</div>
+            <div class="timeline-event-description">Halfway to emergency fund goal</div>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-event-date">Week 6</div>
+            <div class="timeline-event-milestone">₦7,500 Achieved</div>
+            <div class="timeline-event-amount">Projected</div>
+            <div class="timeline-event-description">75% completion milestone</div>
+          </div>
+          <div class="timeline-event">
+            <div class="timeline-event-date">Week 8</div>
+            <div class="timeline-event-milestone">₦10,000 Reached</div>
+            <div class="timeline-event-amount">Projected</div>
+            <div class="timeline-event-description">Emergency fund fully funded</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="module-features-grid grid-3col">
+
+        <!-- Feature 7 (Strategy): Break-Even Gauge -->
+        <div class="feat-card">
+          <div class="feat-card-header">
+            <div class="feat-badge">Feature 7</div>
+            <h3>📊 Live Break-Even Progress</h3>
+            <span class="pill pill-gold" id="be-status-pill">Amber Zone</span>
+          </div>
+          <p class="feat-desc">Visual gauge that transitions from Amber (covering fixed costs) to Green (pure profit
+            territory).</p>
+
+          <div class="gauge-wrap">
+            <div class="gauge-track">
+              <div class="gauge-fill amber" id="be-gauge-fill" style="width:73.3%"></div>
+            </div>
+            <div class="gauge-labels">
+              <span>₦0</span>
+              <span id="be-target-lbl">Target: ₦30,000</span>
+            </div>
+          </div>
+
+          <div class="be-stats">
+            <div class="be-stat"><span>Net Profit Logged</span><strong id="be-logged-profit">₦22,000</strong></div>
+            <div class="be-stat"><span>Remaining to Break-Even</span><strong class="rose"
+                id="be-remaining-gap">₦8,000</strong></div>
+          </div>
+
+          <div class="be-banner amber" id="be-banner-box">
+            🔴 <strong>Amber Zone:</strong> ₦8,000 away from break-even. Sell 8 more bottles to cross into profit!
+          </div>
+
+          <!-- Fixed costs input -->
+          <div class="be-input-row">
+            <label>Adjust Monthly Fixed Costs</label>
+            <div class="input-wrap"><span>₦</span><input type="number" id="be-fixed-costs-inp" value="30000"></div>
+            <button class="btn btn-sm btn-primary" id="update-be-btn">Update</button>
+          </div>
+        </div>
+
+        <!-- Feature 8 (Strategy): Bottom-Up Pricing Engine -->
+        <div class="feat-card">
+          <div class="feat-card-header">
+            <div class="feat-badge">Feature 8</div>
+            <h3>🎯 Bottom-Up Pricing Advisor</h3>
+            <span class="pill pill-purple">Goal Back-Solver</span>
+          </div>
+          <p class="feat-desc">Enter your monthly survival target. JOSEPH AI reverse-engineers the exact price and
+            volume blueprint.</p>
+
+          <div class="pricing-form">
+            <div class="form-group">
+              <label>Desired Monthly Net Profit Goal</label>
+              <div class="input-wrap"><span>₦</span><input type="number" id="goal-profit-inp" value="50000"></div>
+            </div>
+            <button class="btn btn-primary btn-block" id="calc-pricing-btn">Generate My Blueprints →</button>
+          </div>
+
+          <div class="blueprints-list" id="blueprints-list">
+            <!-- JS populates -->
+          </div>
+        </div>
+
+        <!-- Feature 9: Supplier Procurement Advisor -->
+        <div class="feat-card">
+          <div class="feat-card-header">
+            <div class="feat-badge">Feature 9</div>
+            <h3>🚚 Supplier Procurement Advisor</h3>
+            <span class="pill pill-cyan">Wholesale Simulator</span>
+          </div>
+          <p class="feat-desc">Trade-off calculator: small bucket today vs bulk 100kg bag for massive unit cost savings.
+          </p>
+
+          <div class="procurement-options">
+            <div class="p-opt active" id="p-opt-current">
+              <div class="p-opt-tag">Option A — Current</div>
+              <div class="p-opt-title">Standard 10kg Bucket</div>
+              <div class="p-opt-detail">₦10,000 → Unit COGS: ₦500/bottle</div>
+            </div>
+            <div class="p-opt" id="p-opt-wholesale">
+              <div class="p-opt-tag">Option B — Bulk</div>
+              <div class="p-opt-title">Wholesale 100kg Bag</div>
+              <div class="p-opt-detail">₦82,000 → Unit COGS: ₦410/bottle (−18%)</div>
+            </div>
+          </div>
+
+          <div class="tradeoff-box">
+            <h4>⚖️ Capital Allocation Trade-Off</h4>
+            <p id="tradeoff-text">Buying the 100kg bag reduces unit cost to ₦410, adding ₦90 extra margin per bottle.
+              However, it would drain 90%+ of your current liquid reserves.</p>
+            <div class="tradeoff-verdict warning" id="tradeoff-verdict">
+              ✋ <strong>Recommendation:</strong> Wait until spendable reserves cross ₦95,000 before scaling to bulk.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ============================================
+       BANK ALERT MODAL
+       ============================================ -->
+  <div class="modal-overlay" id="bank-alert-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🔔 Bank Alert Parser</h3>
+        <button class="modal-close" id="close-modal-btn">&#x2715;</button>
+      </div>
+      <p class="modal-sub">Select an incoming bank notification to parse and auto-log:</p>
+      <div class="alert-templates">
+        <button class="alert-tpl" data-type="sale3k">
+          <span class="tpl-bank">OPay</span>
+          <span class="tpl-msg">"Credit: ₦3,000.00 from CHINEDU OKONKWO — payment"</span>
+        </button>
+        <button class="alert-tpl" data-type="sale15k">
+          <span class="tpl-bank">Moniepoint</span>
+          <span class="tpl-msg">"Credit: ₦15,000.00 from EVENT CATERING — bulk order"</span>
+        </button>
+        <button class="alert-tpl" data-type="mono_gtb">
+          <span class="tpl-bank">GTBank (Mono Webhook)</span>
+          <span class="tpl-msg">"Webhook: ₦4,500 Credit — Ref: MONO_TX_99482"</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ============================================
+       LEDGER SELECTION MODAL
+       ============================================ -->
+  <div class="modal-overlay" id="ledger-selection-modal">
+    <div class="modal-card ledger-modal">
+      <div class="modal-header">
+        <h3>📂 Select Ledger</h3>
+        <button class="modal-close"
+          onclick="this.closest('.modal-overlay').classList.remove('active')">&#x2715;</button>
+      </div>
+      <div class="ledger-modal-content">
+        <div class="ledger-preview">
+          <span class="ledger-amount" id="ledger-amount">₦3,000</span>
+          <span class="ledger-type" id="ledger-type">Incoming</span>
+          <span class="ledger-title" id="ledger-title">Payment Received</span>
+        </div>
+        <p class="ledger-prompt">Which ledger should this transaction belong to?</p>
+        <div class="ledger-options">
+          <button class="ledger-option life-option" id="select-life-ledger">
+            <div class="ledger-option-icon">🧍</div>
+            <div class="ledger-option-info">
+              <span class="ledger-option-title">Life Ledger</span>
+              <span class="ledger-option-desc">Personal expenses, allowance, survival costs</span>
+            </div>
+            <span class="ledger-balance">₦15,000</span>
+          </button>
+          <button class="ledger-option business-option" id="select-business-ledger">
+            <div class="ledger-option-icon">💼</div>
+            <div class="ledger-option-info">
+              <span class="ledger-option-title">Business Ledger</span>
+              <span class="ledger-option-desc">Sales, inventory, working capital</span>
+            </div>
+            <span class="ledger-balance">₦20,000</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       BUDGET SPLIT CONFIRMATION MODAL
+       ============================================ -->
+  <div class="modal-overlay" id="budget-split-modal">
+    <div class="modal-card budget-modal">
+      <div class="modal-header">
+        <h3>🧠 Smart Budget Split</h3>
+        <button class="modal-close"
+          onclick="this.closest('.modal-overlay').classList.remove('active')">&#x2715;</button>
+      </div>
+      <div class="budget-split-content">
+        <p class="budget-split-intro">Your incoming funds will be automatically allocated using the 50:30:20 rule:</p>
+        <div class="budget-split-breakdown">
+          <div class="split-row">
+            <span class="split-label">Total Incoming</span>
+            <span class="split-value split-total" id="split-total">₦15,000</span>
+          </div>
+          <div class="split-row">
+            <span class="split-label">🏠 Needs (50%)</span>
+            <span class="split-value split-needs" id="split-needs">₦7,500</span>
+          </div>
+          <div class="split-row">
+            <span class="split-label">🎯 Wants (30%)</span>
+            <span class="split-value split-wants" id="split-wants">₦4,500</span>
+          </div>
+          <div class="split-row">
+            <span class="split-label">🏦 Savings (20%)</span>
+            <span class="split-value split-savings" id="split-savings">₦3,000</span>
+          </div>
+        </div>
+        <p class="budget-split-source" id="split-source">Source: Weekly Allowance</p>
+        <div class="budget-split-actions">
+          <button class="btn btn-secondary btn-outline" id="modify-split-btn">Adjust Split</button>
+          <button class="btn btn-primary" id="confirm-split-btn">Confirm & Allocate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       FLOATING CHAT INTERFACE (Rational Proxy)
+       ============================================ -->
+  <div class="chat-widget collapsed" id="chat-widget">
+    <div class="chat-toggle-btn" id="chat-toggle-btn" title="Financial Assistant">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <span class="chat-title">Financial Assistant</span>
+          <span class="chat-subtitle">Ask about burn rate, budget, strategy</span>
+        </div>
+        <button class="chat-close" id="chat-close-btn" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <!-- Messages populate here -->
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask about your burn rate, budget, or strategy..." />
+        <button class="chat-send-btn" id="chat-send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       SETTINGS PANEL
+       ============================================ -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card settings-modal-card">
+      <div class="modal-header">
+        <h3>⚙️ Settings</h3>
+        <button class="modal-close" id="close-settings-btn">&#x2715;</button>
+      </div>
+
+      <div class="settings-content">
+        <!-- API Configuration -->
+        <div class="settings-section">
+          <h4 class="settings-section-title">📡 Data Sources</h4>
+
+          <div class="settings-row">
+            <div class="settings-label">
+              <span class="settings-label-text">Use Real APIs</span>
+              <span class="settings-label-sub">Fetch live data from external sources</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="use-real-apis-toggle" ${localStorage.getItem('joseph_userealapis')==='true'
+                ? 'checked' : '' }>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-divider"></div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">NewsAPI Key (Optional)</label>
+            <div class="settings-input-row">
+              <input type="password" class="settings-input" id="newsapi-key-input" placeholder="Enter your NewsAPI key">
+              <button class="btn btn-sm btn-primary" id="save-newsapi-btn">Save</button>
+            </div>
+            <a href="https://newsapi.org/register" target="_blank" class="settings-link">Get free API key →</a>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Trading Economics Key (Optional)</label>
+            <div class="settings-input-row">
+              <input type="password" class="settings-input" id="tradingecon-key-input"
+                placeholder="Enter your Trading Economics key">
+              <button class="btn btn-sm btn-primary" id="save-te-btn">Save</button>
+            </div>
+            <a href="https://tradingeconomics.com/" target="_blank" class="settings-link">Get API key →</a>
+          </div>
+
+          <button class="btn btn-outline btn-block" id="clear-cache-btn">Clear Data Cache</button>
+        </div>
+
+        <!-- Budget Configuration -->
+        <div class="settings-section">
+          <h4 class="settings-section-title">💰 Budget Rules</h4>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Monthly Budget (₦)</label>
+            <input type="number" class="settings-input" id="monthly-budget-input" value="45000">
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Budget Split Rule</label>
+            <div class="budget-split-inputs">
+              <div class="split-input-group">
+                <span>Needs</span>
+                <input type="number" class="settings-input sm" id="needs-ratio-input" value="50" min="0" max="100">
+                <span>%</span>
+              </div>
+              <div class="split-input-group">
+                <span>Wants</span>
+                <input type="number" class="settings-input sm" id="wants-ratio-input" value="30" min="0" max="100">
+                <span>%</span>
+              </div>
+              <div class="split-input-group">
+                <span>Savings</span>
+                <input type="number" class="settings-input sm" id="savings-ratio-input" value="20" min="0" max="100">
+                <span>%</span>
+              </div>
+            </div>
+            <p class="settings-hint">Must equal 100%</p>
+          </div>
+
+          <button class="btn btn-primary btn-block" id="save-budget-btn">Save Budget Settings</button>
+        </div>
+
+        <!-- Business Configuration -->
+        <div class="settings-section">
+          <h4 class="settings-section-title">💼 Business Settings</h4>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Reinvestment Ratio</label>
+            <div class="settings-input-row">
+              <input type="range" class="settings-range" id="reinvestment-slider" min="50" max="90" value="70">
+              <span class="settings-range-value" id="reinvestment-value">70%</span>
+            </div>
+            <p class="settings-hint">% of sales automatically locked for restock</p>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Retail Price (₦)</label>
+            <input type="number" class="settings-input" id="retail-price-input" value="1500">
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Monthly Fixed Costs (₦)</label>
+            <input type="number" class="settings-input" id="fixed-costs-input" value="30000">
+          </div>
+
+          <button class="btn btn-primary btn-block" id="save-business-btn">Save Business Settings</button>
+        </div>
+
+        <!-- Display Preferences -->
+        <div class="settings-section">
+          <h4 class="settings-section-title">🎨 Display</h4>
+
+          <div class="settings-row">
+            <div class="settings-label">
+              <span class="settings-label-text">Show Module Animations</span>
+              <span class="settings-label-sub">Smooth transitions between pages</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="animations-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-label">
+              <span class="settings-label-text">Compact Mode</span>
+              <span class="settings-label-sub">Reduce spacing for more content</span>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="compact-toggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">🌍 Region & Currency</label>
+            <select class="settings-input" id="region-select">
+              <option value="nigeria">🇳🇬 Nigeria - ₦ Naira (NGN)</option>
+              <option value="usa">🇺🇸 United States - $ Dollar (USD)</option>
+              <option value="india">🇮🇳 India - ₹ Rupee (INR)</option>
+              <option value="uk">🇬🇧 United Kingdom - £ Pound (GBP)</option>
+            </select>
+            <span class="settings-hint">Select your region to customize currency, banks, and examples</span>
+          </div>
+
+          <button class="btn btn-primary btn-block" id="save-display-btn">Save Display Settings</button>
+        </div>
+
+        <!-- Account Classification -->
+        <div class="settings-section">
+          <h4 class="settings-section-title">🏦 Account Classification</h4>
+          <p class="settings-hint">Tell the system which accounts are for Business vs Personal spending. This
+            auto-routes transactions.</p>
+
+          <div id="account-rules-list" class="account-rules-list">
+            <!-- Account rules populated dynamically -->
+          </div>
+
+          <div class="settings-group">
+            <button class="btn btn-outline btn-block" id="add-account-rule-btn">
+              + Add Account Rule
+            </button>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-input-label">Auto-classify New Accounts</label>
+            <div class="settings-row">
+              <div class="settings-label">
+                <span class="settings-label-text">Enable AI Classification</span>
+                <span class="settings-label-sub">Learn from transaction patterns</span>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="auto-classify-toggle" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-section danger">
+          <h4 class="settings-section-title">🗑️ Data Management</h4>
+
+          <button class="btn btn-outline-danger btn-block" id="export-data-btn">Export All Data</button>
+          <button class="btn btn-outline-danger btn-block" id="clear-all-data-btn">Clear All Data (Reset)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Button (FAB) -->
+  <button class="settings-fab" id="settings-fab-btn" title="Settings">
+    <span>⚙️</span>
+  </button>
+
+  <!-- ============================================
+       INTERACTIVE TOUR/OVERLAY
+       ============================================ -->
+  <div class="tour-overlay" id="tour-overlay">
+    <div class="tour-backdrop" id="tour-backdrop"></div>
+
+    <!-- Tour Step 1: Welcome -->
+    <div class="tour-step" id="tour-step-1" data-tour-step="1">
+      <div class="tour-highlight-ring"></div>
+      <div class="tour-card">
+        <div class="tour-progress">
+          <span class="tour-progress-text">Step 1 of 5</span>
+          <div class="tour-progress-bar">
+            <div class="tour-progress-fill" style="width: 20%"></div>
+          </div>
+        </div>
+        <div class="tour-icon">👋</div>
+        <h3 class="tour-title">Welcome to JOSEPH AI</h3>
+        <p class="tour-description">
+          Your AI-powered Economic Operating System designed for everyone.
+          Let's show you how this transforms your business.
+        </p>
+        <div class="tour-actions">
+          <button class="btn btn-ghost" id="tour-skip-btn">Skip Tour</button>
+          <button class="btn btn-primary" id="tour-next-1-btn">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Step 2: Dual-Ledger System -->
+    <div class="tour-step" id="tour-step-2" data-tour-step="2">
+      <div class="tour-highlight-ring"></div>
+      <div class="tour-card">
+        <div class="tour-progress">
+          <span class="tour-progress-text">Step 2 of 5</span>
+          <div class="tour-progress-bar">
+            <div class="tour-progress-fill" style="width: 40%"></div>
+          </div>
+        </div>
+        <div class="tour-icon">💼</div>
+        <h3 class="tour-title">The Dual-Ledger System</h3>
+        <p class="tour-description">
+          We separate your <strong>Business</strong> from your <strong>Personal</strong> finances.
+          Every sale automatically splits into capital protection and spendable profit.
+        </p>
+        <div class="tour-visual">
+          <div class="tour-ledger-demo">
+            <div class="tour-ledger-box business">
+              <span class="tour-ledger-icon">💼</span>
+              <span class="tour-ledger-label">Business</span>
+              <span class="tour-ledger-value">₦20,000</span>
+            </div>
+            <div class="tour-ledger-arrow">→</div>
+            <div class="tour-ledger-split">
+              <div class="tour-ledger-box vault">
+                <span>🔒 Vault</span>
+                <span>70%</span>
+              </div>
+              <div class="tour-ledger-box spendable">
+                <span>✨ Available</span>
+                <span>30%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tour-actions">
+          <button class="btn btn-ghost" id="tour-prev-2-btn">← Back</button>
+          <button class="btn btn-primary" id="tour-next-2-btn">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Step 3: Economic Intelligence -->
+    <div class="tour-step" id="tour-step-3" data-tour-step="3">
+      <div class="tour-highlight-ring"></div>
+      <div class="tour-card">
+        <div class="tour-progress">
+          <span class="tour-progress-text">Step 3 of 5</span>
+          <div class="tour-progress-bar">
+            <div class="tour-progress-fill" style="width: 60%"></div>
+          </div>
+        </div>
+        <div class="tour-icon">📡</div>
+        <h3 class="tour-title">Live Economic Intelligence</h3>
+        <p class="tour-description">
+          Real-time data on inflation, FX rates, commodity prices, and market trends.
+          We tell you <em>before</em> price shocks destroy your margin.
+        </p>
+        <div class="tour-visual">
+          <div class="tour-ticker-demo">
+            <div class="tour-ticker-item">
+              <span class="tour-ticker-label">Inflation</span>
+              <span class="tour-ticker-value">31.7%</span>
+              <span class="tour-ticker-change positive">+0.8%</span>
+            </div>
+            <div class="tour-ticker-item">
+              <span class="tour-ticker-label">FX Rate</span>
+              <span class="tour-ticker-value">₦1,650/$</span>
+              <span class="tour-ticker-change negative">+2.3%</span>
+            </div>
+          </div>
+        </div>
+        <div class="tour-actions">
+          <button class="btn btn-ghost" id="tour-prev-3-btn">← Back</button>
+          <button class="btn btn-primary" id="tour-next-3-btn">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Step 4: Strategy Engine -->
+    <div class="tour-step" id="tour-step-4" data-tour-step="4">
+      <div class="tour-highlight-ring"></div>
+      <div class="tour-card">
+        <div class="tour-progress">
+          <span class="tour-progress-text">Step 4 of 5</span>
+          <div class="tour-progress-bar">
+            <div class="tour-progress-fill" style="width: 80%"></div>
+          </div>
+        </div>
+        <div class="tour-icon">🎯</div>
+        <h3 class="tour-title">AI Strategy Engine</h3>
+        <p class="tour-description">
+          Contextual advice based on your actual data. We tell you exactly:
+          <strong>What price to charge, how many units to sell, and when to scale.</strong>
+        </p>
+        <div class="tour-visual">
+          <div class="tour-advice-demo">
+            <div class="tour-advice-item">
+              <span class="tour-advice-icon">⚠️</span>
+              <span class="tour-advice-text">Runway: 14 days. Increase sales velocity.</span>
+            </div>
+            <div class="tour-advice-item">
+              <span class="tour-advice-icon">💡</span>
+              <span class="tour-advice-text">Raise price to ₦1,650 to maintain margins.</span>
+            </div>
+            <div class="tour-advice-item">
+              <span class="tour-advice-icon">🚀</span>
+              <span class="tour-advice-text">Bulk procurement approved. Save ₦90/unit.</span>
+            </div>
+          </div>
+        </div>
+        <div class="tour-actions">
+          <button class="btn btn-ghost" id="tour-prev-4-btn">← Back</button>
+          <button class="btn btn-primary" id="tour-next-4-btn">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Step 5: Get Started -->
+    <div class="tour-step" id="tour-step-5" data-tour-step="5">
+      <div class="tour-highlight-ring"></div>
+      <div class="tour-card">
+        <div class="tour-progress">
+          <span class="tour-progress-text">Step 5 of 5</span>
+          <div class="tour-progress-bar">
+            <div class="tour-progress-fill" style="width: 100%"></div>
+          </div>
+        </div>
+        <div class="tour-icon">🚀</div>
+        <h3 class="tour-title">You're Ready!</h3>
+        <p class="tour-description">
+          Your Economic Operating System is ready. Remember:<br>
+          <strong>Every sale. Every expense. Every decision.</strong><br>
+          We'll help you make the right ones.
+        </p>
+        <div class="tour-visual">
+          <div class="tour-final-demo">
+            <div class="tour-final-item">
+              <span class="tour-final-icon">☁️</span>
+              <span class="tour-final-text">Dream Module</span>
+            </div>
+            <div class="tour-final-item">
+              <span class="tour-final-icon">💡</span>
+              <span class="tour-final-text">Interpretation</span>
+            </div>
+            <div class="tour-final-item">
+              <span class="tour-final-icon">💳</span>
+              <span class="tour-final-text">Finance</span>
+            </div>
+            <div class="tour-final-item">
+              <span class="tour-final-icon">🎯</span>
+              <span class="tour-final-text">Strategy</span>
+            </div>
+          </div>
+        </div>
+        <div class="tour-actions">
+          <button class="btn btn-ghost" id="tour-prev-5-btn">← Back</button>
+          <button class="btn btn-hero-primary" id="tour-finish-btn">Open Dashboard →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour Navigation Dots -->
+    <div class="tour-dots" id="tour-dots">
+      <button class="tour-dot active" data-tour-step="1"></button>
+      <button class="tour-dot" data-tour-step="2"></button>
+      <button class="tour-dot" data-tour-step="3"></button>
+      <button class="tour-dot" data-tour-step="4"></button>
+      <button class="tour-dot" data-tour-step="5"></button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       FLOATING HOME BUTTON (Separate from topbar)
+       ========================================== -->
+  <button id="floating-wa-btn"
+    onclick="window.openWhatsAppBot()"
+    style="position: fixed; top: 12px; right: 230px; background: #25D366; color: white; padding: 8px 16px; border-radius: 50px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(37,211,102,0.35); z-index: 10001; transition: all 0.2s ease; pointer-events: all;">
+    <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i>
+    Go to WhatsApp
+    <i class="fa-solid fa-arrow-right" style="font-size: 0.75rem;"></i>
+  </button>
+
+  <div id="floating-home-btn"
+    style="position: fixed; top: 12px; right: 80px; background: linear-gradient(135deg, #24248f 0%, #1A1A75 100%); color: white; padding: 8px 16px; border-radius: 50px; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; border: 1px solid rgba(255, 255, 255, 0.2); cursor: pointer; box-shadow: 0 4px 12px rgba(36, 36, 143, 0.4); z-index: 9999; transition: all 0.2s ease;">
+    <span style="font-size: 16px;">←</span>
+    <span>Home</span>
+  </div>
+
+  <!-- API Client (must load first) -->
+  <script src="frontend-api-client.js"></script>
+  <script src="dataEngine.js"></script>
+  <script src="transactionEngine.js"></script>
+  <script src="app-bootstrap.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

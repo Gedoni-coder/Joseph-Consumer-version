@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Button Test</title>
+</head>
+<body>
+  <h1>Button Test Page</h1>
+  <p>Open browser console (F12) and click the buttons below to test:</p>
+
+  <h2>Test 1: Home Button</h2>
+  <button id="back-to-home-btn">← Home</button>
+  <p id="home-result">Waiting...</p>
+
+  <h2>Test 2: Bank Alert Button</h2>
+  <button id="trigger-bank-alert-btn">🔔 Bank Alert</button>
+  <p id="bank-result">Waiting...</p>
+
+  <h2>Test 3: Back to Selection (Interpretation)</h2>
+  <button onclick="showInterpretationSelection()">Back to Selection</button>
+  <p id="interpretation-result">Waiting...</p>
+
+  <h2>Test 4: Back to Selection (Finance)</h2>
+  <button onclick="showFinanceSelection()">Back to Selection</button>
+  <p id="finance-result">Waiting...</p>
+
+  <script>
+    console.log('Test page loaded');
+
+    // Test 1: Home Button
+    const homeBtn = document.getElementById('back-to-home-btn');
+    if (homeBtn) {
+      homeBtn.addEventListener('click', () => {
+        console.log('Home button clicked!');
+        document.getElementById('home-result').textContent = '✅ Home button works!';
+        document.getElementById('home-result').style.color = 'green';
+      });
+    }
+
+    // Test 2: Bank Alert Button
+    const bankBtn = document.getElementById('trigger-bank-alert-btn');
+    if (bankBtn) {
+      bankBtn.addEventListener('click', () => {
+        console.log('Bank Alert button clicked!');
+        document.getElementById('bank-result').textContent = '✅ Bank Alert button works!';
+        document.getElementById('bank-result').style.color = 'green';
+      });
+    }
+
+    // Test 3: showInterpretationSelection function
+    window.showInterpretationSelection = function() {
+      console.log('showInterpretationSelection called!');
+      document.getElementById('interpretation-result').textContent = '✅ Interpretation selection works!';
+      document.getElementById('interpretation-result').style.color = 'green';
+    };
+
+    // Test 4: showFinanceSelection function
+    window.showFinanceSelection = function() {
+      console.log('showFinanceSelection called!');
+      document.getElementById('finance-result').textContent = '✅ Finance selection works!';
+      document.getElementById('finance-result').style.color = 'green';
+    };
+
+    console.log('All event listeners attached');
+  </script>
+</body>
+</html>

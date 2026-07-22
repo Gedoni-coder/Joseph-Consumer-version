@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+whatsapp-bot/node_modules/
+
+# WhatsApp Bot Cache & Sessions
+whatsapp-bot/sessions-browser/
+whatsapp-bot/.wwebjs_cache/
+whatsapp-bot/.wwebjs_auth/
+.wwebjs_cache/
+.wwebjs_auth/
+
+# Environment variables
+.env
+*.env
+backend/.env
+whatsapp-bot/.env
+
+# Local database & SQLite
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+backend/prisma/*.db
+backend/dev.db
+
+# System / IDE / Logs
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.claude/
+.tempmediaStorage/
+scratch/
+
+# Backups / Temp
+*.backup

@@ -1,0 +1,956 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String           @id @default(uuid())
+  email                String           @unique
+  password             String
+  name                 String?
+  phone                String?
+  dob                  DateTime?
+  bio                  String?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  lastLogin            DateTime?
+  lastActivity         DateTime?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  whatsappOTP          String?
+  whatsappOTPExpiry    DateTime?
+  whatsappLinkToken    String?          @unique
+  whatsappLinkTokenExpiry DateTime?
+  isActive             Boolean          @default(true)
+  isEmailVerified      Boolean          @default(false)
+  onboardingComplete   Boolean          @default(false)
+  onboardingStep       Int              @default(0)
+  currency             String           @default("NGN")
+  language             String           @default("en")
+  notifications        Boolean          @default(true)
+  businessProfile      BusinessProfile?
+  creditEntries        CreditEntry[]
+  goals                Goal[]
+  ledgers              Ledger[]
+  transactions         Transaction[]
+  preferences          UserPreferences?
+  notificationSettings NotificationSettings?
+  refreshTokens        RefreshToken[]
+  sessions             UserSession[]
+  strategyRecommendations StrategyRecommendation[]
+  varianceAlerts       VarianceAlert[]
+  categoryLearnings    CategoryLearning[]
+  accountClassifications AccountClassification[]
+  apiConfiguration      ApiConfiguration?
+  customers            Customer[]
+
+  @@map("users")
+}
+
+model UserPreferences {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  darkMode   Boolean  @default(false)
+  accentColor String  @default("navy")
+  fontSize   String   @default("medium")
+  dateFormat String   @default("dmy")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model NotificationSettings {
+  id                   String   @id @default(uuid())
+  userId               String   @unique
+  pushNotifications    Boolean  @default(true)
+  emailNotifications   Boolean  @default(true)
+  lowBalanceThreshold  Float    @default(5000)
+  spendingAlert        Boolean  @default(true)
+  goalUpdates          Boolean  @default(true)
+  runwayWarning        Boolean  @default(true)
+  creditReminders      Boolean  @default(true)
+  economicAlerts       Boolean  @default(true)
+  priceMovementAlerts  Boolean  @default(true)
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_settings")
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid())
+  userId     String
+  token      String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  revokedAt  DateTime?
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model UserSession {
+  id         String   @id @default(uuid())
+  userId     String
+  deviceInfo String?
+  deviceType String?
+  ipAddress  String?
+  userAgent  String?
+  lastActive DateTime @default(now())
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, lastActive])
+  @@index([expiresAt])
+  @@map("user_sessions")
+}
+
+model StrategyRecommendation {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  message     String
+  impact      String?
+  type        String   @default("info")
+  priority    String   @default("medium")
+  viewed      Boolean  @default(false)
+  status      String   @default("new")
+  category    String?
+  source      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  viewedAt    DateTime?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([userId, viewed])
+  @@map("strategy_recommendations")
+}
+
+model VarianceAlert {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String
+  priority    String   @default("medium")
+  title       String
+  message     String
+  impact      String?
+  directive   String?
+  resolved    Boolean  @default(false)
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, resolved])
+  @@index([userId, type])
+  @@map("variance_alerts")
+}
+
+model CategoryLearning {
+  id         String   @id @default(uuid())
+  userId     String
+  pattern    String
+  category   TxnCategory
+  confidence Float    @default(1.0)
+  usageCount Int      @default(1)
+  lastUsed   DateTime @default(now())
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pattern])
+  @@index([userId, category])
+  @@map("category_learnings")
+}
+
+model AccountClassification {
+  id          String    @id @default(uuid())
+  userId      String
+  accountId   String
+  accountName String
+  ledgerType  LedgerType
+  isActive    Boolean   @default(true)
+  confidence  Float     @default(1.0)
+  usageCount  Int       @default(1)
+  lastUsed    DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, accountId])
+  @@index([userId, ledgerType])
+  @@map("account_classifications")
+}
+
+model ApiConfiguration {
+  id                  String   @id @default(uuid())
+  userId              String   @unique
+  newsApiKey          String?
+  fmdqApiKey          String?
+  commoditiesApiKey   String?
+  cbnApiKey           String?
+  useRealAPIs         Boolean  @default(true)
+  useBackendAPI       Boolean  @default(true)
+  dataRefreshInterval Int      @default(3600)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("api_configurations")
+}
+
+model Customer {
+  id               String                @id @default(uuid())
+  userId           String
+  name             String
+  phone            String?
+  email            String?
+  address          String?
+  notes            String?
+  loyaltyLevel     String                @default("regular")
+  totalPurchases   Float                @default(0)
+  totalCredit      Float                @default(0)
+  lastPurchaseAt   DateTime?
+  lastContactAt    DateTime?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interactions     CustomerInteraction[]
+  creditEntries    CreditEntry[]
+
+  @@index([userId, loyaltyLevel])
+  @@index([userId, lastPurchaseAt])
+  @@map("customers")
+}
+
+model CustomerInteraction {
+  id             String   @id @default(uuid())
+  customerId     String
+  type           String
+  direction      String
+  summary        String?
+  notes          String?
+  interactionAt  DateTime @default(now())
+  createdAt      DateTime @default(now())
+  customer       Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId, interactionAt])
+  @@map("customer_interactions")
+}
+
+model Ledger {
+  id                     String        @id @default(uuid())
+  userId                 String
+  type                   LedgerType
+  name                   String
+  currency               String        @default("NGN")
+  balance                Float         @default(0)
+  totalIncome            Float         @default(0)
+  totalExpenses          Float         @default(0)
+  netCashFlow            Float         @default(0)
+  runwayDays             Int           @default(0)
+  monthlyBudget          Float?
+  budgetNeeds            Float         @default(0)
+  budgetWants            Float         @default(0)
+  budgetSavings          Float         @default(0)
+  spentNeeds             Float         @default(0)
+  spentWants             Float         @default(0)
+  spentSavings           Float         @default(0)
+  burnRate               Float         @default(0)
+  workingCapital         Float         @default(0)
+  availableCapital       Float         @default(0)
+  workingCapitalTarget   Float?
+  reinvestmentRatio      Float         @default(0.4)
+  businessTotalSales     Float         @default(0)
+  businessTotalExpenses  Float         @default(0)
+  businessNetProfit      Float         @default(0)
+  businessProfitMargin   Float         @default(0)
+  businessAvgTransaction Float         @default(0)
+  businessTxnCount       Int           @default(0)
+  businessCreditSales    Float         @default(0)
+  businessCreditCount    Int           @default(0)
+  businessCollectionRate Float         @default(0)
+  isActive               Boolean       @default(true)
+  isDefault              Boolean       @default(false)
+  isDeleted              Boolean       @default(false)
+  deletedAt              DateTime?
+  description            String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  creditEntries          CreditEntry[]
+  goals                  Goal[]
+  user                   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions           Transaction[]
+
+  @@unique([userId, type])
+  @@index([userId, isActive])
+  @@index([type, balance])
+  @@map("ledgers")
+}
+
+model Transaction {
+  id                  String       @id @default(uuid())
+  userId              String
+  ledgerId            String
+  externalId          String?      @unique
+  provider            String       @default("custom")
+  type                TxnType
+  amount              Float
+  currency            String       @default("NGN")
+  narration           String?
+  description         String?
+  timestamp           DateTime
+  accountId           String?
+  accountName         String?
+  merchant            String?
+  beneficiary         String?
+  balanceAfter        Float?
+  balanceBefore       Float?
+  category            TxnCategory?
+  tags                String       @default("[]")
+  isCreditSale        Boolean      @default(false)
+  creditCustomer      String?
+  creditPhone         String?
+  creditDueDate       DateTime?
+  splitWorkingCapital Float?
+  splitAvailable      Float?
+  splitRatio          Float?
+  fpnaProcessedAt     DateTime?
+  fpnaSource          String       @default("manual")
+  fpnaConfidence      Float        @default(0.5)
+  fpnaNeedsConfirm    Boolean      @default(false)
+  fpnaReviewedAt      DateTime?
+  creditEntryId       String?      @unique
+  hasAttachment       Boolean      @default(false)
+  attachmentUrl       String?
+  attachmentType      String?
+  notes               String?
+  isConfirmed         Boolean      @default(false)
+  confirmedAt         DateTime?
+  isDeleted           Boolean      @default(false)
+  deletedAt           DateTime?
+  deletedBy           String?
+  batchId             String?
+  importId            String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  creditEntry         CreditEntry? @relation("CreditTransactions", fields: [creditEntryId], references: [id])
+  ledger              Ledger       @relation(fields: [ledgerId], references: [id], onDelete: Cascade)
+  user                User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, timestamp(sort: Desc)])
+  @@index([userId, type])
+  @@index([externalId, userId])
+  @@index([isDeleted])
+  @@map("transactions")
+}
+
+model CreditEntry {
+  id                String       @id @default(uuid())
+  userId            String
+  ledgerId          String
+  transactionId     String?      @unique
+  customerName      String
+  phone             String?
+  email             String?
+  address           String?
+  totalCredit       Float
+  amountPaid        Float        @default(0)
+  amountOutstanding Float
+  dueDate           DateTime
+  creditPeriod      Int          @default(7)
+  paymentTerms      String?
+  status            CreditStatus @default(PENDING)
+  resolvedAt        DateTime?
+  resolvedBy        String?
+  priority          Priority     @default(MEDIUM)
+  riskLevel         RiskLevel    @default(LOW)
+  reminderEnabled   Boolean      @default(true)
+  reminderFrequency Int          @default(3)
+  lastReminderSent  DateTime?
+  nextReminderDate  DateTime?
+  notes             String?
+  tags              String       @default("[]")
+  isDeleted         Boolean      @default(false)
+  deletedAt         DateTime?
+  customerId        String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  ledger            Ledger       @relation(fields: [ledgerId], references: [id], onDelete: Cascade)
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items             CreditItem[]
+  payments          Payment[]
+  reminders         Reminder[]
+  transaction       Transaction? @relation("CreditTransactions")
+  customer          Customer?     @relation(fields: [customerId], references: [id])
+
+  @@index([userId, status])
+  @@index([userId, dueDate])
+  @@index([status, dueDate])
+  @@index([isDeleted])
+  @@map("credit_entries")
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  creditEntryId String
+  amount        Float
+  date          DateTime      @default(now())
+  method        PaymentMethod @default(CASH)
+  reference     String?
+  notes         String?
+  recordedBy    String?
+  createdAt     DateTime      @default(now())
+  creditEntry   CreditEntry   @relation(fields: [creditEntryId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Reminder {
+  id            String         @id @default(uuid())
+  creditEntryId String
+  sentAt        DateTime       @default(now())
+  method        ReminderMethod
+  status        String         @default("sent")
+  response      String?
+  nextReminder  DateTime?
+  creditEntry   CreditEntry    @relation(fields: [creditEntryId], references: [id], onDelete: Cascade)
+
+  @@map("reminders")
+}
+
+model CreditItem {
+  id            String      @id @default(uuid())
+  creditEntryId String
+  name          String
+  quantity      Int
+  unit          String?
+  unitPrice     Float?
+  totalPrice    Float?
+  creditEntry   CreditEntry @relation(fields: [creditEntryId], references: [id], onDelete: Cascade)
+
+  @@map("credit_items")
+}
+
+model BusinessProfile {
+  id                   String        @id @default(uuid())
+  userId               String        @unique
+  businessName         String?
+  businessPhone        String?
+  businessEmail        String?
+  businessAddress      String?
+  businessCity         String?
+  businessState        String?
+  businessCategory     String?       @default("retail")
+  businessType         String?       @default("micro")
+  businessType2        String?       @default("retail")
+  industry             String?
+  pricingStrategy      String        @default("cost_plus")
+  pricingFrequency     String        @default("monthly")
+  lastPriceReview      DateTime?
+  fixedCosts           Float         @default(0)
+  variableCostRatio    Float         @default(0.6)
+  monthlyRevenueTarget Float?
+  annualRevenueTarget  Float?
+  profitMarginTarget   Float         @default(20)
+  marketSegment        String        @default("mid_market")
+  competitiveAdvantage String?
+  businessDays         String        @default("[\"monday\",\"tuesday\",\"wednesday\",\"thursday\",\"friday\",\"saturday\"]")
+  currency             String        @default("NGN")
+  lastUpdated          DateTime      @default(now())
+  isComplete           Boolean       @default(false)
+  isDeleted            Boolean       @default(false)
+  deletedAt            DateTime?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  user                 User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products             Product[]
+  rawMaterials         RawMaterial[]
+  suppliers            Supplier[]
+
+  @@map("business_profiles")
+}
+
+model Product {
+  id                String          @id @default(uuid())
+  businessProfileId String
+  name              String
+  sku               String?
+  category          String          @default("finished_goods")
+  currentPrice      Float
+  unit              String          @default("unit")
+  cogs              Float           @default(0)
+  costRawMaterials  Float?
+  costLabor         Float?
+  costPackaging     Float?
+  costOverhead      Float?
+  costOther         Float?
+  targetMargin      Float           @default(20)
+  currentMargin     Float           @default(0)
+  competitorPrice   Float?
+  competitorName    String?
+  demandLevel       String          @default("moderate")
+  priceElasticity   String          @default("unit")
+  isActive          Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  businessProfile   BusinessProfile @relation(fields: [businessProfileId], references: [id], onDelete: Cascade)
+  priceHistory      ProductPriceHistory[]
+  competitorPrices  CompetitorPrice[]
+
+  @@index([businessProfileId, isActive])
+  @@map("products")
+}
+
+model ProductPriceHistory {
+  id          String   @id @default(uuid())
+  productId   String
+  price       Float
+  cost        Float?
+  margin      Float?
+  reason      String?
+  effectiveAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, effectiveAt])
+  @@map("product_price_history")
+}
+
+model CompetitorPrice {
+  id              String   @id @default(uuid())
+  productId       String
+  competitorName  String
+  price           Float
+  recordedAt      DateTime @default(now())
+  createdAt       DateTime @default(now())
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, recordedAt])
+  @@map("competitor_prices")
+}
+
+model Supplier {
+  id                String             @id @default(uuid())
+  businessProfileId String
+  name              String
+  contactPerson     String?
+  phone             String?
+  email             String?
+  address           String?
+  paymentTerms      String             @default("30_days")
+  creditLimit       Float?
+  reliability       String             @default("medium")
+  rating            Float              @default(3)
+  leadTimeDays      Int                @default(7)
+  isActive          Boolean            @default(true)
+  notes             String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  bulkDiscounts     SupplierDiscount[]
+  products          SupplierProduct[]
+  procurementOptions ProcurementOption[]
+  businessProfile   BusinessProfile    @relation(fields: [businessProfileId], references: [id], onDelete: Cascade)
+
+  @@map("suppliers")
+}
+
+model SupplierProduct {
+  id         String   @id @default(uuid())
+  supplierId String
+  name       String
+  sku        String?
+  unitPrice  Float?
+  unit       String?
+  moq        Int?
+  supplier   Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@map("supplier_products")
+}
+
+model SupplierDiscount {
+  id              String   @id @default(uuid())
+  supplierId      String
+  minQty          Int
+  discountPercent Float
+  description     String?
+  supplier        Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@map("supplier_discounts")
+}
+
+model ProcurementOption {
+  id             String   @id @default(uuid())
+  supplierId     String
+  name           String
+  description    String?
+  cost           Float
+  unitCost       Float
+  quantity       Int
+  unit           String?
+  savingsPercent Float?
+  recommendation String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  supplier       Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([supplierId, isActive])
+  @@map("procurement_options")
+}
+
+model RawMaterial {
+  id                String          @id @default(uuid())
+  businessProfileId String
+  name              String
+  unit              String?
+  currentPrice      Float?
+  supplierName      String?
+  monthlyUsage      Float?
+  stockOnHand       Float?
+  reorderLevel      Float?
+  lastPurchase      DateTime?
+  isActive          Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  businessProfile   BusinessProfile @relation(fields: [businessProfileId], references: [id], onDelete: Cascade)
+  transactions      InventoryTransaction[]
+
+  @@index([businessProfileId, isActive])
+  @@map("raw_materials")
+}
+
+model InventoryTransaction {
+  id             String   @id @default(uuid())
+  materialId     String
+  type           String
+  quantity       Float
+  unitCost       Float?
+  totalCost      Float?
+  reason         String?
+  transactionAt  DateTime @default(now())
+  createdAt      DateTime @default(now())
+  material       RawMaterial @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@index([materialId, transactionAt])
+  @@map("inventory_transactions")
+}
+
+model Goal {
+  id            String       @id @default(uuid())
+  userId        String
+  ledgerId      String?
+  title         String
+  description   String?
+  category      GoalCategory
+  goalType      String       @default("numeric")
+  targetValue   Float?
+  currentValue  Float        @default(0)
+  unit          String?
+  startDate     DateTime     @default(now())
+  endDate       DateTime
+  progress      Float        @default(0)
+  status        GoalStatus   @default(NOT_STARTED)
+  priority      Priority     @default(MEDIUM)
+  importance    String       @default("should_have")
+  outcomeNotes  String?
+  outcomeRating String?
+  tags          String       @default("[]")
+  isPinned      Boolean      @default(false)
+  isDeleted     Boolean      @default(false)
+  deletedAt     DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  actionItems   ActionItem[]
+  ledger        Ledger?      @relation(fields: [ledgerId], references: [id])
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestones    Milestone[]
+
+  @@index([userId, status])
+  @@index([userId, category])
+  @@index([userId, priority])
+  @@index([isDeleted])
+  @@map("goals")
+}
+
+model Milestone {
+  id           String    @id @default(uuid())
+  goalId       String
+  title        String
+  description  String?
+  targetValue  Float?
+  currentValue Float     @default(0)
+  unit         String?
+  dueDate      DateTime?
+  completed    Boolean   @default(false)
+  completedAt  DateTime?
+  notes        String?
+  createdAt    DateTime  @default(now())
+  goal         Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@map("milestones")
+}
+
+model ActionItem {
+  id            String    @id @default(uuid())
+  goalId        String
+  title         String
+  description   String?
+  assignedTo    String?
+  priority      Priority  @default(MEDIUM)
+  status        String    @default("pending")
+  dueDate       DateTime?
+  completedAt   DateTime?
+  estimatedCost Float?
+  actualCost    Float?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  goal          Goal      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@map("action_items")
+}
+
+model EconomicIndicator {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  name          String
+  category      String
+  value         Float
+  unit          String?
+  change        Float?
+  changePercent Float?
+  trend         String?
+  source        String?
+  lastUpdated   DateTime @default(now())
+  thresholdLow  Float?
+  thresholdHigh Float?
+  status        String?
+  history       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([category])
+  @@index([code])
+  @@map("economic_indicators")
+}
+
+model EconomicNews {
+  id              String   @id @default(uuid())
+  title           String
+  summary         String?
+  source          String?
+  url             String?
+  publishedAt     DateTime @default(now())
+  impact          String?
+  affectedSectors String   @default("[]")
+  relevance       Float?
+  createdAt       DateTime @default(now())
+
+  @@index([publishedAt(sort: Desc)])
+  @@map("economic_news")
+}
+
+model EconomicEvent {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  name          String
+  description   String?
+  eventDate     DateTime
+  category      String?
+  importance    String?
+  expectedValue Float?
+  actualValue   Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([eventDate])
+  @@map("economic_events")
+}
+
+model Insight {
+  id                String    @id @default(uuid())
+  userId            String
+  title             String
+  body              String
+  category          String?
+  severity          String?
+  sourceType        String
+  sourceId          String?
+  isActionable      Boolean   @default(false)
+  recommendedAction String?
+  status            String    @default("new")
+  isRead            Boolean   @default(false)
+  isPinned          Boolean   @default(false)
+  validUntil        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([userId, status])
+  @@index([userId, severity])
+  @@index([userId, isPinned])
+  @@map("insights")
+}
+
+model InterpretationRule {
+  id                String   @id @default(uuid())
+  code              String   @unique
+  name              String
+  description       String?
+  indicatorCode     String?
+  conditionType     String
+  operator          String?
+  thresholdValue    Float?
+  insightTemplate   String
+  severity          String?
+  recommendedAction String?
+  isEnabled         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@map("interpretation_rules")
+}
+
+model InsightTemplate {
+  id             String   @id @default(uuid())
+  ruleCode       String
+  name           String
+  titleTemplate  String
+  bodyTemplate   String
+  actionTemplate String?
+  variables      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([ruleCode, name])
+  @@map("insight_templates")
+}
+
+model UserThresholdSettings {
+  id                  String   @id @default(uuid())
+  userId              String   @unique
+  customThresholds    String?
+  notifyOnThreshold   Boolean  @default(true)
+  notifyOnNewEvents   Boolean  @default(true)
+  notificationMethods String   @default("[\"in_app\"]")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@map("user_threshold_settings")
+}
+
+model EconomicDataCache {
+  id              String    @id @default(uuid())
+  type            String
+  data            String
+  source          String    @default("cached")
+  sourceUrl       String?
+  apiProvider     String?
+  fetchedAt       DateTime  @default(now())
+  expiresAt       DateTime
+  lastRefreshedAt DateTime?
+  isActive        Boolean   @default(true)
+  isStale         Boolean   @default(false)
+  cacheHit        Int       @default(0)
+  lastAccessedAt  DateTime?
+  error           String?
+  retryCount      Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([type, expiresAt])
+  @@index([type, isActive])
+  @@index([expiresAt])
+  @@map("economic_data_cache")
+}
+
+model CategoryRule {
+  id         String      @id @default(uuid())
+  userId     String
+  pattern    String
+  category   TxnCategory
+  confidence Float       @default(1)
+  usageCount Int         @default(1)
+  lastUsed   DateTime    @default(now())
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([userId, pattern])
+  @@map("category_rules")
+}
+
+enum LedgerType {
+  LIFE
+  BUSINESS
+}
+
+enum TxnType {
+  CREDIT
+  DEBIT
+}
+
+enum TxnCategory {
+  NEEDS
+  WANTS
+  SAVINGS
+}
+
+enum CreditStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum PaymentMethod {
+  CASH
+  TRANSFER
+  POS
+  OTHER
+}
+
+enum ReminderMethod {
+  SMS
+  WHATSAPP
+  CALL
+  EMAIL
+  IN_APP
+}
+
+enum GoalCategory {
+  REVENUE
+  SAVINGS
+  EXPANSION
+  COST_REDUCTION
+  EFFICIENCY
+  QUALITY
+  OTHER
+}
+
+enum GoalStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  ON_TRACK
+  AT_RISK
+  BEHIND
+  COMPLETED
+  PAUSED
+  CANCELLED
+}

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Your Setup | JOSEPH AI</title>
+  <meta name="description" content="Choose your subscription method and connect your accounts to unlock all features.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ==========================================
+       PAYMENT PAGE SPECIFIC STYLES
+       ========================================== */
+
+    body {
+      background: var(--bg-primary);
+    }
+
+    /* Page Container */
+    .payment-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    }
+
+    /* Header */
+    .payment-header {
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .payment-header-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .payment-header-logo .logo-mark {
+      width: 48px;
+      height: 48px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .payment-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .payment-header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Workflow Progress */
+    .workflow-progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 0 1.5rem 2rem;
+      background: var(--bg-primary);
+    }
+
+    .progress-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .progress-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all var(--transition-base);
+    }
+
+    .progress-step.active .progress-number {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--glow-sm);
+    }
+
+    .progress-step.completed .progress-number {
+      background: var(--success);
+      color: white;
+    }
+
+    .progress-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+    }
+
+    .progress-step.active .progress-label {
+      color: var(--text-primary);
+    }
+
+    .progress-step.completed .progress-label {
+      color: var(--success);
+    }
+
+    .progress-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--border-light);
+      position: relative;
+    }
+
+    .progress-divider::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--success);
+      transition: width var(--transition-slow);
+    }
+
+    .progress-divider.filled::after {
+      width: 100%;
+    }
+
+    /* Main Content */
+    .payment-content {
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    /* Workflow Section */
+    .workflow-section {
+      display: none;
+    }
+
+    .workflow-section.active {
+      display: block;
+      animation: fadeInUp var(--transition-slow);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Workflow Header */
+    .workflow-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .workflow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .workflow-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .workflow-header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Payment Options Grid */
+    .payment-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Payment Card */
+    .payment-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-2xl);
+      padding: 2rem;
+      transition: all var(--transition-base);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+
+    .payment-card:hover {
+      border-color: var(--border-medium);
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .payment-card:hover::before {
+      opacity: 1;
+    }
+
+    .payment-card.selected {
+      border-color: var(--navy-600);
+      box-shadow: var(--glow-sm);
+    }
+
+    .payment-card.selected::before {
+      opacity: 1;
+    }
+
+    /* Card Icon */
+    .payment-card-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 1.25rem;
+    }
+
+    .payment-card.card-option .payment-card-icon {
+      background: linear-gradient(135deg, #f5f5fc 0%, #e8ebff 100%);
+    }
+
+    .payment-card.bank-option .payment-card-icon {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    }
+
+    /* Card Content */
+    .payment-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .payment-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Card Features */
+    .payment-card-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-card-feature {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--bg-tertiary);
+      padding: 0.375rem 0.75rem;
+      border-radius: var(--radius-md);
+    }
+
+    .payment-card-feature i {
+      color: var(--success);
+      font-size: 10px;
+    }
+
+    /* Action Button */
+    .payment-card-action {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-lg);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-align: center;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .payment-card-action.primary {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .payment-card-action.primary:hover {
+      box-shadow: var(--shadow-md), var(--glow-sm);
+      transform: translateY(-1px);
+    }
+
+    .payment-card-action.secondary {
+      background: white;
+      color: var(--text-primary);
+      border: 2px solid var(--border-default);
+    }
+
+    .payment-card-action.secondary:hover {
+      border-color: var(--navy-600);
+      background: var(--bg-secondary);
+    }
+
+    /* Bank Connect Section */
+    .bank-connect-section {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .bank-connect-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-2xl);
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .bank-connect-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .bank-connect-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .bank-connect-card p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .bank-connect-badges {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .bank-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-tertiary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .bank-badge i {
+      color: var(--navy-600);
+    }
+
+    .connect-bank-btn {
+      width: 100%;
+      max-width: 320px;
+      padding: 1.125rem 2rem;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      box-shadow: var(--shadow-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .connect-bank-btn:hover {
+      box-shadow: var(--shadow-md), var(--glow-sm);
+      transform: translateY(-2px);
+    }
+
+    /* Security Note */
+    .security-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-success);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--success);
+    }
+
+    .security-note i {
+      font-size: 14px;
+    }
+
+    /* Navigation Buttons */
+    .workflow-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .workflow-nav-btn {
+      padding: 0.875rem 1.75rem;
+      border-radius: var(--radius-lg);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+
+    .workflow-nav-btn.primary {
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+    }
+
+    .workflow-nav-btn.primary:hover {
+      box-shadow: var(--shadow-md), var(--glow-sm);
+    }
+
+    .workflow-nav-btn.secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 2px solid var(--border-default);
+    }
+
+    .workflow-nav-btn.secondary:hover {
+      border-color: var(--border-medium);
+      color: var(--text-primary);
+    }
+
+    /* Completion State */
+    .completion-state {
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .completion-icon {
+      width: 100px;
+      height: 100px;
+      background: var(--bg-success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: var(--success);
+      margin: 0 auto 2rem;
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .completion-state h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .completion-state p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .completion-steps {
+      text-align: left;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .completion-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .completion-step:last-child {
+      border-bottom: none;
+    }
+
+    .completion-step i {
+      color: var(--success);
+      font-size: 18px;
+    }
+
+    .completion-step span {
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .payment-header h1 {
+        font-size: 24px;
+      }
+
+      .payment-options {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-progress {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .progress-divider {
+        width: 2px;
+        height: 30px;
+      }
+
+      .progress-divider::after {
+        width: 100%;
+        height: 0;
+      }
+
+      .progress-divider.filled::after {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       PAYMENT PAGE
+       ============================================ -->
+  <div class="payment-page">
+
+    <!-- Header -->
+    <header class="payment-header">
+      <div class="payment-header-logo">
+        <div class="logo-mark">J</div>
+        <span style="font-size: 24px; font-weight: 700; color: var(--text-primary);">
+          JOSEPH <span style="color: var(--navy-600);">AI</span>
+        </span>
+      </div>
+      <h1>Complete Your Setup</h1>
+      <p>Choose your subscription method and connect your accounts to unlock all features.</p>
+    </header>
+
+    <!-- Workflow Progress -->
+    <div class="workflow-progress">
+      <div class="progress-step active" id="step-1">
+        <span class="progress-number">1</span>
+        <span class="progress-label">Choose Payment</span>
+      </div>
+      <div class="progress-divider" id="divider-1"></div>
+      <div class="progress-step" id="step-2">
+        <span class="progress-number">2</span>
+        <span class="progress-label">Connect Economic</span>
+      </div>
+      <div class="progress-divider" id="divider-2"></div>
+      <div class="progress-step" id="step-3">
+        <span class="progress-number">3</span>
+        <span class="progress-label">Complete</span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="payment-content">
+
+      <!-- WORKFLOW 1: Payment Selection -->
+      <section class="workflow-section active" id="workflow-payment">
+        <div class="workflow-header">
+          <div class="workflow-badge">
+            <i class="fas fa-credit-card"></i>
+            Step 1 of 2
+          </div>
+          <h2>Choose Your Subscription Method</h2>
+          <p>Select how you'd like to subscribe to JOSEPH AI. You can change this anytime.</p>
+        </div>
+
+        <div class="payment-options">
+          <!-- Card Option -->
+          <div class="payment-card card-option" onclick="selectPaymentMethod('card')">
+            <div class="payment-card-icon">
+              <i class="fas fa-credit-card" style="color: var(--navy-600);"></i>
+            </div>
+            <h3>Subscribe with Card</h3>
+            <p>Use your debit or credit card for quick and secure payments.</p>
+            <div class="payment-card-features">
+              <span class="payment-card-feature"><i class="fas fa-check"></i> Instant activation</span>
+              <span class="payment-card-feature"><i class="fas fa-check"></i> Auto-renewal</span>
+              <span class="payment-card-feature"><i class="fas fa-check"></i> Secure payment</span>
+            </div>
+            <button class="payment-card-action primary" onclick="handleCardPayment(event)">
+              SUBSCRIBE WITH CARD
+            </button>
+          </div>
+
+          <!-- Bank Option -->
+          <div class="payment-card bank-option" onclick="selectPaymentMethod('bank')">
+            <div class="payment-card-icon">
+              <i class="fas fa-building-columns" style="color: var(--success);"></i>
+            </div>
+            <h3>Subscribe with Account</h3>
+            <p>Link your financial account for direct debit payments. No card required.</p>
+            <div class="payment-card-features">
+              <span class="payment-card-feature"><i class="fas fa-check"></i> No card needed</span>
+              <span class="payment-card-feature"><i class="fas fa-check"></i> Bank-level security</span>
+              <span class="payment-card-feature"><i class="fas fa-check"></i> Easy management</span>
+            </div>
+            <button class="payment-card-action secondary" onclick="handleBankPayment(event)">
+              SUBSCRIBE WITH ACCOUNT
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- WORKFLOW 2: Connect Bank -->
+      <section class="workflow-section" id="workflow-bank">
+        <div class="workflow-header">
+          <div class="workflow-badge">
+            <i class="fas fa-link"></i>
+            Step 2 of 2
+          </div>
+          <h2>Connect Your Economic Account</h2>
+          <p style="font-weight: 600; color: #1a1a2e; font-size: 1.15rem; line-height: 1.6;">This will enable us to see your past receipts, make sense of your transactions and track your finance effectively</p>
+        </div>
+
+        <div class="bank-connect-section">
+          <div class="bank-connect-card">
+            <div class="bank-connect-icon">
+              <i class="fas fa-building-columns" style="color: var(--navy-600);"></i>
+            </div>
+            <h3>Connect Economic Account</h3>
+
+            <div class="bank-connect-badges">
+              <span class="bank-badge"><i class="fas fa-shield-halved"></i> Bank-level security</span>
+      <span class="bank-badge"><i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp-friendly</span>
+              <span class="bank-badge"><i class="fas fa-sync"></i> Real-time sync</span>
+              <span class="bank-badge"><i class="fas fa-eye-slash"></i> Read-only access</span>
+            </div>
+
+            <button class="connect-bank-btn" onclick="handleConnectBank(event)">
+              <i class="fas fa-link"></i>
+              CONNECT ECONOMIC ACCOUNT
+            </button>
+
+            <div class="security-note">
+              <i class="fas fa-lock"></i>
+              <span>Your credentials are encrypted and never stored on our servers</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="workflow-nav">
+          <button class="workflow-nav-btn secondary" onclick="goToWorkflow('payment')">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <button class="workflow-nav-btn primary" onclick="skipAndContinue()">
+            Skip for Now <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- WORKFLOW 3: Completion -->
+      <section class="workflow-section" id="workflow-complete">
+        <div class="completion-state">
+          <div class="completion-icon">
+            <i class="fas fa-check"></i>
+          </div>
+          <h3>You're All Set!</h3>
+          <p>Your JOSEPH AI account is ready. Here's what you've completed:</p>
+
+          <div class="completion-steps">
+            <div class="completion-step" id="completed-payment">
+              <i class="fas fa-check-circle"></i>
+              <span>Payment method selected</span>
+            </div>
+            <div class="completion-step" id="completed-bank">
+              <i class="fas fa-check-circle"></i>
+              <span>Account connection completed</span>
+            </div>
+          </div>
+
+          <button class="workflow-nav-btn primary" onclick="goToDashboard()">
+            Go to Dashboard <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ==========================================
+       JAVASCRIPT
+       ============================================ -->
+  <script>
+    // State
+    let selectedPaymentMethod = null;
+    let bankConnected = false;
+    let currentWorkflow = 'payment';
+
+    // Elements
+    const workflowSections = {
+      payment: document.getElementById('workflow-payment'),
+      bank: document.getElementById('workflow-bank'),
+      complete: document.getElementById('workflow-complete')
+    };
+
+    const progressSteps = {
+      '1': document.getElementById('step-1'),
+      '2': document.getElementById('step-2'),
+      '3': document.getElementById('step-3')
+    };
+
+    const progressDividers = {
+      '1': document.getElementById('divider-1'),
+      '2': document.getElementById('divider-2')
+    };
+
+    // Select Payment Method
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+
+      // Visual feedback
+      document.querySelectorAll('.payment-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+
+      if (method === 'card') {
+        document.querySelector('.card-option').classList.add('selected');
+      } else if (method === 'bank') {
+        document.querySelector('.bank-option').classList.add('selected');
+      }
+    }
+
+    // Handle Card Payment
+    function handleCardPayment(event) {
+      event.stopPropagation();
+      selectedPaymentMethod = 'card';
+      selectPaymentMethod('card');
+
+      // Here you would integrate a payment provider
+      console.log('Card payment selected');
+
+      // Simulate payment success
+      setTimeout(() => {
+        goToWorkflow('bank');
+      }, 500);
+    }
+
+    // Handle Bank Payment
+    function handleBankPayment(event) {
+      event.stopPropagation();
+      selectedPaymentMethod = 'bank';
+      selectPaymentMethod('bank');
+
+      // Here you would handle account-based payment flow
+      console.log('Account payment selected');
+
+      // For now, proceed to bank connection
+      setTimeout(() => {
+        goToWorkflow('bank');
+      }, 500);
+    }
+
+    // Handle Connect Bank
+    function handleConnectBank(event) {
+      event.stopPropagation();
+
+      // Here you would integrate account connection API
+      console.log('Connect account clicked');
+
+      // For demo, mark as complete
+      bankConnected = true;
+
+      // Show completion
+      setTimeout(() => {
+        goToWorkflow('complete');
+      }, 500);
+    }
+
+    // Skip Bank Connection
+    function skipAndContinue() {
+      bankConnected = false;
+      goToWorkflow('complete');
+    }
+
+    // Go to Workflow
+    function goToWorkflow(workflow) {
+      // Hide all sections
+      Object.values(workflowSections).forEach(section => {
+        section.classList.remove('active');
+      });
+
+      // Show target section
+      workflowSections[workflow].classList.add('active');
+      currentWorkflow = workflow;
+
+      // Update progress
+      updateProgress(workflow);
+    }
+
+    // Update Progress Indicators
+    function updateProgress(workflow) {
+      // Reset all
+      Object.values(progressSteps).forEach(step => {
+        step.classList.remove('active', 'completed');
+      });
+      Object.values(progressDividers).forEach(divider => {
+        divider.classList.remove('filled');
+      });
+
+      // Set states based on current workflow
+      if (workflow === 'payment') {
+        progressSteps['1'].classList.add('active');
+      } else if (workflow === 'bank') {
+        progressSteps['1'].classList.add('completed');
+        progressDividers['1'].classList.add('filled');
+        progressSteps['2'].classList.add('active');
+      } else if (workflow === 'complete') {
+        progressSteps['1'].classList.add('completed');
+        progressSteps['2'].classList.add('completed');
+        progressDividers['1'].classList.add('filled');
+        progressDividers['2'].classList.add('filled');
+        progressSteps['3'].classList.add('active');
+      }
+    }
+
+    // Go to Dashboard
+    function goToDashboard() {
+      window.location.href = '/index.html';
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgress('payment');
+    });
+  </script>
+
+</body>
+</html>

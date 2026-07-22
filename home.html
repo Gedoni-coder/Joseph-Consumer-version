@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - JOSEPH AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg-primary: #F8F9FF;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #E8EBFF;
+      --text-primary: #1A1A2E;
+      --text-secondary: #4A4A6A;
+      --text-tertiary: #7A7A9A;
+      --border-light: #E8EBFF;
+      --border-navy: #24248f;
+      --accent-primary: #24248f;
+      --accent-secondary: #1A1A75;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --card-shadow: 0 2px 8px rgba(36, 36, 143, 0.08), 0 1px 3px rgba(36, 36, 143, 0.04);
+      --card-shadow-lg: 0 8px 24px rgba(36, 36, 143, 0.12), 0 4px 12px rgba(36, 36, 143, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Calibri', 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ============================================
+       SIDEBAR - Navy Blue & White Theme
+       ============================================ */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-secondary);
+      border-right: 1px solid #E8EBFF;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 100;
+      box-shadow: 2px 0 12px rgba(36, 36, 143, 0.08);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #E8EBFF;
+      background: linear-gradient(135deg, #24248f 0%, #1A1A75 100%);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-logo-mark {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar-logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .sidebar-logo-text span {
+      color: #B8B8FF;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #24248f;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #4A4A6A;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .sidebar-link:hover {
+      background: #E8EBFF;
+      color: #24248f;
+      border-color: #D0D4FF;
+    }
+
+    .sidebar-link.active {
+      background: linear-gradient(135deg, #24248f 0%, #1A1A75 100%);
+      color: white;
+      border-color: #24248f;
+      box-shadow: 0 2px 8px rgba(36, 36, 143, 0.25);
+    }
+
+    .sidebar-link-icon {
+      font-size: 18px;
+    }
+
+    .sidebar-link-text {
+      flex: 1;
+    }
+
+    .sidebar-link-badge {
+      font-size: 11px;
+      padding: 0.25rem 0.6rem;
+      background: #10b981;
+      color: white;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    .sidebar-activity {
+      border-top: 1px solid #E8EBFF;
+      padding: 1rem;
+    }
+
+    .sidebar-activity-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-activity-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #24248f;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 0.25rem;
+    }
+
+    .activity-item:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .activity-icon {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .activity-text {
+      font-size: 12px;
+      color: #4A4A6A;
+      line-height: 1.4;
+    }
+
+    .activity-time {
+      font-size: 10px;
+      color: #7A7A9A;
+      margin-top: 0.1rem;
+    }
+
+    .sidebar-footer {
+      padding: 1rem;
+      border-top: 1px solid #E8EBFF;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #24248f 0%, #1A1A75 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: white;
+      box-shadow: 0 2px 6px rgba(36, 36, 143, 0.2);
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1A1A2E;
+    }
+
+    .user-business {
+      font-size: 11px;
+      color: #7A7A9A;
+    }
+
+    .logout-btn {
+      padding: 0.5rem;
+      color: #7A7A9A;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      color: #ef4444;
+    }
+
+    /* ============================================
+       MAIN CONTENT - Navy Blue Theme
+       ============================================ */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 2rem;
+      background: var(--bg-primary);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .welcome-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #24248f;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .welcome-text p {
+      font-size: 14px;
+      color: #4A4A6A;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .topbar-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 2px solid #E8EBFF;
+      background: white;
+      color: #24248f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .topbar-btn:hover {
+      border-color: #24248f;
+      background: #E8EBFF;
+      box-shadow: 0 2px 8px rgba(36, 36, 143, 0.15);
+    }
+
+    /* ============================================
+       BENTO GRID - Navy Blue Theme
+       ============================================ */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1.25rem;
+    }
+
+    .bento-card {
+      background: white;
+      border-radius: 18px;
+      border: 1px solid #E8EBFF;
+      padding: 1.25rem;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow-lg);
+      border-color: #B8B8FF;
+    }
+
+    /* Hub Card - Central Stats */
+    .hub-card {
+      grid-column: span 2;
+      grid-row: span 2;
+      background: linear-gradient(135deg, #24248f 0%, #1A1A75 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border: none;
+    }
+
+    .hub-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hub-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .hub-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .hub-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .hub-subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .hub-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .hub-stat {
+      text-align: center;
+    }
+
+    .hub-stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+
+    .hub-stat-label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .hub-progress {
+      position: relative;
+    }
+
+    .hub-progress-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .hub-progress-fill {
+      height: 100%;
+      background: white;
+      border-radius: 3px;
+      width: 73%;
+    }
+
+    .hub-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .hub-actions {
+      display: flex;
+      gap: 0.75rem;
+      position: relative;
+    }
+
+    .hub-btn {
+      flex: 1;
+      padding: 0.75rem;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hub-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .hub-btn.primary {
+      background: white;
+      color: var(--accent-primary);
+    }
+
+    /* Module Cards */
+    .module-card {
+      position: relative;
+    }
+
+    .module-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .module-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .module-card.dream .module-icon {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .module-card.interpretation .module-icon {
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .module-card.finance .module-icon {
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .module-card.strategy .module-icon {
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .module-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .module-card p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .module-stat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .module-stat-label {
+      color: var(--text-tertiary);
+    }
+
+    .module-stat-value {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .module-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 11px;
+      margin-top: 0.75rem;
+    }
+
+    .module-indicator.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .module-indicator.dot.green { background: var(--success); }
+    .module-indicator.dot.orange { background: var(--warning); }
+    .module-indicator.dot.blue { background: #3b82f6; }
+
+    .module-arrow {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      width: 28px;
+      height: 28px;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .bento-card:hover .module-arrow {
+      opacity: 1;
+    }
+
+    /* Wide Cards */
+    .wide-card {
+      grid-column: span 2;
+    }
+
+    /* Insights Card */
+    .insights-card {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .insights-card .module-icon {
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .insight-item:last-child {
+      border-bottom: none;
+    }
+
+    .insight-icon {
+      font-size: 14px;
+    }
+
+    .insight-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .hub-card {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hub-card,
+      .wide-card {
+        grid-column: span 1;
+      }
+
+      .hub-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar (Option 4) -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-mark">J</div>
+        <div class="sidebar-logo-text">JOSEPH <span>AI</span></div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Modules</div>
+      <a href="/dream" class="sidebar-link">
+        <span class="sidebar-link-icon">☁️</span>
+        <span class="sidebar-link-text">Dream</span>
+      </a>
+      <a href="/interpretation" class="sidebar-link">
+        <span class="sidebar-link-icon">💡</span>
+        <span class="sidebar-link-text">Interpretation</span>
+      </a>
+      <a href="/finance" class="sidebar-link">
+        <span class="sidebar-link-icon">💳</span>
+        <span class="sidebar-link-text">Finance</span>
+        <span class="sidebar-link-badge">Live</span>
+      </a>
+      <a href="/strategy" class="sidebar-link">
+        <span class="sidebar-link-icon">🎯</span>
+        <span class="sidebar-link-text">Strategy</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-activity">
+      <div class="sidebar-activity-header">
+        <span class="sidebar-activity-title">Recent Activity</span>
+        <i class="fa-solid fa-ellipsis" style="font-size: 12px; color: var(--text-tertiary);"></i>
+      </div>
+      <div class="activity-item">
+        <span class="activity-icon">💰</span>
+        <div>
+          <div class="activity-text">Sale: +₦3,000</div>
+          <div class="activity-time">2 mins ago</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <span class="activity-icon">📊</span>
+        <div>
+          <div class="activity-text">Economic alert: Inflation up</div>
+          <div class="activity-time">1 hour ago</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <span class="activity-icon">🎯</span>
+        <div>
+          <div class="activity-text">Break-even: 73% reached</div>
+          <div class="activity-time">3 hours ago</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="user-initial">U</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User Name</div>
+          <div class="user-business">Personal & Family Finances</div>
+        </div>
+        <div class="logout-btn" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="welcome-text">
+        <h1>Welcome back, <span id="welcome-name">User</span></h1>
+        <p>Here's what's happening with your finances today</p>
+      </div>
+      <div class="topbar-actions">
+        <button onclick="window.openWhatsAppBot()" class="btn-whatsapp">
+          <i class="fa-brands fa-whatsapp" style="font-size: 1.1rem;"></i>
+          Go to WhatsApp
+          <i class="fa-solid fa-arrow-right" style="font-size: 0.8rem;"></i>
+        </button>
+        <div class="topbar-btn" onclick="window.location.href='/finance'">
+          <i class="fa-solid fa-bell"></i>
+        </div>
+        <div class="topbar-btn" onclick="window.location.href='settings.html';">
+          <i class="fa-solid fa-gear"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bento Grid Layout (Option 1) with Hub Card (Option 2) -->
+    <div class="bento-grid">
+      <!-- HUB CARD - Central Financial Stats (Option 2) -->
+      <div class="bento-card hub-card">
+        <div class="hub-header">
+          <div>
+            <div class="hub-title">Finance Hub</div>
+            <div class="hub-subtitle">Your financial command center</div>
+          </div>
+          <div class="hub-icon">💰</div>
+        </div>
+
+        <div class="hub-stats">
+          <div class="hub-stat">
+            <div class="hub-stat-value">₦20K</div>
+            <div class="hub-stat-label">Revenue</div>
+          </div>
+          <div class="hub-stat">
+            <div class="hub-stat-value">₦14K</div>
+            <div class="hub-stat-label">Vault Protected</div>
+          </div>
+          <div class="hub-stat">
+            <div class="hub-stat-value">18d</div>
+            <div class="hub-stat-label">Runway</div>
+          </div>
+        </div>
+
+        <div class="hub-progress">
+          <div class="hub-progress-bar">
+            <div class="hub-progress-fill" style="width: 73%;"></div>
+          </div>
+          <div class="hub-progress-labels">
+            <span>Break-Even Progress</span>
+            <span>₦22K / ₦30K</span>
+          </div>
+        </div>
+
+        <div class="hub-actions" style="margin-top: 1rem;">
+          <button class="hub-btn primary" onclick="window.location.href='/strategy'">
+            View Strategy
+          </button>
+          <button class="hub-btn" onclick="window.location.href='/finance'">
+            Finance
+          </button>
+        </div>
+      </div>
+
+      <!-- DREAM MODULE -->
+      <a href="/dream" class="bento-card module-card dream">
+        <div class="module-card-header">
+          <div class="module-icon">☁️</div>
+        </div>
+        <h3>Dream</h3>
+        <p>Economic radar & market outlook</p>
+        <div class="module-stat">
+          <span class="module-stat-label">Economic Health</span>
+          <span class="module-stat-value">72/100</span>
+        </div>
+        <div class="module-indicator">
+          <span class="module-indicator-dot orange"></span>
+          Moderate stress
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <!-- INTERPRETATION MODULE -->
+      <a href="/interpretation" class="bento-card module-card interpretation">
+        <div class="module-card-header">
+          <div class="module-icon">💡</div>
+        </div>
+        <h3>Interpretation</h3>
+        <p>Batch cost & calendar modeler</p>
+        <div class="module-stat">
+          <span class="module-stat-label">Unit COGS</span>
+          <span class="module-stat-value">₦500</span>
+        </div>
+        <div class="module-indicator">
+          <span class="module-indicator-dot green"></span>
+          On track
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <!-- FINANCE MODULE -->
+      <a href="/finance" class="bento-card module-card finance">
+        <div class="module-card-header">
+          <div class="module-icon">💳</div>
+        </div>
+        <h3>Finance</h3>
+        <p>Live ledger, vault & burn rate</p>
+        <div class="module-stat">
+          <span class="module-stat-label">Available</span>
+          <span class="module-stat-value">₦6,000</span>
+        </div>
+        <div class="module-indicator">
+          <span class="module-indicator-dot green"></span>
+          Live updates
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <!-- STRATEGY MODULE -->
+      <a href="/strategy" class="bento-card module-card strategy">
+        <div class="module-card-header">
+          <div class="module-icon">🎯</div>
+        </div>
+        <h3>Strategy</h3>
+        <p>Pricing, break-even & procurement</p>
+        <div class="module-stat">
+          <span class="module-stat-label">To Break-Even</span>
+          <span class="module-stat-value">₦8,000</span>
+        </div>
+        <div class="module-indicator">
+          <span class="module-indicator-dot blue"></span>
+          73% reached
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <!-- INSIGHTS CARD - Wide -->
+      <div class="bento-card wide-card insights-card">
+        <div class="module-card-header">
+          <div class="module-icon">🧠</div>
+          <div>
+            <h3>AI Insights</h3>
+            <p>3 recommendations for your finances</p>
+          </div>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon">⚠️</span>
+          <span class="insight-text">Commodity prices up 12%. Consider bulk purchase before hike.</span>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon">💡</span>
+          <span class="insight-text">Seasonal demand surge next week. Prepare your budget accordingly.</span>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon">🎯</span>
+          <span class="insight-text">Raise price to ₦1,550 to maintain margins amid inflation.</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- API Client -->
+  <script src="frontend-api-client.js"></script>
+  <script>
+    // IMMEDIATE AUTH CHECK - This runs as soon as the page loads
+    // to prevent any flickering or redirect loops
+    (function() {
+      console.log('Checking authentication on home page load...');
+
+      // Check localStorage synchronously for immediate redirect decision
+      const hasAccessToken = !!localStorage.getItem('joseph_access_token');
+      const hasRefreshToken = !!localStorage.getItem('joseph_refresh_token');
+      const hasUser = !!localStorage.getItem('joseph_user');
+
+      console.log('Auth state:', { hasAccessToken, hasRefreshToken, hasUser });
+
+      // If no tokens at all, redirect immediately to login
+      if (!hasAccessToken && !hasRefreshToken) {
+        console.log('No auth tokens found, redirecting to login...');
+        document.body.style.display = 'none'; // Hide page to prevent flicker
+        window.location.href = 'login.html';
+        return;
+      }
+
+      console.log('Auth tokens found, proceeding to load page...');
+    })();
+
+    // Load user data when API client is ready
+    function loadUserData() {
+      const userJson = localStorage.getItem('joseph_user');
+      if (userJson) {
+        try {
+          const user = JSON.parse(userJson);
+          const name = user.name || 'User';
+          const initial = name.charAt(0).toUpperCase();
+
+          const userNameEl = document.getElementById('user-name');
+          const userInitialEl = document.getElementById('user-initial');
+          const welcomeNameEl = document.getElementById('welcome-name');
+
+          if (userNameEl) userNameEl.textContent = name;
+          if (userInitialEl) userInitialEl.textContent = initial;
+          if (welcomeNameEl) welcomeNameEl.textContent = name.split(' ')[0];
+
+          console.log('User data loaded:', name);
+        } catch (e) {
+          console.error('Error parsing user data:', e);
+        }
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('joseph_access_token');
+      localStorage.removeItem('joseph_refresh_token');
+      localStorage.removeItem('joseph_user');
+      window.location.href = 'login.html';
+    }
+
+    // Load user data when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserData();
+    });
+
+    // Dispatch API loaded event
+    window.dispatchEvent(new CustomEvent('joseph-api:loaded'));
+  </script>
+</body>
+</html>

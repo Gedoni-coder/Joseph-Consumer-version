@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test - JOSEPH AI</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1a1a2e; margin-bottom: 8px; }
+        h2 { color: #24248f; font-size: 18px; margin-bottom: 12px; }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+        pre {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover { background: #5568d3; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .status {
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .status.success { background: #d1fae5; color: #065f46; }
+        .status.error { background: #fee2e2; color: #991b1b; }
+        .status.info { background: #dbeafe; color: #1e40af; }
+    </style>
+</head>
+<body>
+    <h1>🔐 JOSEPH AI - Auth Integration Test</h1>
+    <p style="color: #666; margin-bottom: 24px;">Testing the frontend-backend authentication connection</p>
+
+    <!-- Test Results -->
+    <div class="card">
+        <h2>📊 Test Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <!-- API Client -->
+    <script src="frontend-api-client.js"></script>
+    <script>
+        const results = document.getElementById('results');
+
+        function addResult(type, message, data = null) {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = `<strong>${message}</strong>`;
+
+            if (data) {
+                const pre = document.createElement('pre');
+                pre.textContent = JSON.stringify(data, null, 2);
+                div.appendChild(pre);
+            }
+
+            results.appendChild(div);
+        }
+
+        function clearResults() {
+            results.innerHTML = '';
+        }
+
+        async function testRegister() {
+            clearResults();
+            addResult('info', '🔄 Testing Register...');
+
+            try {
+                const response = await window.JosephAPI.auth.register(
+                    `test${Date.now()}@example.com`,
+                    'Test123456',
+                    'Test User'
+                );
+                addResult('success', '✅ Register Successful!', response);
+
+                // Store tokens for next tests
+                window.testAccessToken = response.accessToken;
+                window.testRefreshToken = response.refreshToken;
+            } catch (error) {
+                addResult('error', '❌ Register Failed', error);
+            }
+        }
+
+        async function testLogin() {
+            clearResults();
+            addResult('info', '🔄 Testing Login...');
+
+            try {
+                const response = await window.JosephAPI.auth.login(
+                    'test@example.com',
+                    'Test123456'
+                );
+                addResult('success', '✅ Login Successful!', response);
+
+                window.testAccessToken = response.accessToken;
+                window.testRefreshToken = response.refreshToken;
+            } catch (error) {
+                addResult('error', '❌ Login Failed', error);
+            }
+        }
+
+        async function testGetCurrentUser() {
+            clearResults();
+            addResult('info', '🔄 Testing Get Current User...');
+
+            try {
+                const response = await window.JosephAPI.auth.getCurrentUser();
+                addResult('success', '✅ Get Current User Successful!', response);
+            } catch (error) {
+                addResult('error', '❌ Get Current User Failed', error);
+            }
+        }
+
+        async function testDreamModule() {
+            clearResults();
+            addResult('info', '🔄 Testing Dream Module...');
+
+            try {
+                const response = await window.JosephAPI.dream.getOverview();
+                addResult('success', '✅ Dream Module Response!', response);
+            } catch (error) {
+                addResult('error', '❌ Dream Module Failed', error);
+            }
+        }
+
+        async function testTokenRefresh() {
+            clearResults();
+            addResult('info', '🔄 Testing Token Refresh...');
+
+            try {
+                // This would call the refresh endpoint
+                addResult('info', 'Token refresh requires API implementation');
+            } catch (error) {
+                addResult('error', '❌ Token Refresh Failed', error);
+            }
+        }
+
+        // Auto-test on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            addResult('info', '🚀 Starting Auth Integration Tests...');
+
+            // Wait a moment for API client to load
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Check if API client is loaded
+            if (typeof window.JosephAPI === 'undefined') {
+                addResult('error', '❌ API Client not loaded!');
+                return;
+            }
+
+            addResult('success', '✅ API Client loaded successfully!');
+            addResult('info', 'Click buttons below to test specific endpoints');
+        });
+    </script>
+
+    <!-- Test Buttons -->
+    <div class="card">
+        <h2>🧪 Manual Tests</h2>
+        <button onclick="testRegister()">Test Register</button>
+        <button onclick="testLogin()">Test Login</button>
+        <button onclick="testGetCurrentUser()">Test Get Current User</button>
+        <button onclick="testDreamModule()">Test Dream Module</button>
+        <button onclick="testTokenRefresh()">Test Token Refresh</button>
+    </div>
+
+    <!-- Current Auth State -->
+    <div class="card">
+        <h2>🔑 Current Auth State</h2>
+        <div id="authState">
+            <p><strong>Is Authenticated:</strong> <span id="isAuth">-</span></p>
+            <p><strong>Access Token:</strong> <span id="hasAccessToken">-</span></p>
+            <p><strong>Stored User:</strong> <span id="storedUser">-</span></p>
+        </div>
+    </div>
+
+    <script>
+        function updateAuthState() {
+            const isAuth = window.JosephAPI?.auth?.isAuthenticated() || false;
+            const hasToken = window.JosephAPI?.TokenStorage?.hasTokens() || false;
+            const storedUser = window.JosephAPI?.auth?.getStoredUser();
+
+            document.getElementById('isAuth').textContent = isAuth ? 'Yes ✅' : 'No ❌';
+            document.getElementById('isAuth').style.color = isAuth ? '#10b981' : '#ef4444';
+
+            document.getElementById('hasAccessToken').textContent = hasToken ? 'Yes ✅' : 'No ❌';
+            document.getElementById('hasAccessToken').style.color = hasToken ? '#10b981' : '#ef4444';
+
+            document.getElementById('storedUser').textContent = storedUser
+                ? `${storedUser.name} (${storedUser.email})`
+                : 'None ❌';
+            document.getElementById('storedUser').style.color = storedUser ? '#10b981' : '#ef4444';
+        }
+
+        // Update auth state every second
+        setInterval(updateAuthState, 1000);
+        updateAuthState();
+    </script>
+</body>
+</html>
