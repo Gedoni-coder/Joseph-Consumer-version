@@ -1,0 +1,17 @@
+{
+  "name": "@app-core/repository",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@app-core/db": "workspace:*",
+    "@prisma/client": "^7.1.0"
+  }
+}

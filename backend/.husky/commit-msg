@@ -1,0 +1,9 @@
+commit_msg_file="$1"
+
+case "$commit_msg_file" in
+  /*) ;;
+  ?:*) ;;
+  *) commit_msg_file="$(pwd)/$commit_msg_file" ;;
+esac
+
+pnpm --dir backend exec commitlint --config commitlint.config.cjs --edit "$commit_msg_file"
