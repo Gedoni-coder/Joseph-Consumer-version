@@ -1,5 +1,5 @@
-import { prisma } from '../config/prisma.js';
-import { HTTP_STATUS } from '../config/constants.js';
+import { prisma } from '../config/prisma';
+import { HTTP_STATUS } from '../config/constants';
 
 const formatValue = (value: number | null | undefined, unit?: string | null) => {
   if (value === null || value === undefined) return 'N/A';

@@ -1,7 +1,7 @@
 import type { Response } from 'express';
 import { ERROR_STATUS_CODE_MAPPING, isAppError, normalizeError } from '@app-core/errors';
 import { MESSAGES } from '@app-core/messages';
-import { sendError } from './response.utils.js';
+import { sendError } from './response.utils';
 
 const resolveStatusCode = (code: string) =>
     ERROR_STATUS_CODE_MAPPING[code as keyof typeof ERROR_STATUS_CODE_MAPPING] ?? 500;

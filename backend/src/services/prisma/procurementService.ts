@@ -4,7 +4,7 @@
  * Handles procurement options and inventory transactions
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // PROCUREMENT OPTION OPERATIONS

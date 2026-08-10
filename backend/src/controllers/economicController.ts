@@ -1,9 +1,9 @@
-import economicService from '../services/prisma/economicService.js';
-import { prisma } from '../config/prisma.js';
+import economicService from '../services/prisma/economicService';
+import { prisma } from '../config/prisma';
 import {
   ECONOMIC_DATA_TYPES,
   HTTP_STATUS
-} from '../config/constants.js';
+} from '../config/constants';
 
 const getUserNewsApiKey = async (userId?: string) => {
   if (!userId) {

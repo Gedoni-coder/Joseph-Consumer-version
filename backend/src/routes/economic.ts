@@ -5,8 +5,8 @@
  */
 
 import express from 'express';
-import economicController from '../controllers/economicController.js';
-import { authenticate, optionalAuth } from '../middleware/authPrisma.js';
+import economicController from '../controllers/economicController';
+import { authenticate, optionalAuth } from '../middleware/authPrisma';
 
 const router = express.Router();
 

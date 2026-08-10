@@ -5,8 +5,8 @@
  */
 
 import express from 'express';
-import * as preferencesController from '../controllers/preferencesController.js';
-import { authenticate } from '../middleware/authPrisma.js';
+import * as preferencesController from '../controllers/preferencesController';
+import { authenticate } from '../middleware/authPrisma';
 
 const router = express.Router();
 

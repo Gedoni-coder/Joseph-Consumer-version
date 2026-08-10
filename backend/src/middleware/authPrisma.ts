@@ -4,9 +4,9 @@
  * JWT token verification and user authentication
  */
 
-import { verifyAccessToken, extractTokenFromHeader } from '../config/jwt.js';
-import { prisma } from '../config/prisma.js';
-import { HTTP_STATUS, ERROR_MESSAGES } from '../config/constants.js';
+import { verifyAccessToken, extractTokenFromHeader } from '../config/jwt';
+import { prisma } from '../config/prisma';
+import { HTTP_STATUS, ERROR_MESSAGES } from '../config/constants';
 
 // ==========================================
 // AUTH MIDDLEWARE

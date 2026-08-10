@@ -9,13 +9,13 @@ import {
   generateTokenPair,
   generateTokenId,
   verifyRefreshToken
-} from '../config/jwt.js';
-import authService from '../services/prisma/authService.js';
+} from '../config/jwt';
+import authService from '../services/prisma/authService';
 import {
   HTTP_STATUS,
   SUCCESS_MESSAGES,
   ERROR_MESSAGES
-} from '../config/constants.js';
+} from '../config/constants';
 
 // ==========================================
 // REGISTER

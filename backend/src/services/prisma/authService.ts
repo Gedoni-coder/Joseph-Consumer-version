@@ -6,12 +6,12 @@
 
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 import {
   generateTokenPair,
   generateTokenId,
   verifyRefreshToken
-} from '../../config/jwt.js';
+} from '../../config/jwt';
 
 // ==========================================
 // HELPER FUNCTIONS

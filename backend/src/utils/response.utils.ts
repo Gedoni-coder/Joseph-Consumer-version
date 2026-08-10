@@ -1,6 +1,6 @@
 import type { Response } from 'express';
 import { MESSAGES } from '@app-core/messages';
-import type { ApiResponse } from '../types/index.js';
+import type { ApiResponse } from '../types/index';
 
 export const sendSuccess = <T>(
     res: Response,

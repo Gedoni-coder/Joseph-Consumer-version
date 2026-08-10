@@ -8,7 +8,7 @@ import {
   getNotificationSettings,
   updateNotificationSettings,
   toggleAllNotifications
-} from '../services/prisma/notificationSettingsService.js';
+} from '../services/prisma/notificationSettingsService';
 
 export async function getSettings(req, res, next) {
   try {

@@ -4,7 +4,7 @@
  * Handles category learning and account classification
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // CATEGORY LEARNING OPERATIONS

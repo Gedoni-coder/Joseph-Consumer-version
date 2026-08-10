@@ -4,7 +4,7 @@
  * Mirrors Mongoose strategyController functionality
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // PRICING STRATEGY

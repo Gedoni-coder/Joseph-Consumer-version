@@ -7,8 +7,8 @@
 
 import express from 'express';
 import crypto from 'crypto';
-import { authenticate } from '../middleware/authPrisma.js';
-import { prisma } from '../config/prisma.js';
+import { authenticate } from '../middleware/authPrisma';
+import { prisma } from '../config/prisma';
 
 const router = express.Router();
 
@@ -78,7 +78,7 @@ router.post('/auth/verify-link-token', async (req, res) => {
       });
     }
 
-    const { generateAccessToken, generateRefreshToken } = await import('../config/jwt.js');
+    const { generateAccessToken, generateRefreshToken } = await import('../config/jwt');
 
     // Normalize phone number (bot might send varying formats)
     const normalizedPhone = phone.replace(/\D/g, '');
@@ -328,7 +328,7 @@ router.post('/auth/verify-otp', async (req, res) => {
       });
     }
 
-    const { generateAccessToken, generateRefreshToken } = await import('../config/jwt.js');
+    const { generateAccessToken, generateRefreshToken } = await import('../config/jwt');
 
     // Find user by phone
     const normalizedPhone = phone.replace(/\D/g, '');

@@ -8,7 +8,7 @@ import {
   getUserPreferences,
   updateUserPreferences,
   resetUserPreferences
-} from '../services/prisma/userPreferencesService.js';
+} from '../services/prisma/userPreferencesService';
 
 export async function getPreferences(req, res, next) {
   try {

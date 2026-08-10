@@ -4,7 +4,7 @@
  * Handles notification preference operations
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // NOTIFICATION SETTINGS OPERATIONS

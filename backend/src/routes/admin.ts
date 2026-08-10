@@ -46,8 +46,8 @@ import {
   resetTemplate,
   previewTemplate,
   seedIndustryTemplates
-} from '../controllers/adminController.js';
-import { authenticate } from '../middleware/authPrisma.js';
+} from '../controllers/adminController';
+import { authenticate } from '../middleware/authPrisma';
 
 const router = express.Router();
 

@@ -4,7 +4,7 @@
  * Handles external API keys and data source settings
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // API CONFIGURATION OPERATIONS

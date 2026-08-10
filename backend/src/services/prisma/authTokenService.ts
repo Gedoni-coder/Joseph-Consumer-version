@@ -5,7 +5,7 @@
  */
 
 import crypto from 'crypto';
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // REFRESH TOKEN OPERATIONS

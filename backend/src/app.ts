@@ -1,29 +1,29 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
-import './types/express.js';
+import './types/express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import { createAppError } from '@app-core/errors';
 import { appLogger } from '@app-core/logger';
 import { MESSAGES } from '@app-core/messages';
-import { prisma } from './config/prisma.js';
-import { getRateLimitConfig } from './config/rate-limit.js';
+import { prisma } from './config/prisma';
+import { getRateLimitConfig } from './config/rate-limit';
 import {
   createRateLimiter,
   getDefaultRateLimitKeyDetails
-} from './middleware/rate-limit.middleware.js';
-import adminRoutes from './routes/admin.js';
-import authRoutes from './routes/auth.js';
-import dreamRoutes from './routes/dream.js';
-import economicRoutes from './routes/economic.js';
-import financeRoutes from './routes/finance.js';
-import interpretationRoutes from './routes/interpretation.js';
-import notificationsRoutes from './routes/notifications.js';
-import preferencesRoutes from './routes/preferences.js';
-import strategyRoutes from './routes/strategy.js';
-import whatsappRoutes from './routes/whatsapp.js';
-import { sendSuccess } from './utils/response.utils.js';
-import { sendNormalizedError } from './utils/service-error.utils.js';
+} from './middleware/rate-limit.middleware';
+import adminRoutes from './routes/admin';
+import authRoutes from './routes/auth';
+import dreamRoutes from './routes/dream';
+import economicRoutes from './routes/economic';
+import financeRoutes from './routes/finance';
+import interpretationRoutes from './routes/interpretation';
+import notificationsRoutes from './routes/notifications';
+import preferencesRoutes from './routes/preferences';
+import strategyRoutes from './routes/strategy';
+import whatsappRoutes from './routes/whatsapp';
+import { sendSuccess } from './utils/response.utils';
+import { sendNormalizedError } from './utils/service-error.utils';
 
 dotenv.config();
 

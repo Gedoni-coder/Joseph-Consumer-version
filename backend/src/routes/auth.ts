@@ -5,13 +5,13 @@
  */
 
 import express from 'express';
-import authController from '../controllers/authControllerPrisma.js';
-import { authenticate } from '../middleware/authPrisma.js';
+import authController from '../controllers/authControllerPrisma';
+import { authenticate } from '../middleware/authPrisma';
 import {
   validateRegister,
   validateLogin,
   validateRefreshToken
-} from '../middleware/validation.js';
+} from '../middleware/validation';
 
 const router = express.Router();
 

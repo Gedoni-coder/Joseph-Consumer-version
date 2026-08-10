@@ -4,9 +4,9 @@
  * Handles all Finance module endpoints using Prisma/PostgreSQL
  */
 
-import { financeService } from '../services/prisma/financeService.js';
-import { LEDGER_TYPES } from '../config/constants.js';
-import { HTTP_STATUS, ERROR_MESSAGES } from '../config/constants.js';
+import { financeService } from '../services/prisma/financeService';
+import { LEDGER_TYPES } from '../config/constants';
+import { HTTP_STATUS, ERROR_MESSAGES } from '../config/constants';
 
 // ==========================================
 // HELPER FUNCTIONS
@@ -321,7 +321,7 @@ export const getTransactions = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { ledgerType, type, limit = 50 } = req.query;
-    const { prisma } = await import('../config/prisma.js');
+    const { prisma } = await import('../config/prisma');
 
     const where = {
       userId,
@@ -378,7 +378,7 @@ export const getGoals = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { status } = req.query;
-    const { prisma } = await import('../config/prisma.js');
+    const { prisma } = await import('../config/prisma');
 
     const goals = await prisma.goal.findMany({
       where: {
@@ -411,7 +411,7 @@ export const createGoal = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { title, description, category, targetValue, currentValue, endDate, priority } = req.body;
-    const { prisma } = await import('../config/prisma.js');
+    const { prisma } = await import('../config/prisma');
 
     if (!title || !category || !endDate) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
@@ -453,7 +453,7 @@ export const updateGoal = async (req, res, next) => {
     const userId = req.userId;
     const { id } = req.params;
     const { currentValue, status, title, targetValue, endDate } = req.body;
-    const { prisma } = await import('../config/prisma.js');
+    const { prisma } = await import('../config/prisma');
 
     const goal = await prisma.goal.findFirst({ where: { id, userId, isDeleted: false } });
     if (!goal) {

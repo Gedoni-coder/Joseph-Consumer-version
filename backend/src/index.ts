@@ -51,20 +51,21 @@ const shutdown = async (signal: ShutdownSignal) => {
 };
 
 const startServer = async () => {
-  const [{ appLogger: logger }, { default: app }, { prisma: prismaClient }] = await Promise.all([
-    import('@app-core/logger'),
-    import('./app.js'),
-    import('./config/prisma.js')
-  ]);
-
-  appLogger = logger;
-  prisma = prismaClient;
-
-  const PORT = Number(process.env.PORT || 4000);
-  const HOST = process.env.HOST || '0.0.0.0';
-  const skipDb = process.env.SKIP_DB === 'true';
-
   try {
+    const { appLogger: logger } = await import('@app-core/logger');
+    appLogger = logger;
+
+    const [{ default: app }, { prisma: prismaClient }] = await Promise.all([
+      import('./app'),
+      import('./config/prisma')
+    ]);
+
+    prisma = prismaClient;
+
+    const PORT = Number(process.env.PORT || 4000);
+    const HOST = process.env.HOST || '0.0.0.0';
+    const skipDb = process.env.SKIP_DB === 'true';
+
     if (!skipDb) {
       await prisma.$connect();
       appLogger.info({ message: 'PostgreSQL connected through Prisma' }, 'STARTUP');
@@ -85,7 +86,14 @@ const startServer = async () => {
       );
     });
   } catch (error) {
-    appLogger.errorX(error instanceof Error ? error : new Error('Startup failed'), 'STARTUP');
+    const startupError = error instanceof Error ? error : new Error('Startup failed');
+    appLogger.error(
+      {
+        errorMessage: startupError.message,
+        errorStack: startupError.stack
+      },
+      'STARTUP'
+    );
     process.exit(1);
   }
 };

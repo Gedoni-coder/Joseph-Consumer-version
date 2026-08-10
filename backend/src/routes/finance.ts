@@ -5,8 +5,8 @@
  */
 
 import express from 'express';
-import financeController from '../controllers/financeControllerPrisma.js';
-import { authenticate } from '../middleware/authPrisma.js';
+import financeController from '../controllers/financeControllerPrisma';
+import { authenticate } from '../middleware/authPrisma';
 
 const router = express.Router();
 

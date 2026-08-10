@@ -6,7 +6,7 @@
  */
 
 import axios from 'axios';
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // CONFIGURATION

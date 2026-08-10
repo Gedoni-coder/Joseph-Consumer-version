@@ -1,5 +1,5 @@
-import { prisma } from '../config/prisma.js';
-import economicDataUpdater, { DATA_SOURCES } from '../services/prisma/economicDataUpdater.js';
+import { prisma } from '../config/prisma';
+import economicDataUpdater, { DATA_SOURCES } from '../services/prisma/economicDataUpdater';
 
 export const updateIndicator = async (req, res) => {
   try {

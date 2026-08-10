@@ -1,7 +1,7 @@
 import { ipKeyGenerator, rateLimit, type Options } from 'express-rate-limit';
 import type { Request } from 'express';
 import { appLogger } from '@app-core/logger';
-import { sendError } from '../utils/response.utils.js';
+import { sendError } from '../utils/response.utils';
 
 type RateLimitKeyDetails = {
     key: string;

@@ -4,9 +4,9 @@
  * Handles all Interpretation module endpoints using Prisma/PostgreSQL
  */
 
-import { interpretationService } from '../services/prisma/interpretationService.js';
-import { prisma } from '../config/prisma.js';
-import { HTTP_STATUS } from '../config/constants.js';
+import { interpretationService } from '../services/prisma/interpretationService';
+import { prisma } from '../config/prisma';
+import { HTTP_STATUS } from '../config/constants';
 
 // ==========================================
 // OVERVIEW

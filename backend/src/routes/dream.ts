@@ -5,8 +5,8 @@
  */
 
 import express from 'express';
-import dreamController from '../controllers/dreamController.js';
-import { optionalAuth } from '../middleware/authPrisma.js';
+import dreamController from '../controllers/dreamController';
+import { optionalAuth } from '../middleware/authPrisma';
 
 const router = express.Router();
 

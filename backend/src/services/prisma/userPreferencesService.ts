@@ -4,7 +4,7 @@
  * Handles user preference operations
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 
 // ==========================================
 // USER PREFERENCES OPERATIONS

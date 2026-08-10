@@ -5,7 +5,7 @@
  */
 
 import Joi from 'joi';
-import { HTTP_STATUS, ERROR_MESSAGES, REGEX, TRANSACTION_TYPES, LEDGER_TYPES, TRANSACTION_CATEGORIES, CREDIT_STATUS } from '../config/constants.js';
+import { HTTP_STATUS, ERROR_MESSAGES, REGEX, TRANSACTION_TYPES, LEDGER_TYPES, TRANSACTION_CATEGORIES, CREDIT_STATUS } from '../config/constants';
 
 // ==========================================
 // JOI VALIDATION SCHEMAS

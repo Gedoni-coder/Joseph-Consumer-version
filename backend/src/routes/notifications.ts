@@ -5,8 +5,8 @@
  */
 
 import express from 'express';
-import * as notificationsController from '../controllers/notificationsController.js';
-import { authenticate } from '../middleware/authPrisma.js';
+import * as notificationsController from '../controllers/notificationsController';
+import { authenticate } from '../middleware/authPrisma';
 
 const router = express.Router();
 

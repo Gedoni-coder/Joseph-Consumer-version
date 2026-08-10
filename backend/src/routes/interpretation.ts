@@ -5,8 +5,8 @@
  */
 
 import express from 'express';
-import interpretationController from '../controllers/interpretationControllerPrisma.js';
-import { authenticate } from '../middleware/authPrisma.js';
+import interpretationController from '../controllers/interpretationControllerPrisma';
+import { authenticate } from '../middleware/authPrisma';
 
 const router = express.Router();
 

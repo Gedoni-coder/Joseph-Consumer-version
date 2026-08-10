@@ -5,7 +5,7 @@
  * Mirrors Mongoose economicDataUpdater functionality
  */
 
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../config/prisma';
 import axios from 'axios';
 
 // ==========================================

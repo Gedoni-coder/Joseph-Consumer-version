@@ -1,4 +1,4 @@
-import { prisma } from './prisma.js';
+import { prisma } from './prisma';
 
 export const DATABASE_CONFIG = {
   type: 'postgresql',
@@ -10,7 +10,7 @@ export const DATABASE_CONFIG = {
 
 export class ServiceFactory {
   static async getService<T = unknown>(serviceName: string): Promise<T> {
-    const module = await import(`../services/prisma/${serviceName}.js`);
+    const module = await import(`../services/prisma/${serviceName}`);
     return module.default as T;
   }
 

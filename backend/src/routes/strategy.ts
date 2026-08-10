@@ -25,10 +25,10 @@
  */
 
 import express from 'express';
-import strategyController from '../controllers/strategyControllerPrisma.js';
+import strategyController from '../controllers/strategyControllerPrisma';
 import {
   authenticate
-} from '../middleware/authPrisma.js';
+} from '../middleware/authPrisma';
 
 const router = express.Router();
 
