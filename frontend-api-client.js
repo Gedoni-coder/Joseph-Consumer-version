@@ -7,7 +7,7 @@
 // CONFIGURATION
 // ==========================================
 const API_CONFIG = {
-  baseURL: 'http://localhost:4000/api',
+  baseURL: 'http://localhost:5000/api',
   timeout: 30000,
   endpoints: {
     // Auth
@@ -54,22 +54,30 @@ const API_CONFIG = {
 // ==========================================
 // TOKEN STORAGE
 // ==========================================
+const ACCESS_TOKEN_STORAGE_KEY = 'joseph_access_token';
+const REFRESH_TOKEN_STORAGE_KEY = 'joseph_refresh_token';
+let accessTokenInMemory = null;
+
+function clearLegacyTokenStorage() {
+  // Refresh tokens now live only in the HttpOnly cookie set by the backend.
+  localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
+}
+
+clearLegacyTokenStorage();
+
 const TokenStorage = {
   getAccessToken() {
-    return localStorage.getItem('joseph_access_token');
+    return accessTokenInMemory;
   },
   setAccessToken(token) {
-    localStorage.setItem('joseph_access_token', token);
-  },
-  getRefreshToken() {
-    return localStorage.getItem('joseph_refresh_token');
-  },
-  setRefreshToken(token) {
-    localStorage.setItem('joseph_refresh_token', token);
+    // Keep the access JWT in memory so a script cannot recover it after a reload.
+    accessTokenInMemory = token || null;
+    clearLegacyTokenStorage();
   },
   clearTokens() {
-    localStorage.removeItem('joseph_access_token');
-    localStorage.removeItem('joseph_refresh_token');
+    accessTokenInMemory = null;
+    clearLegacyTokenStorage();
   },
   hasTokens() {
     return !!this.getAccessToken();
@@ -82,8 +90,8 @@ const TokenStorage = {
 class APIClient {
   constructor() {
     this.baseURL = API_CONFIG.baseURL;
-    this.isRefreshing = false;
-    this.refreshSubscribers = [];
+    // Shared in-flight refresh so simultaneous 401s do not rotate the cookie multiple times.
+    this.refreshPromise = null;
   }
 
   /**
@@ -134,6 +142,30 @@ class APIClient {
     return await response.text();
   }
 
+  async readErrorPayload(response) {
+    const contentType = response.headers.get('content-type');
+
+    if (!contentType?.includes('application/json')) {
+      return { message: response.statusText || 'Request failed' };
+    }
+
+    try {
+      return await response.json();
+    } catch (_error) {
+      return { message: response.statusText || 'Request failed' };
+    }
+  }
+
+  shouldRefreshAuth(response, errorPayload, includeAuth, skipAuthRefresh, isRefreshRequest) {
+    return (
+      response.status === 401 &&
+      includeAuth &&
+      !skipAuthRefresh &&
+      !isRefreshRequest &&
+      errorPayload?.code === 'TOKEN_EXPIRED'
+    );
+  }
+
   /**
    * Make HTTP request
    */
@@ -147,9 +179,17 @@ class APIClient {
     } = options;
 
     const url = this.buildURL(endpoint, params);
+    const isRefreshRequest = endpoint === `${API_CONFIG.endpoints.auth}/refresh`;
+
+    if (includeAuth && !skipAuthRefresh && !isRefreshRequest && !TokenStorage.hasTokens()) {
+      // After a page reload the access token is gone, but the browser may still have the refresh cookie.
+      await this.refreshAccessToken({ redirectOnFailure: false });
+    }
+
     const config = {
       method,
-      headers: { ...this.getHeaders(includeAuth), ...headers }
+      headers: { ...this.getHeaders(includeAuth), ...headers },
+      credentials: 'include'
     };
 
     if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
@@ -158,13 +198,18 @@ class APIClient {
 
     try {
       let response = await fetch(url, config);
+      let errorPayload = null;
 
-      // Handle 401 - try to refresh token
-      if (response.status === 401 && includeAuth && !skipAuthRefresh) {
+      if (!response.ok) {
+        errorPayload = await this.readErrorPayload(response.clone());
+      }
+
+      // Only TOKEN_EXPIRED gets a refresh-and-retry; invalid credentials should fail normally.
+      if (this.shouldRefreshAuth(response, errorPayload, includeAuth, skipAuthRefresh, isRefreshRequest)) {
         const newToken = await this.refreshAccessToken();
 
         if (newToken) {
-          // Retry original request with new token
+          // Retry once with the newly issued 15-minute access JWT.
           config.headers['Authorization'] = `Bearer ${newToken}`;
           response = await fetch(url, config);
         }
@@ -183,28 +228,27 @@ class APIClient {
   /**
    * Refresh access token
    */
-  async refreshAccessToken() {
-    // If already refreshing, wait for it to complete
-    if (this.isRefreshing) {
-      return new Promise((resolve) => {
-        this.refreshSubscribers.push(resolve);
-      });
+  async refreshAccessToken(options = {}) {
+    // Share the same refresh request across all callers until it settles.
+    if (this.refreshPromise) {
+      return this.refreshPromise;
     }
 
-    this.isRefreshing = true;
+    this.refreshPromise = this.performRefreshAccessToken(options);
 
     try {
-      const refreshToken = TokenStorage.getRefreshToken();
+      return await this.refreshPromise;
+    } finally {
+      this.refreshPromise = null;
+    }
+  }
 
-      if (!refreshToken) {
-        this.clearAuthAndRedirect();
-        return null;
-      }
-
+  async performRefreshAccessToken({ redirectOnFailure = true } = {}) {
+    try {
       const response = await fetch(`${this.baseURL}${API_CONFIG.endpoints.auth}/refresh`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken })
+        credentials: 'include'
       });
 
       if (!response.ok) {
@@ -213,22 +257,22 @@ class APIClient {
 
       const data = await response.json();
 
-      // Store new tokens
-      TokenStorage.setAccessToken(data.accessToken);
-      TokenStorage.setRefreshToken(data.refreshToken);
+      if (!data.accessToken) {
+        throw new Error('Token refresh response missing access token');
+      }
 
-      // Notify all waiting requests
-      this.refreshSubscribers.forEach(resolve => resolve(data.accessToken));
-      this.refreshSubscribers = [];
+      TokenStorage.setAccessToken(data.accessToken);
 
       return data.accessToken;
-
     } catch (error) {
-      console.error('Token refresh failed:', error);
-      this.clearAuthAndRedirect();
+      console.warn('Session refresh failed; login is required.');
+      TokenStorage.clearTokens();
+
+      if (redirectOnFailure) {
+        this.clearAuthAndRedirect();
+      }
+
       return null;
-    } finally {
-      this.isRefreshing = false;
     }
   }
 
@@ -237,7 +281,7 @@ class APIClient {
    */
   clearAuthAndRedirect() {
     TokenStorage.clearTokens();
-    this.refreshSubscribers = [];
+    localStorage.removeItem('joseph_user');
 
     // Dispatch logout event
     window.dispatchEvent(new CustomEvent('auth:logout'));
@@ -310,6 +354,10 @@ const api = new APIClient();
 // AUTH API
 // ==========================================
 const AuthAPI = {
+  extractUser(response) {
+    return response?.user || response?.data?.user || response || null;
+  },
+
   /**
    * Register new user
    */
@@ -319,10 +367,10 @@ const AuthAPI = {
       includeAuth: false
     });
 
-    // Store tokens
+    // Store the access token. The refresh token is stored by the backend
+    // in an HttpOnly cookie and is never available to JavaScript.
     if (response.accessToken) {
       TokenStorage.setAccessToken(response.accessToken);
-      TokenStorage.setRefreshToken(response.refreshToken);
     }
 
     // Store user data for pages that check for joseph_user
@@ -342,10 +390,10 @@ const AuthAPI = {
       includeAuth: false
     });
 
-    // Store tokens
+    // Store the access token. The refresh token is stored by the backend
+    // in an HttpOnly cookie and is never available to JavaScript.
     if (response.accessToken) {
       TokenStorage.setAccessToken(response.accessToken);
-      TokenStorage.setRefreshToken(response.refreshToken);
     }
 
     // Store user data for pages that check for joseph_user
@@ -365,22 +413,50 @@ const AuthAPI = {
   async logout(logoutAll = false) {
     try {
       await api.post(API_CONFIG.endpoints.auth + '/logout', {
-        data: { refreshToken: TokenStorage.getRefreshToken(), logoutAll }
+        data: { logoutAll },
+        includeAuth: false,
+        skipAuthRefresh: true
       });
-      } catch (error) {
-        console.error('Failed to logout cleanly', error);
-      } finally {
-        TokenStorage.clearTokens();
-        localStorage.removeItem('joseph_user');
-        window.dispatchEvent(new CustomEvent('auth:logout'));
+    } catch (_error) {
+      console.warn('Logout request failed; clearing local auth state.');
+    } finally {
+      TokenStorage.clearTokens();
+      localStorage.removeItem('joseph_user');
+      window.dispatchEvent(new CustomEvent('auth:logout'));
+    }
+  },
+
+  /**
+   * Restore a page-load session from the HttpOnly refresh cookie.
+   */
+  async restoreSession(options = {}) {
+    const accessToken = await api.refreshAccessToken({
+      redirectOnFailure: options.redirectOnFailure === true
+    });
+
+    if (!accessToken) {
+      return null;
+    }
+
+    try {
+      const user = await AuthAPI.getCurrentUser();
+      if (user) {
+        AuthAPI.storeUser(user);
       }
-    },
+      return user;
+    } catch (_error) {
+      TokenStorage.clearTokens();
+      localStorage.removeItem('joseph_user');
+      return null;
+    }
+  },
 
   /**
    * Get current user
    */
   async getCurrentUser() {
-    return await api.get(API_CONFIG.endpoints.auth + '/me');
+    const response = await api.get(API_CONFIG.endpoints.auth + '/me');
+    return AuthAPI.extractUser(response);
   },
 
   /**

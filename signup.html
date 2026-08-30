@@ -780,10 +780,9 @@
         // Show success message
         showAlert('Account created successfully! Redirecting...', 'success');
 
-        // Debug logging
-        console.log('Signup successful. Tokens stored:', {
-          hasAccessToken: !!localStorage.getItem('joseph_access_token'),
-          hasRefreshToken: !!localStorage.getItem('joseph_refresh_token'),
+        // Access token is memory-only; the refresh token is an HttpOnly cookie.
+        console.log('Signup successful. Auth state initialized:', {
+          hasAccessToken: window.JosephAPI.TokenStorage.hasTokens(),
           hasUser: !!localStorage.getItem('joseph_user')
         });
 

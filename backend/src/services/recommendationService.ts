@@ -4,7 +4,7 @@
  * Handles AI-generated strategy recommendations
  */
 
-import { prisma } from '../../config/prisma';
+import { prisma } from '../config/prisma';
 
 // ==========================================
 // STRATEGY RECOMMENDATION OPERATIONS

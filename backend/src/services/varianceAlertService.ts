@@ -4,7 +4,7 @@
  * Handles variance analysis and alerts
  */
 
-import { prisma } from '../../config/prisma';
+import { prisma } from '../config/prisma';
 
 // ==========================================
 // VARIANCE ALERT OPERATIONS

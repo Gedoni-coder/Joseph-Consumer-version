@@ -4,7 +4,7 @@
  * Handles customer relationship management
  */
 
-import { prisma } from '../../config/prisma';
+import { prisma } from '../config/prisma';
 
 // ==========================================
 // CUSTOMER OPERATIONS

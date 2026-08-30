@@ -4,7 +4,7 @@
  * Handles all Finance module endpoints using Prisma/PostgreSQL
  */
 
-import { financeService } from '../services/prisma/financeService';
+import { financeService } from '../services/financeService';
 import { LEDGER_TYPES } from '../config/constants';
 import { HTTP_STATUS, ERROR_MESSAGES } from '../config/constants';
 

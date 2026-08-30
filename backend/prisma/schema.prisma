@@ -81,15 +81,21 @@ model NotificationSettings {
 }
 
 model RefreshToken {
-  id         String   @id @default(uuid())
-  userId     String
-  token      String   @unique
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  revokedAt  DateTime?
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String                        @id @default(uuid())
+  familyId           String                        @map("family_id")
+  userId             String                        @map("user_id")
+  tokenHash          String                        @unique @map("token_hash")
+  expiresAt          DateTime                      @map("expires_at")
+  revokedAt          DateTime?                     @map("revoked_at")
+  revocationReason   RefreshTokenRevocationReason? @map("revocation_reason")
+  replacedByTokenId  String?                       @map("replaced_by_token_id")
+  createdAt          DateTime                      @default(now()) @map("created_at")
+  user               User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replacedByToken    RefreshToken?                 @relation("RefreshTokenRotation", fields: [replacedByTokenId], references: [id])
+  replacedTokens     RefreshToken[]                @relation("RefreshTokenRotation")
 
-  @@index([token])
+  @@index([userId])
+  @@index([familyId])
   @@index([expiresAt])
   @@map("refresh_tokens")
 }
@@ -886,6 +892,16 @@ model CategoryRule {
 enum UserRole {
   admin
   user
+}
+
+enum RefreshTokenRevocationReason {
+  ROTATED
+  LOGOUT
+  LOGOUT_ALL
+  PASSWORD_CHANGED
+  PASSWORD_RESET
+  ACCOUNT_SUSPENDED
+  TOKEN_REUSE
 }
 
 enum LedgerType {

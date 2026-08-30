@@ -1,17 +1,12 @@
-// @ts-nocheck
 /**
  * Authentication Routes
  * Endpoints for user authentication and profile management
  */
 
-import express from 'express';
-import authController from '../controllers/authControllerPrisma';
-import { authenticate } from '../middleware/authPrisma';
-import {
-  validateRegister,
-  validateLogin,
-  validateRefreshToken
-} from '../middleware/validation';
+import express from "express";
+import authController from "./auth.controller";
+import { authenticate } from "../../middleware/authPrisma";
+import { validateRegister, validateLogin } from "../../middleware/validation";
 
 const router = express.Router();
 
@@ -24,27 +19,27 @@ const router = express.Router();
  * @desc    Register a new user account
  * @access  Public
  * @body    { email, password, name, phone? }
- * @returns { user, accessToken, refreshToken }
+ * @returns { user, accessToken }
  */
-router.post('/register', validateRegister, authController.register);
+router.post("/register", validateRegister, authController.register);
 
 /**
  * @route   POST /api/auth/login
  * @desc    Login with email and password
  * @access  Public
  * @body    { email, password }
- * @returns { user, accessToken, refreshToken }
+ * @returns { user, accessToken }
  */
-router.post('/login', validateLogin, authController.login);
+router.post("/login", validateLogin, authController.login);
 
 /**
  * @route   POST /api/auth/refresh
- * @desc    Get new access token using refresh token
+ * @desc    Rotate refresh cookie and issue a new access token
  * @access  Public
- * @body    { refreshToken }
- * @returns { accessToken, refreshToken }
+ * @cookie  joseph_refresh_token
+ * @returns { accessToken }
  */
-router.post('/refresh', validateRefreshToken, authController.refreshToken);
+router.post("/refresh", authController.refreshToken);
 
 /**
  * @route   POST /api/auth/request-password-reset
@@ -53,7 +48,7 @@ router.post('/refresh', validateRefreshToken, authController.refreshToken);
  * @body    { email }
  * @returns { message }
  */
-router.post('/request-password-reset', authController.requestPasswordReset);
+router.post("/request-password-reset", authController.requestPasswordReset);
 
 /**
  * @route   POST /api/auth/reset-password
@@ -62,20 +57,21 @@ router.post('/request-password-reset', authController.requestPasswordReset);
  * @body    { token, newPassword }
  * @returns { message }
  */
-router.post('/reset-password', authController.resetPassword);
+router.post("/reset-password", authController.resetPassword);
 
 // ==========================================
-// PROTECTED ROUTES (Authentication Required)
+// MIXED ROUTES
 // ==========================================
 
 /**
  * @route   POST /api/auth/logout
- * @desc    Logout and invalidate refresh token
- * @access  Private
- * @body    { refreshToken, logoutAll? }
+ * @desc    Logout by revoking the refresh session cookie
+ * @access  Public
+ * @body    { logoutAll? }
+ * @cookie  joseph_refresh_token
  * @returns { message }
  */
-router.post('/logout', authenticate, authController.logout);
+router.post("/logout", authController.logout);
 
 /**
  * @route   GET /api/auth/me
@@ -83,7 +79,7 @@ router.post('/logout', authenticate, authController.logout);
  * @access  Private
  * @returns { user }
  */
-router.get('/me', authenticate, authController.getCurrentUser);
+router.get("/me", authenticate, authController.getCurrentUser);
 
 /**
  * @route   PATCH /api/auth/profile
@@ -92,7 +88,7 @@ router.get('/me', authenticate, authController.getCurrentUser);
  * @body    { name?, phone? }
  * @returns { user }
  */
-router.patch('/profile', authenticate, authController.updateProfile);
+router.patch("/profile", authenticate, authController.updateProfile);
 
 /**
  * @route   POST /api/auth/change-password
@@ -101,7 +97,7 @@ router.patch('/profile', authenticate, authController.updateProfile);
  * @body    { currentPassword, newPassword }
  * @returns { message }
  */
-router.post('/change-password', authenticate, authController.changePassword);
+router.post("/change-password", authenticate, authController.changePassword);
 
 /**
  * @route   POST /api/auth/complete-onboarding
@@ -109,7 +105,11 @@ router.post('/change-password', authenticate, authController.changePassword);
  * @access  Private
  * @returns { user }
  */
-router.post('/complete-onboarding', authenticate, authController.completeOnboarding);
+router.post(
+  "/complete-onboarding",
+  authenticate,
+  authController.completeOnboarding,
+);
 
 // ==========================================
 // EXPORT
