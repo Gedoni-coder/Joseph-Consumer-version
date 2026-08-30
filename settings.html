@@ -835,7 +835,8 @@
         } catch (error) {
           console.error('Logout error:', error);
         }
-        localStorage.clear();
+        window.JosephAPI.TokenStorage.clearTokens();
+        localStorage.removeItem('joseph_user');
         window.location.href = 'login.html';
       }
     }

@@ -53,7 +53,7 @@ The backend server for JOSEPH AI - Family Finance & Business Management applicat
    npm run dev
    ```
 
-The server will start on `http://localhost:4000`
+The server will start on `http://localhost:5000`
 
 ## 📁 Project Structure
 
@@ -131,7 +131,7 @@ The API uses JWT (JSON Web Tokens) for authentication:
 
 ### Request Format
 ```bash
-curl -H "Authorization: Bearer <access_token>" http://localhost:4000/api/transactions
+curl -H "Authorization: Bearer <access_token>" http://localhost:5000/api/transactions
 ```
 
 ### Token Refresh
@@ -181,7 +181,7 @@ POST /api/auth/refresh
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `NODE_ENV` | Environment | `development` |
-| `PORT` | Server port | `4000` |
+| `PORT` | Server port | `5000` |
 | `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:3000` |
 | `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/joseph-ai` |
 | `JWT_SECRET` | JWT secret key | (must be set) |

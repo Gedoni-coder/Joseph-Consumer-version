@@ -4,7 +4,7 @@
  * Handles product pricing history and competitor pricing
  */
 
-import { prisma } from '../../config/prisma';
+import { prisma } from '../config/prisma';
 
 // ==========================================
 // PRODUCT PRICE HISTORY OPERATIONS

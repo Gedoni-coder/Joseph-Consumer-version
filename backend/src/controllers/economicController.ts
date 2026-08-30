@@ -1,4 +1,4 @@
-import economicService from '../services/prisma/economicService';
+import economicService from '../services/economicService';
 import { prisma } from '../config/prisma';
 import {
   ECONOMIC_DATA_TYPES,

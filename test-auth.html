@@ -99,9 +99,10 @@
                 );
                 addResult('success', '✅ Register Successful!', response);
 
-                // Store tokens for next tests
+                // Store access-token presence for manual checks.
+                // The refresh token is intentionally unavailable to JavaScript.
                 window.testAccessToken = response.accessToken;
-                window.testRefreshToken = response.refreshToken;
+                window.testRefreshToken = null;
             } catch (error) {
                 addResult('error', '❌ Register Failed', error);
             }
@@ -118,8 +119,9 @@
                 );
                 addResult('success', '✅ Login Successful!', response);
 
+                // The backend sets the refresh session as an HttpOnly cookie.
                 window.testAccessToken = response.accessToken;
-                window.testRefreshToken = response.refreshToken;
+                window.testRefreshToken = null;
             } catch (error) {
                 addResult('error', '❌ Login Failed', error);
             }
@@ -154,8 +156,15 @@
             addResult('info', '🔄 Testing Token Refresh...');
 
             try {
-                // This would call the refresh endpoint
-                addResult('info', 'Token refresh requires API implementation');
+                // Browser sends the HttpOnly refresh cookie automatically.
+                const token = await window.JosephAPI.api.refreshAccessToken({ redirectOnFailure: false });
+                if (!token) {
+                    throw new Error('Refresh failed or no refresh cookie exists');
+                }
+                addResult('success', 'âœ… Token Refresh Successful!', {
+                    hasAccessToken: window.JosephAPI.TokenStorage.hasTokens(),
+                    refreshTokenReadableByJavaScript: false
+                });
             } catch (error) {
                 addResult('error', '❌ Token Refresh Failed', error);
             }

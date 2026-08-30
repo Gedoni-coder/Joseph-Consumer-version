@@ -1798,10 +1798,14 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // Logout
-  window.logout = function() {
+  window.logout = async function() {
     if (confirm('Are you sure you want to logout?')) {
-      localStorage.clear();
-      window.location.href = '/landing';
+      if (window.JosephAPI && window.JosephAPI.auth) {
+        await window.JosephAPI.auth.logout();
+      } else {
+        localStorage.removeItem('joseph_user');
+        window.location.href = 'login.html';
+      }
     }
   };
 

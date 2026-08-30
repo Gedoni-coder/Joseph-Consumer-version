@@ -4,8 +4,8 @@
  * Mirrors Mongoose financeController functionality
  */
 
-import { prisma } from '../../config/prisma';
-import { LEDGER_TYPES, CREDIT_STATUS } from '../../config/constants';
+import { prisma } from '../config/prisma';
+import { LEDGER_TYPES, CREDIT_STATUS } from '../config/constants';
 
 // ==========================================
 // HELPER FUNCTIONS

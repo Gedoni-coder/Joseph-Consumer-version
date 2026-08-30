@@ -220,10 +220,9 @@
         // Show success message
         showAlert('Login successful! Redirecting...', 'success');
 
-        // Debug logging
-        console.log('Login successful. Tokens stored:', {
-          hasAccessToken: !!localStorage.getItem('joseph_access_token'),
-          hasRefreshToken: !!localStorage.getItem('joseph_refresh_token'),
+        // Access token is memory-only; the refresh token is an HttpOnly cookie.
+        console.log('Login successful. Auth state initialized:', {
+          hasAccessToken: window.JosephAPI.TokenStorage.hasTokens(),
           hasUser: !!localStorage.getItem('joseph_user')
         });
 

@@ -11,7 +11,7 @@
   // CONFIGURATION
   // ==========================================
   const APP_CONFIG = {
-    apiBaseURL: 'http://localhost:4000',
+    apiBaseURL: 'http://localhost:5000',
     loginPath: 'login.html',
     signupPath: 'signup.html',
     homePath: 'home.html'
@@ -102,15 +102,22 @@
    * Check if access token needs refresh
    */
   async function checkTokenRefresh() {
-    if (!window.JosephAPI || !window.JosephAPI.auth.isAuthenticated()) {
-      return;
+    if (!window.JosephAPI || !window.JosephAPI.auth) {
+      return null;
     }
 
     try {
-      // Try to get current user (will refresh token if needed)
-      const user = await window.JosephAPI.auth.getCurrentUser();
-      window.JosephAPI.auth.storeUser(user);
-      updateAuthUI(user);
+      // Page reloads lose the in-memory access token, so restore from the HttpOnly refresh cookie first.
+      const user = window.JosephAPI.auth.isAuthenticated()
+        ? await window.JosephAPI.auth.getCurrentUser()
+        : await window.JosephAPI.auth.restoreSession({ redirectOnFailure: false });
+
+      if (user) {
+        window.JosephAPI.auth.storeUser(user);
+        updateAuthUI(user);
+      }
+
+      return user;
     } catch (error) {
       console.error('Token check failed:', error);
       // If token refresh fails, clear auth and redirect to login
@@ -120,6 +127,7 @@
       if (!window.location.pathname.includes('login.html')) {
         window.location.href = APP_CONFIG.loginPath;
       }
+      return null;
     }
   }
 
@@ -149,9 +157,9 @@
 
     // Check authentication status
     if (window.JosephAPI && window.JosephAPI.auth) {
-      if (window.JosephAPI.auth.isAuthenticated()) {
-        await checkTokenRefresh();
-      } else {
+      const user = await checkTokenRefresh();
+
+      if (!user) {
         // Try to restore user from localStorage
         const storedUser = window.JosephAPI.auth.getStoredUser();
         if (storedUser) {

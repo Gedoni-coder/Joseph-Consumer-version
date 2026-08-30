@@ -4,7 +4,7 @@
  * Handles insights generation and interpretation using Prisma/PostgreSQL
  */
 
-import { prisma } from '../../config/prisma';
+import { prisma } from '../config/prisma';
 
 // ==========================================
 // HELPER FUNCTIONS

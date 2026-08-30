@@ -4,7 +4,7 @@
  * Handles all Strategy module endpoints using Prisma/PostgreSQL
  */
 
-import { strategyService } from '../services/prisma/strategyService';
+import { strategyService } from '../services/strategyService';
 import { HTTP_STATUS } from '../config/constants';
 
 // ==========================================
