@@ -87,10 +87,16 @@ model RefreshToken {
   expiresAt  DateTime
   createdAt  DateTime @default(now())
   revokedAt  DateTime?
+  sessionId  String?
+  parentId   String?  @unique
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session    UserSession? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  parent     RefreshToken? @relation("RefreshRotation", fields: [parentId], references: [id], onDelete: SetNull)
+  successor  RefreshToken? @relation("RefreshRotation")
 
   @@index([token])
   @@index([expiresAt])
+  @@index([userId, sessionId])
   @@map("refresh_tokens")
 }
 
@@ -104,7 +110,9 @@ model UserSession {
   lastActive DateTime @default(now())
   expiresAt  DateTime
   createdAt  DateTime @default(now())
+  revokedAt  DateTime?
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokens RefreshToken[]
 
   @@index([userId, lastActive])
   @@index([expiresAt])

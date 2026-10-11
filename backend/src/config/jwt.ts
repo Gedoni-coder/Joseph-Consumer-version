@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * JWT Configuration and Token Management
  * Handles token creation, verification, and refresh token management
  */
 
 import jwt from 'jsonwebtoken';
+import crypto from 'node:crypto';
 
 // ==========================================
 // CONFIGURATION
@@ -12,8 +12,8 @@ import jwt from 'jsonwebtoken';
 const JWT_CONFIG = {
   ACCESS_TOKEN_SECRET: process.env.JWT_SECRET,
   REFRESH_TOKEN_SECRET: process.env.JWT_REFRESH_SECRET,
-  ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN || '15m',
-  REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN || process.env.JWT_REFRESH_EXPIRES_IN || '7d'
+  ACCESS_TOKEN_EXPIRES_IN: (process.env.ACCESS_TOKEN_EXPIRES_IN || '15m') as jwt.SignOptions['expiresIn'],
+  REFRESH_TOKEN_EXPIRES_IN: (process.env.REFRESH_TOKEN_EXPIRES_IN || process.env.JWT_REFRESH_EXPIRES_IN || '7d') as jwt.SignOptions['expiresIn']
 };
 
 // Validate secrets on startup
@@ -48,7 +48,7 @@ export function generateAccessToken(payload) {
  */
 export function generateRefreshToken(payload) {
   return jwt.sign(payload, JWT_CONFIG.REFRESH_TOKEN_SECRET, {
-    expiresIn: JWT_CONFIG.REFRESH_TOKEN_EXPIRES_IN,
+    ...(payload.exp === undefined ? { expiresIn: JWT_CONFIG.REFRESH_TOKEN_EXPIRES_IN } : {}),
     issuer: 'joseph-ai',
     audience: 'joseph-ai-refresh'
   });
@@ -60,15 +60,18 @@ export function generateRefreshToken(payload) {
  * @param {string} tokenId - Unique ID for refresh token
  * @returns {object} { accessToken, refreshToken }
  */
-export function generateTokenPair(userPayload, tokenId) {
+export function generateTokenPair(userPayload, tokenId, sessionExpiresAt?: Date) {
   const accessToken = generateAccessToken({
     userId: userPayload.userId,
-    email: userPayload.email
+    email: userPayload.email,
+    sessionId: userPayload.sessionId
   });
 
   const refreshToken = generateRefreshToken({
     userId: userPayload.userId,
-    tokenId: tokenId
+    tokenId: tokenId,
+    sessionId: userPayload.sessionId,
+    ...(sessionExpiresAt ? { exp: Math.floor(sessionExpiresAt.getTime() / 1000) } : {})
   });
 
   return {
@@ -90,10 +93,15 @@ export function generateTokenPair(userPayload, tokenId) {
  */
 export function verifyAccessToken(token) {
   try {
-    return jwt.verify(token, JWT_CONFIG.ACCESS_TOKEN_SECRET, {
+    const decoded = jwt.verify(token, JWT_CONFIG.ACCESS_TOKEN_SECRET, {
+      algorithms: ['HS256'],
       issuer: 'joseph-ai',
       audience: 'joseph-ai-users'
     });
+    if (typeof decoded === 'string' || typeof decoded.userId !== 'string') {
+      throw new Error('Invalid access token');
+    }
+    return decoded;
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       throw new Error('Access token expired');
@@ -112,10 +120,15 @@ export function verifyAccessToken(token) {
  */
 export function verifyRefreshToken(token) {
   try {
-    return jwt.verify(token, JWT_CONFIG.REFRESH_TOKEN_SECRET, {
+    const decoded = jwt.verify(token, JWT_CONFIG.REFRESH_TOKEN_SECRET, {
+      algorithms: ['HS256'],
       issuer: 'joseph-ai',
       audience: 'joseph-ai-refresh'
     });
+    if (typeof decoded === 'string' || typeof decoded.userId !== 'string') {
+      throw new Error('Invalid refresh token');
+    }
+    return decoded;
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       throw new Error('Refresh token expired');
@@ -133,8 +146,9 @@ export function verifyRefreshToken(token) {
  */
 export function decodeToken(token) {
   try {
-    return jwt.decode(token);
-  } catch (error) {
+    const decoded = jwt.decode(token);
+    return typeof decoded === 'string' ? null : decoded;
+  } catch (_error) {
     return null;
   }
 }
@@ -175,7 +189,7 @@ export function getTokenExpiresIn(token) {
  * @returns {string} Unique token ID
  */
 export function generateTokenId() {
-  return `tok_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+  return crypto.randomUUID();
 }
 
 // ==========================================

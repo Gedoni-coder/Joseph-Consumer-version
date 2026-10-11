@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * WhatsApp Bot Routes
  * Endpoints specifically for the WhatsApp bot integration
@@ -7,6 +6,8 @@
 
 import express from 'express';
 import crypto from 'crypto';
+import { createAppError } from '@app-core/errors';
+import { createAuthSession } from '../services/prisma/authSessionService';
 import { authenticate } from '../middleware/authPrisma';
 import { prisma } from '../config/prisma';
 
@@ -67,7 +68,7 @@ router.post('/link/generate', authenticate, async (req, res) => {
  * @access  Public (used by WhatsApp bot)
  * @body    { phone: string, token: string }
  */
-router.post('/auth/verify-link-token', async (req, res) => {
+router.post('/auth/verify-link-token', async (req, res, next) => {
   try {
     const { phone, token } = req.body;
 
@@ -78,7 +79,6 @@ router.post('/auth/verify-link-token', async (req, res) => {
       });
     }
 
-    const { generateAccessToken, generateRefreshToken } = await import('../config/jwt');
 
     // Normalize phone number (bot might send varying formats)
     const normalizedPhone = phone.replace(/\D/g, '');
@@ -110,27 +110,16 @@ router.post('/auth/verify-link-token', async (req, res) => {
       });
     }
 
-    // Update user's phone number if it's different/empty, and clear token
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        phone: '+' + finalPhone, // Store in E.164 format
-        whatsappLinkToken: null,
-        whatsappLinkTokenExpiry: null
+    const { accessToken, refreshToken } = await createAuthSession(user, {
+      userAgent: req.headers['user-agent'], ip: req.ip
+    }, async (tx, currentUser) => {
+      if (currentUser.whatsappLinkToken !== token || !currentUser.whatsappLinkTokenExpiry ||
+          currentUser.whatsappLinkTokenExpiry <= new Date()) {
+        throw createAppError('Invalid or expired linking token', 'UNAUTHORIZED');
       }
-    });
-
-    // Generate tokens (bot might not need these for its own session, but good to have)
-    const accessToken = generateAccessToken({ userId: user.id, email: user.email });
-    const refreshToken = generateRefreshToken({ userId: user.id, email: user.email });
-
-    // Add refresh token
-    await prisma.refreshToken.create({
-      data: {
-        userId: user.id,
-        token: refreshToken,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-      }
+      await tx.user.update({ where: { id: user.id }, data: {
+        phone: '+' + finalPhone, whatsappLinkToken: null, whatsappLinkTokenExpiry: null
+      } });
     });
 
     res.json({
@@ -149,12 +138,7 @@ router.post('/auth/verify-link-token', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('WhatsApp verify-link-token error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to verify token',
-      error: error.message
-    });
+    return next(error);
   }
 });
 
@@ -317,7 +301,7 @@ router.post('/auth/send-otp', async (req, res) => {
  * @access  Public (used by WhatsApp bot)
  * @body    { phone: string, code: string }
  */
-router.post('/auth/verify-otp', async (req, res) => {
+router.post('/auth/verify-otp', async (req, res, next) => {
   try {
     const { phone, code } = req.body;
 
@@ -328,7 +312,6 @@ router.post('/auth/verify-otp', async (req, res) => {
       });
     }
 
-    const { generateAccessToken, generateRefreshToken } = await import('../config/jwt');
 
     // Find user by phone
     const normalizedPhone = phone.replace(/\D/g, '');
@@ -367,26 +350,16 @@ router.post('/auth/verify-otp', async (req, res) => {
       });
     }
 
-    // Clear OTP after successful verification
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        whatsappOTP: null,
-        whatsappOTPExpiry: null
+    const { accessToken, refreshToken } = await createAuthSession(user, {
+      userAgent: req.headers['user-agent'], ip: req.ip
+    }, async (tx, currentUser) => {
+      if (!currentUser.whatsappOTP || currentUser.whatsappOTP !== code ||
+          !currentUser.whatsappOTPExpiry || currentUser.whatsappOTPExpiry <= new Date()) {
+        throw createAppError('Invalid or expired verification code', 'UNAUTHORIZED');
       }
-    });
-
-    // Generate tokens
-    const accessToken = generateAccessToken({ userId: user.id, email: user.email });
-    const refreshToken = generateRefreshToken({ userId: user.id, email: user.email });
-
-    // Add refresh token to user's tokens using Prisma RefreshToken model
-    await prisma.refreshToken.create({
-      data: {
-        userId: user.id,
-        token: refreshToken,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-      }
+      await tx.user.update({ where: { id: user.id }, data: {
+        whatsappOTP: null, whatsappOTPExpiry: null
+      } });
     });
 
     res.json({
@@ -405,12 +378,7 @@ router.post('/auth/verify-otp', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('WhatsApp verify-otp error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to verify OTP',
-      error: error.message
-    });
+    return next(error);
   }
 });
 
@@ -429,7 +397,7 @@ router.get('/user/phone', async (req, res) => {
   try {
     const { phone } = req.query;
 
-    if (!phone) {
+    if (typeof phone !== 'string' || !phone) {
       return res.status(400).json({
         success: false,
         message: 'Phone number is required'

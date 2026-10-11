@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Prisma-based Authentication Service
  * Handles user authentication using Prisma/PostgreSQL
@@ -6,12 +5,11 @@
 
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/prisma';
 import {
-  generateTokenPair,
-  generateTokenId,
-  verifyRefreshToken
-} from '../../config/jwt';
+  revokeAuthSession, revokeAllAuthSessions, revokeUserSessionsInTransaction, withLockedUser
+} from './authSessionService';
 
 // ==========================================
 // HELPER FUNCTIONS
@@ -142,36 +140,8 @@ export async function verifyCredentials(email, password) {
   return user;
 }
 
-/**
- * Add refresh token to user
- */
-export async function addRefreshToken(userId, refreshToken, deviceInfo) {
-  // Store refresh token in database
-  // Note: For Prisma, we'd need a RefreshToken model or use JSON field
-  // For now, we'll return success - you may want to implement proper token storage
-  return await prisma.user.update({
-    where: { id: userId },
-    data: {
-      lastLogin: new Date()
-    }
-  });
-}
-
-/**
- * Remove refresh token
- */
-export async function removeRefreshToken(userId, refreshToken) {
-  // Implement proper token removal logic
-  return true;
-}
-
-/**
- * Clear all refresh tokens
- */
-export async function clearAllRefreshTokens(userId) {
-  // Implement proper token clearing logic
-  return true;
-}
+export const removeRefreshToken = revokeAuthSession;
+export const clearAllRefreshTokens = revokeAllAuthSessions;
 
 /**
  * Update user last login
@@ -198,7 +168,7 @@ export async function updateLastActivity(userId) {
  */
 export async function updateUserProfile(userId, data) {
   const { name, phone } = data;
-  const updateData = {};
+  const updateData: Prisma.UserUpdateInput = {};
 
   if (name) updateData.name = name.trim();
   if (phone !== undefined) {
@@ -227,21 +197,15 @@ export async function updateUserProfile(userId, data) {
  * Change user password
  */
 export async function changeUserPassword(userId, currentPassword, newPassword) {
-  const user = await findUserById(userId);
-
-  const isValid = await comparePassword(currentPassword, user.password);
-  if (!isValid) {
-    throw new Error('INVALID_CURRENT_PASSWORD');
-  }
-
   const hashedPassword = await hashPassword(newPassword);
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: { password: hashedPassword }
+  return withLockedUser(userId, async (tx, user) => {
+    if (!(await comparePassword(currentPassword, user.password))) {
+      throw new Error('INVALID_CURRENT_PASSWORD');
+    }
+    await tx.user.update({ where: { id: userId }, data: { password: hashedPassword } });
+    await revokeUserSessionsInTransaction(tx, userId);
+    return true;
   });
-
-  return true;
 }
 
 /**
@@ -278,32 +242,23 @@ export async function generatePasswordReset(email) {
  */
 export async function resetPasswordWithToken(token, newPassword) {
   const hashedToken = hashResetToken(token);
-
   const user = await prisma.user.findFirst({
-    where: {
-      resetPasswordToken: hashedToken,
-      resetPasswordExpires: {
-        gt: new Date()
-      }
-    }
+    where: { resetPasswordToken: hashedToken, resetPasswordExpires: { gt: new Date() } }
   });
-
-  if (!user) {
-    throw new Error('INVALID_OR_EXPIRED_TOKEN');
-  }
-
+  if (!user) throw new Error('INVALID_OR_EXPIRED_TOKEN');
   const hashedPassword = await hashPassword(newPassword);
-
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      password: hashedPassword,
-      resetPasswordToken: null,
-      resetPasswordExpires: null
+  return withLockedUser(user.id, async (tx, lockedUser) => {
+    // Re-check under the user lock so a reset token is consumed only once.
+    if (lockedUser.resetPasswordToken !== hashedToken ||
+        !lockedUser.resetPasswordExpires || lockedUser.resetPasswordExpires <= new Date()) {
+      throw new Error('INVALID_OR_EXPIRED_TOKEN');
     }
+    await tx.user.update({ where: { id: user.id }, data: {
+      password: hashedPassword, resetPasswordToken: null, resetPasswordExpires: null
+    } });
+    await revokeUserSessionsInTransaction(tx, user.id);
+    return true;
   });
-
-  return true;
 }
 
 /**
@@ -347,7 +302,6 @@ export default {
   findUserByEmail,
   findUserById,
   verifyCredentials,
-  addRefreshToken,
   removeRefreshToken,
   clearAllRefreshTokens,
   updateLastLogin,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Authentication Routes
  * Endpoints for user authentication and profile management
@@ -10,7 +9,11 @@ import { authenticate } from '../middleware/authPrisma';
 import {
   validateRegister,
   validateLogin,
-  validateRefreshToken
+  validateRefreshToken,
+  validateLogout,
+  validateChangePassword,
+  validateResetPassword,
+  validateResetRequest
 } from '../middleware/validation';
 
 const router = express.Router();
@@ -53,7 +56,7 @@ router.post('/refresh', validateRefreshToken, authController.refreshToken);
  * @body    { email }
  * @returns { message }
  */
-router.post('/request-password-reset', authController.requestPasswordReset);
+router.post('/request-password-reset', validateResetRequest, authController.requestPasswordReset);
 
 /**
  * @route   POST /api/auth/reset-password
@@ -62,7 +65,7 @@ router.post('/request-password-reset', authController.requestPasswordReset);
  * @body    { token, newPassword }
  * @returns { message }
  */
-router.post('/reset-password', authController.resetPassword);
+router.post('/reset-password', validateResetPassword, authController.resetPassword);
 
 // ==========================================
 // PROTECTED ROUTES (Authentication Required)
@@ -75,7 +78,7 @@ router.post('/reset-password', authController.resetPassword);
  * @body    { refreshToken, logoutAll? }
  * @returns { message }
  */
-router.post('/logout', authenticate, authController.logout);
+router.post('/logout', authenticate, validateLogout, authController.logout);
 
 /**
  * @route   GET /api/auth/me
@@ -101,7 +104,7 @@ router.patch('/profile', authenticate, authController.updateProfile);
  * @body    { currentPassword, newPassword }
  * @returns { message }
  */
-router.post('/change-password', authenticate, authController.changePassword);
+router.post('/change-password', authenticate, validateChangePassword, authController.changePassword);
 
 /**
  * @route   POST /api/auth/complete-onboarding

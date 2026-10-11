@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Validation Middleware
  * Input validation using Joi
@@ -215,6 +214,23 @@ const validate = (schema, property = 'body') => {
 export const validateRegister = validate(registerSchema);
 export const validateLogin = validate(loginSchema);
 export const validateRefreshToken = validate(refreshTokenSchema);
+export const validateLogout = validate(Joi.object({
+  logoutAll: Joi.boolean().default(false),
+  refreshToken: Joi.when('logoutAll', {
+    is: true, then: Joi.string().optional(), otherwise: Joi.string().required()
+  })
+}));
+export const validateChangePassword = validate(Joi.object({
+  currentPassword: Joi.string().required(),
+  newPassword: registerSchema.extract('password')
+}));
+export const validateResetPassword = validate(Joi.object({
+  token: Joi.string().hex().length(64).required(),
+  newPassword: registerSchema.extract('password')
+}));
+export const validateResetRequest = validate(Joi.object({
+  email: Joi.string().email().required()
+}));
 
 // Transaction validation
 export const validateCreateTransaction = validate(createTransactionSchema);

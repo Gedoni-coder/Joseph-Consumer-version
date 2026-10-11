@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Admin Routes
  * Routes for managing economic data, user settings, and insight templates
@@ -48,14 +47,12 @@ import {
   seedIndustryTemplates
 } from '../controllers/adminController';
 import { authenticate } from '../middleware/authPrisma';
+import { requireAdmin } from '../middleware/role.middleware';
 
 const router = express.Router();
 
-// All routes require authentication
-router.use(authenticate);
-
-// Some routes require admin access (optional - comment out if not needed)
-// router.use(requireAdmin);
+// Administrative mutations must never be available to ordinary accounts.
+router.use(authenticate, requireAdmin);
 
 // ==========================================
 // INDICATOR MANAGEMENT

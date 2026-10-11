@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Prisma-based Authentication Middleware
  * JWT token verification and user authentication
@@ -7,6 +6,7 @@
 import { verifyAccessToken, extractTokenFromHeader } from '../config/jwt';
 import { prisma } from '../config/prisma';
 import { HTTP_STATUS, ERROR_MESSAGES } from '../config/constants';
+import { hasActiveSession } from '../services/prisma/authSessionService';
 
 // ==========================================
 // AUTH MIDDLEWARE
@@ -48,7 +48,7 @@ export const authenticate = async (req, res, next) => {
       where: { id: decoded.userId }
     });
 
-    if (!user || !user.isActive) {
+    if (!user || !user.isActive || !(await hasActiveSession(user.id, decoded.sessionId))) {
       return res.status(HTTP_STATUS.UNAUTHORIZED).json({
         error: ERROR_MESSAGES.UNAUTHORIZED,
         message: 'User not found or inactive'
@@ -96,11 +96,11 @@ export const optionalAuth = async (req, res, next) => {
         where: { id: decoded.userId }
       });
 
-      if (user && user.isActive) {
+      if (user && user.isActive && await hasActiveSession(user.id, decoded.sessionId)) {
         req.user = user;
         req.userId = user.id;
       }
-    } catch (tokenError) {
+    } catch (_tokenError) {
       // Invalid token, proceed without user
     }
 

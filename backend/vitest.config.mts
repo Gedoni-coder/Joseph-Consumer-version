@@ -17,7 +17,7 @@ export default defineConfig({
     test: {
         environment: 'node',
         globals: true,
-        passWithNoTests: true,
+        passWithNoTests: false,
         include: ['tests/**/*.test.ts', 'src/**/*.test.ts', 'core/**/*.test.ts'],
         exclude: ['**/node_modules/**', '**/dist/**', '**/prisma/**'],
         clearMocks: true,

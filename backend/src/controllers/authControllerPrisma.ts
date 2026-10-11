@@ -1,15 +1,10 @@
-// @ts-nocheck
 /**
  * Prisma-based Authentication Controller
  * Handles user authentication using Prisma/PostgreSQL
  */
 
 import crypto from 'crypto';
-import {
-  generateTokenPair,
-  generateTokenId,
-  verifyRefreshToken
-} from '../config/jwt';
+import { createAuthSession, rotateAuthSession } from '../services/prisma/authSessionService';
 import authService from '../services/prisma/authService';
 import {
   HTTP_STATUS,
@@ -46,21 +41,13 @@ export const register = async (req, res, next) => {
     }
 
     // Generate tokens
-    const tokenId = generateTokenId();
     const deviceInfo = {
       deviceId: req.headers['x-device-id'] || crypto.randomBytes(16).toString('hex'),
       userAgent: req.headers['user-agent'],
       ip: req.ip || req.connection.remoteAddress
     };
 
-    const { accessToken, refreshToken } = generateTokenPair(
-      { userId: user.id, email: user.email },
-      tokenId
-    );
-
-    // Add refresh token
-    await authService.addRefreshToken(user.id, refreshToken, deviceInfo);
-    await authService.updateLastLogin(user.id);
+    const { accessToken, refreshToken } = await createAuthSession(user, deviceInfo);
 
     // Return response
     res.status(HTTP_STATUS.CREATED).json({
@@ -105,21 +92,13 @@ export const login = async (req, res, next) => {
     }
 
     // Generate tokens
-    const tokenId = generateTokenId();
     const deviceInfo = {
       deviceId: req.headers['x-device-id'] || crypto.randomBytes(16).toString('hex'),
       userAgent: req.headers['user-agent'],
       ip: req.ip || req.connection.remoteAddress
     };
 
-    const { accessToken, refreshToken } = generateTokenPair(
-      { userId: user.id, email: user.email },
-      tokenId
-    );
-
-    // Add refresh token
-    await authService.addRefreshToken(user.id, refreshToken, deviceInfo);
-    await authService.updateLastLogin(user.id);
+    const { accessToken, refreshToken } = await createAuthSession(user, deviceInfo);
 
     // Return response
     res.status(HTTP_STATUS.OK).json({
@@ -144,7 +123,7 @@ export const logout = async (req, res, next) => {
     const { refreshToken, logoutAll = false } = req.body;
     const userId = req.userId;
 
-    if (!refreshToken) {
+    if (!logoutAll && !refreshToken) {
       return res.status(HTTP_STATUS.BAD_REQUEST).json({
         error: ERROR_MESSAGES.INVALID_INPUT,
         message: 'Refresh token is required'
@@ -172,67 +151,11 @@ export const logout = async (req, res, next) => {
 // ==========================================
 export const refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
-
-    if (!refreshToken) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({
-        error: ERROR_MESSAGES.INVALID_INPUT,
-        message: 'Refresh token is required'
-      });
-    }
-
-    // Verify refresh token
-    let decoded;
-    try {
-      decoded = verifyRefreshToken(refreshToken);
-    } catch (error) {
-      if (error.message.includes('expired')) {
-        return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-          error: ERROR_MESSAGES.TOKEN_EXPIRED,
-          message: 'Refresh token has expired',
-          code: 'REFRESH_TOKEN_EXPIRED'
-        });
-      }
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-        error: ERROR_MESSAGES.TOKEN_INVALID,
-        message: 'Invalid refresh token'
-      });
-    }
-
-    // Find user
-    const user = await authService.findUserById(decoded.userId);
-    if (!user || !user.isActive) {
-      return res.status(HTTP_STATUS.UNAUTHORIZED).json({
-        error: ERROR_MESSAGES.TOKEN_INVALID,
-        message: 'Invalid refresh token'
-      });
-    }
-
-    // Generate new token pair
-    const newTokenId = generateTokenId();
-    const deviceInfo = {
-      deviceId: decoded.deviceId,
-      userAgent: req.headers['user-agent'],
-      ip: req.ip || req.connection.remoteAddress
-    };
-
-    const { accessToken, refreshToken: newRefreshToken } = generateTokenPair(
-      { userId: user.id, email: user.email },
-      newTokenId
-    );
-
-    // Update tokens
-    await authService.removeRefreshToken(user.id, refreshToken);
-    await authService.addRefreshToken(user.id, newRefreshToken, deviceInfo);
-    await authService.updateLastActivity(user.id);
-
+    const pair = await rotateAuthSession(req.body.refreshToken);
     res.status(HTTP_STATUS.OK).json({
       message: SUCCESS_MESSAGES.TOKEN_REFRESHED,
-      accessToken,
-      refreshToken: newRefreshToken,
-      expiresIn: '15m'
+      ...pair
     });
-
   } catch (error) {
     next(error);
   }
@@ -309,8 +232,7 @@ export const changePassword = async (req, res, next) => {
       throw error;
     }
 
-    // Clear all refresh tokens (require re-login on all devices)
-    await authService.clearAllRefreshTokens(userId);
+    // Password update and session revocation commit atomically in the service.
 
     res.status(HTTP_STATUS.OK).json({
       message: 'Password changed successfully. Please login again.'
@@ -329,16 +251,13 @@ export const requestPasswordReset = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    const result = await authService.generatePasswordReset(email);
+    await authService.generatePasswordReset(email);
 
     // In production, send email with reset token
     // For now, just return success
-    console.log('Password reset token:', result.token); // For development only
 
     res.status(HTTP_STATUS.OK).json({
-      message: 'If an account exists with this email, a password reset link will be sent.',
-      // Return token in development only
-      ...(process.env.NODE_ENV === 'development' && result.token && { resetToken: result.token })
+      message: 'If an account exists with this email, a password reset link will be sent.'
     });
 
   } catch (error) {
@@ -366,9 +285,7 @@ export const resetPassword = async (req, res, next) => {
       throw error;
     }
 
-    // Clear all refresh tokens (require re-login)
-    // Note: We need the user ID for this, but we don't have it from the token
-    // You may want to return it from resetPasswordWithToken
+    // The service consumes the reset token and revokes sessions atomically.
 
     res.status(HTTP_STATUS.OK).json({
       message: 'Password reset successfully. Please login with your new password.'
