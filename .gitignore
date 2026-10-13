@@ -38,3 +38,4 @@ scratch/
 
 # Backups / Temp
 *.backup
+web/dist/

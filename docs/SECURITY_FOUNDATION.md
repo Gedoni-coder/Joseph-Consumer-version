@@ -6,6 +6,8 @@ This local change enforces admin authorization and replaces the active authentic
 
 The working tree was imported from the supplied `Joseph-Consumer-version-main.zip`. Its archive comment is `64a98207eef2a717b30b34fb3e4d49c4eba4245c`; that identifier has not been verified against GitHub. The local branch is `fix/security-foundation`, based on a local `snapshot-baseline` import. It does not contain upstream Git history. Reconcile against the live default branch and the existing authentication PR before publishing this change.
 
+Update, 13 October 2026: local Git access verified that archive identifier and the matching upstream tree. The patch was cherry-picked onto real upstream `main` as `e245648` on local `feat/consumer-web`. The original branches are retained. The upstream `feat/Auth` rewrite has an incompatible refresh-token schema that still needs deliberate reconciliation; see `UPSTREAM_AUTH_RECONCILIATION.md`.
+
 ## Behavior
 
 - Admin routes require authentication and the current database user's admin role.
