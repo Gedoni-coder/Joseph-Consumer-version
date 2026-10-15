@@ -292,10 +292,12 @@ h1,h2 {
 .hero-sculpture {
   position:absolute;
   top:14px;
-  left:-17px;
-  width:calc(100% + 90px);
+  left:0;
+  width:100%;
   height:auto;
-  max-width:none;
+  max-width:610px;
+  mask-image:linear-gradient(transparent,#000 8%,#000 86%,transparent),linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-composite:intersect;
   mix-blend-mode:multiply;
   z-index:-1;
   animation:sculpture-entrance 1.3s ease both
@@ -1693,8 +1695,8 @@ h1,h2 {
 }
 @media(min-width:1600px) {
   .hero-sculpture {
-    left:-5px;
-    max-width:660px
+    left:0;
+    max-width:610px
   }
   .hero {
     min-height:745px
@@ -1719,7 +1721,7 @@ h1,h2 {
   }
   .hero-sculpture {
     top:55px;
-    width:calc(100% + 40px);
+    width:100%;
     left:0
   }
   .hero-money-card {
@@ -1874,7 +1876,7 @@ h1,h2 {
   }
   .hero-sculpture {
     top:80px;
-    width:calc(100% + 35px);
+    width:100%;
     left:0
   }
   .hero-money-card {
@@ -2246,7 +2248,7 @@ h1,h2 {
     line-height:1.03
   }
   .hero h1 br:nth-child(2) {
-    display:none
+    display:initial
   }
   .hero h1 em {
     display:inline
@@ -2285,8 +2287,8 @@ h1,h2 {
   }
   .hero-sculpture {
     top:0;
-    left:-10px;
-    width:calc(100% + 20px);
+    left:0;
+    width:100%;
     height:auto
   }
   .art-coordinate {

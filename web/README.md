@@ -17,10 +17,13 @@ For the production build and local preview:
 ```sh
 npm run build
 npm test
+npm run test:browser
 npm run preview -- --port 5173
 ```
 
 Open the printed local URL. Do not expose the development server publicly. No environment variables or database are needed for this preview.
+
+The browser suite uses an existing Google Chrome installation with an isolated temporary profile; it does not download a browser or use your signed-in profile. It starts and stops its own preview server on port 5178. Run `npm run build` before `npm run test:browser`. Screenshots and failure traces are written to ignored `test-results/`.
 
 ## What works
 
@@ -41,8 +44,10 @@ The next product pass should introduce routing and an API boundary after the ups
 
 The existing navy `#24248f` anchors the brand, with warm ivory and muted lime/mint accents. Typography pairs locally bundled Manrope with a system serif accent. The original generated artwork remains outside the repository; `public/joseph-orbit.webp` is the optimized deliverable (approximately 120 KB). Its square aspect ratio is reserved in the UI.
 
-## Verification limits
+## Verification — 15 October 2026
 
-An initial strict TypeScript check and production build passed on 13 October 2026 (Vite 7.3.7; 31 modules). Six DOM interaction tests were added for scenario changes, view selection, conversation selection, navigation, and early-access behavior. Execution was blocked first by sandbox process permissions, then by Windows memory-allocation failures even in a single memory-limited process. These tests have not passed yet. A dialog shim in them does not validate native browser focus trapping.
+The previous machine resource blocker has cleared. Strict TypeScript checking and the production build passed (Vite 7.3.7). All six DOM interaction tests passed. All eight Playwright checks passed in isolated Chrome sessions at viewport widths of 1440, 768, 390 and 320 pixels.
 
-The final build/test rerun and local preview server could not be completed after Windows exhausted memory and disk space. Real-browser screenshots, responsive visual review, screen-reader review, and browser-specific modal behavior remain required before release; the connected browser tool had no available browsers during this pass. Free local disk space and memory, then run the commands above to complete validation.
+Browser checks cover successful page/asset loading, horizontal overflow, navigation, purchase scenarios, dashboard views, sample conversations, FAQ disclosure, dialog keyboard focus cycling, Escape dismissal, focus restoration and reduced-motion styling. Desktop/mobile screenshots and the tablet dashboard were visually reviewed. Browser QA caught and fixed tablet artwork overflow, mobile headline wrapping and dialog focus cycling.
+
+This is a local product preview, not production certification. Safari/Firefox, assistive-technology testing, and real API integration remain unverified. The DOM suite uses a dialog shim; the browser suite checks the actual modal element. No deployment or database migration was performed.

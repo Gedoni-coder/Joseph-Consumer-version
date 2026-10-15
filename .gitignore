@@ -39,3 +39,5 @@ scratch/
 # Backups / Temp
 *.backup
 web/dist/
+web/test-results/
+web/playwright-report/

@@ -145,7 +145,24 @@ function EarlyAccess({ open, onClose }: { open: boolean; onClose: () => void }) 
     if (!open) return;
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = oldOverflow; };
+    const wrapFocus = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const controls = element.querySelectorAll<HTMLElement>('button:not([disabled]), a[href]');
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+    element.addEventListener('keydown', wrapFocus);
+    return () => {
+      element.removeEventListener('keydown', wrapFocus);
+      document.body.style.overflow = oldOverflow;
+    };
   }, [open]);
   return <dialog ref={dialog} className="access-dialog" aria-labelledby="access-title" aria-describedby="access-description" onCancel={onClose} onClose={onClose} onClick={event => { if (event.target === event.currentTarget) onClose(); }}><div className="dialog-content"><button className="dialog-close" onClick={onClose} aria-label="Close early access information"><Icon name="close" /></button><Brand /><span className="dialog-art" aria-hidden="true">✳</span><p className="eyebrow">GOOD THINGS TAKE A LITTLE BUILDING.</p><h2 id="access-title">Your next chapter<br />is <em>on its way.</em></h2><p id="access-description">JOSEPH is still in development. Early-access registration isn't open yet, but you can get a feel for what's coming.</p><a className="button button-primary" href="#experience" onClick={onClose}>Explore the interactive demo <Icon name="arrow" /></a><span className="dialog-note">No signup. No bank details. Just a little clarity.</span></div></dialog>;
 }
