@@ -14,6 +14,7 @@ import {
 } from './middleware/rate-limit.middleware';
 import adminRoutes from './routes/admin';
 import authRoutes from './routes/auth';
+import consumerRoutes from './consumer/routes';
 import dreamRoutes from './routes/dream';
 import economicRoutes from './routes/economic';
 import financeRoutes from './routes/finance';
@@ -66,6 +67,7 @@ app.use(
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use('/api/consumer', consumerRoutes);
 
 app.use((req, res, next) => {
   const startedAt = Date.now();

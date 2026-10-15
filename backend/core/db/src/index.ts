@@ -6,7 +6,7 @@ import { Pool } from 'pg';
 dotenv.config();
 
 export const getDatabaseLogLevels = (): Prisma.LogLevel[] =>
-    process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'];
+    process.env.DB_LOG_QUERIES === 'true' ? ['query', 'error', 'warn'] : ['error'];
 
 const shouldSkipDatabase = () => process.env.SKIP_DB === 'true';
 

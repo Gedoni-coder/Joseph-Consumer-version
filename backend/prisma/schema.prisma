@@ -47,8 +47,74 @@ model User {
   accountClassifications AccountClassification[]
   apiConfiguration      ApiConfiguration?
   customers            Customer[]
+  consumerPlan         ConsumerPlan?
+  moneyAccounts        MoneyAccount[]
+  commitments          ConsumerCommitment[]
+  financialSnapshots   FinancialSnapshot[]
+  consentRecords       ConsumerConsent[]
 
   @@map("users")
+}
+
+model ConsumerPlan {
+  userId      String   @id
+  daily       BigInt
+  reserve     BigInt
+  horizon     Int      @default(30)
+  confirmedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("consumer_plans")
+}
+
+model MoneyAccount {
+  id          String   @id @default(uuid())
+  userId      String
+  label       String
+  balance     BigInt
+  source      String   @default("manual")
+  confirmedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("money_accounts")
+}
+
+model ConsumerCommitment {
+  id        String   @id @default(uuid())
+  userId    String
+  label     String
+  amount    BigInt
+  dueDate   String
+  kind      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, dueDate])
+  @@map("consumer_commitments")
+}
+
+model FinancialSnapshot {
+  id            String   @id @default(uuid())
+  userId        String
+  generatedAt   DateTime @default(now())
+  engineVersion String
+  rulesVersion  String
+  reason        String
+  inputs        Json
+  result        Json
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, generatedAt])
+  @@map("financial_snapshots")
+}
+
+model ConsumerConsent {
+  id        String   @id @default(uuid())
+  userId    String
+  version   String
+  purpose   String
+  accepted  Boolean
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, createdAt])
+  @@map("consumer_consents")
 }
 
 model UserPreferences {
