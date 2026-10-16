@@ -52,6 +52,8 @@ model User {
   commitments          ConsumerCommitment[]
   financialSnapshots   FinancialSnapshot[]
   consentRecords       ConsumerConsent[]
+  bankConnections      ConsumerBankConnection[]
+  bankLinkSessions     ConsumerBankLinkSession[]
 
   @@map("users")
 }
@@ -64,6 +66,36 @@ model ConsumerPlan {
   confirmedAt DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@map("consumer_plans")
+}
+
+model ConsumerBankLinkSession {
+  id         String   @id @default(uuid())
+  userId     String
+  codeHash   String?  @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("consumer_bank_link_sessions")
+}
+
+model ConsumerBankConnection {
+  id                String   @id @default(uuid())
+  userId            String
+  providerAccountId String   @unique
+  bankName          String   @default("Connected bank")
+  accountName       String   @default("")
+  last4             String   @default("")
+  currency          String   @default("NGN")
+  balance           BigInt?
+  status            String   @default("processing")
+  sandbox           Boolean  @default(true)
+  syncedAt          DateTime?
+  createdAt         DateTime @default(now())
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("consumer_bank_connections")
 }
 
 model MoneyAccount {

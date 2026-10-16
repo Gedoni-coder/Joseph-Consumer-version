@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Onboarding } from './Onboarding';
+import { BankConnections } from './BankConnections';
 import { api, kobo, money, type Dashboard, type State, type User } from "./api";
 import {
   Amount,
@@ -33,6 +35,7 @@ function Workspace({
   const [commitment, setCommitment] = useState<CommitmentInput | null>(null);
   const [formVersion, setFormVersion] = useState(0);
   const [simulation, setSimulation] = useState<State | null>(null);
+  const [connectAfterSetup, setConnectAfterSetup] = useState(false);
   const refresh = async () => setData(await api<Dashboard>("/dashboard"));
   useEffect(() => {
     refresh().catch((error) => setError(error.message));
@@ -139,6 +142,10 @@ function Workspace({
               Retry loading
             </button>
           </section>
+        ) : data.requiresOnboarding && page !== 'privacy' ? (
+          <Onboarding done={async () => { await refresh(); setConnectAfterSetup(true); }} />
+        ) : connectAfterSetup && page !== 'privacy' ? (
+          <BankConnections finish={() => { setConnectAfterSetup(false); navigate('overview'); }} />
         ) : !data.consent && page !== "privacy" ? (
           <Consent
             busy={busy}
@@ -557,16 +564,7 @@ function Workspace({
                     </form>
                   </section>
                 </div>
-                <div className="integration-note">
-                  <span>◇</span>
-                  <div>
-                    <strong>Bank connections aren’t configured.</strong>
-                    <p>
-                      There is no bank sync in this planning beta. The balances
-                      above are the amounts you enter.
-                    </p>
-                  </div>
-                </div>
+                <BankConnections />
                 <button
                   className="button"
                   onClick={() =>
@@ -869,9 +867,9 @@ function Workspace({
                       </dd>
                     </dl>
                     <Note>
-                      Email/SMS verification, password recovery, bank sync and
-                      WhatsApp are not configured. This is a manual planning
-                      workspace, not the complete bank-connected beta.
+                      Mono sandbox connections are available in Balances.
+                      Test bank data stays separate from your spending estimates.
+                      Email/SMS verification, password recovery and WhatsApp are not available yet.
                     </Note>
                     <button
                       className="text-button"

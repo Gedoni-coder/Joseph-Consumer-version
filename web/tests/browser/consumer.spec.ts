@@ -26,8 +26,12 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
     .getByLabel("Password", { exact: true })
     .fill("RealFlowPassword42!");
   await page.getByRole("button", { name: "Create my account" }).click();
+  await expect(page.getByRole('heading', { name: "Let's set up your plan." })).toBeVisible();
+  await page.getByLabel('Everyday spending per day').fill('0');
+  await page.getByLabel('Minimum safety buffer').fill('0');
   await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "Agree and continue" }).click();
+  await page.getByRole('button', { name: 'Save plan and continue' }).click();
+  await page.getByRole('button', { name: 'Continue without a bank' }).click();
   await expect(page.getByTestId("safe-to-spend")).toHaveText("—");
   const cookies = await context.cookies();
   expect(
@@ -45,7 +49,7 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
     .fill("100000");
   await page.getByRole("button", { name: "Save balance" }).click();
   await expect(page.getByRole("status")).toContainText("Balance saved");
-  await page.getByRole("button", { name: "Next: spending plan" }).click();
+  await page.getByRole("button", { name: "Spending plan", exact: true }).click();
   await page.getByLabel("Everyday spending per day").fill("1000");
   await page.getByLabel("Minimum safety buffer").fill("10000");
   await page.getByRole("button", { name: "Confirm my spending plan" }).click();

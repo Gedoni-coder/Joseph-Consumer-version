@@ -1,0 +1,237 @@
+:root {
+  font-weight: 500;
+}
+body {
+  background: #fff;
+}
+.button {
+  font-size: 16px;
+  font-weight: 700;
+}
+.button.small,
+.text-button {
+  font-size: 14px;
+}
+.site-header nav,
+.site-footer {
+  font-size: 14px;
+}
+.hero-description {
+  font-size: 19px;
+}
+.hero-footnote {
+  font-size: 14px;
+}
+.hero h1 {
+  font-weight: 750;
+}
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 1.3px;
+}
+.ledger-row h2,
+h2,
+h3 {
+  font-weight: 700;
+}
+.ledger-row p,
+.steps p,
+.promise p {
+  font-size: 16px;
+}
+.ledger-heading,
+.ledger-index,
+.ledger-caption {
+  font-size: 11px;
+}
+.sidebar nav button {
+  font-size: 14px;
+  font-weight: 650;
+}
+.app-header {
+  font-size: 12px;
+}
+.panel > p,
+.note,
+.panel li,
+.consent li,
+.auth-form > p,
+.auth-layout aside p {
+  font-size: 15px;
+}
+.panel label,
+.panel input,
+.panel select,
+.auth-form label,
+.auth-form input {
+  font-size: 16px;
+}
+.item small,
+.status-pill,
+.spend-foot {
+  font-size: 12px;
+}
+.spend-card > p {
+  font-size: 15px;
+}
+.onboarding {
+  max-width: 920px;
+  margin: 30px auto;
+}
+.onboarding .page-heading p {
+  max-width: 650px;
+}
+.signup-progress {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  padding: 0 0 24px;
+  margin: 0 0 30px;
+  border-bottom: 1px solid var(--line);
+  color: #606079;
+  font-size: 15px;
+}
+.signup-progress li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.signup-progress [aria-current] {
+  color: #03031d;
+  font-weight: 800;
+}
+.setup-section {
+  margin: 0;
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid var(--line);
+}
+.setup-section legend {
+  font-size: 13px;
+  font-weight: 750;
+  padding: 0 10px;
+  color: #03031d;
+}
+.setup-section > label {
+  margin-top: 18px;
+}
+.setup-section h2 {
+  font-size: 27px;
+}
+.setup-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.setup-fields label {
+  min-width: 0;
+}
+.setup-entry {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  background: #f8f9fd;
+  border-radius: 6px;
+  display: grid;
+  gap: 15px;
+}
+.setup-entry-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.setup-actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.button.secondary {
+  background: #fff;
+  color: #03031d;
+  border: 1px solid #d8dbeb;
+}
+.button.secondary:hover {
+  background: #f0f2fa;
+}
+.bank-connections {
+  margin-top: 30px;
+  max-width: 920px;
+}
+.bank-connections > .button {
+  margin: 20px 18px 0 0;
+}
+.bank-connections .checkbox {
+  margin-top: 24px;
+}
+.sandbox-notice {
+  padding: 18px 20px;
+  border-left: 3px solid #344c9e;
+  background: #f0f2fa;
+  margin-bottom: 24px;
+}
+.sandbox-notice p {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+.bank-row {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.bank-row h3 {
+  font-size: 21px;
+  margin-bottom: 5px;
+}
+.bank-row p {
+  margin-bottom: 10px;
+}
+.bank-balance {
+  display: block;
+  font-size: 25px;
+  padding: 16px 0 0;
+}
+.bank-balance small {
+  font-size: 13px;
+  font-weight: 500;
+}
+.bank-row .danger {
+  color: #8a302b;
+}
+@media (max-width: 760px) {
+  .hero-description {
+    font-size: 17px;
+  }
+  .site-header nav {
+    font-size: 14px;
+  }
+  .ledger-row p {
+    font-size: 14px;
+  }
+  .ledger-heading,
+  .ledger-caption {
+    font-size: 9px;
+  }
+  .steps p,
+  .promise p {
+    font-size: 16px;
+  }
+  .setup-fields {
+    grid-template-columns: 1fr;
+  }
+  .setup-section {
+    padding: 20px;
+  }
+  .setup-entry {
+    padding: 16px;
+  }
+  .signup-progress {
+    gap: 20px;
+    font-size: 13px;
+  }
+  .bank-connections > .button {
+    width: 100%;
+    margin-right: 0;
+  }
+  .bank-row .setup-actions {
+    gap: 30px;
+  }
+}

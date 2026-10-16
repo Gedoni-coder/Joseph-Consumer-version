@@ -1,7 +1,8 @@
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { randomUUID } from "node:crypto";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import * as mono from "../src/consumer/mono";
 import { calculate, type EngineInput } from "../src/consumer/engine";
 
 describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
@@ -289,6 +290,174 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         (await request(alice, "/logout", "POST", {})).response.status,
       ).toBe(200);
       expect((await request(old, "/me")).response.status).toBe(401);
+    });
+    it("sets up the onboarding modules atomically and prevents a replay from replacing them", async () => {
+      const jar: Jar = {};
+      const id = await register(jar);
+      const setup = {
+        accepted: true,
+        version: "manual-planning-2026-10-16",
+        daily: 100000,
+        reserve: 500000,
+        horizon: 30,
+        cashBalance: 10000000,
+        commitments: [
+          {
+            label: "Rent",
+            amount: 1000000,
+            dueDate: "2026-12-01",
+            kind: "bill",
+          },
+        ],
+      };
+      const invalid = await request(jar, "/onboarding", "POST", {
+        ...setup,
+        daily: -1,
+      });
+      expect(invalid.response.status).toBe(400);
+      expect(await prisma.consumerPlan.count({ where: { userId: id } })).toBe(
+        0,
+      );
+      expect(
+        (await request(jar, "/onboarding", "POST", setup)).response.status,
+      ).toBe(200);
+      const dashboard = (await request(jar, "/dashboard")).body;
+      expect(dashboard.requiresOnboarding).toBe(false);
+      expect(dashboard.inputs.accounts[0].balance).toBe(10000000);
+      expect(dashboard.inputs.commitments[0].label).toBe("Rent");
+      expect(dashboard.inputs.daily).toBe(100000);
+      expect(
+        (
+          await request(jar, "/onboarding", "POST", {
+            ...setup,
+            cashBalance: 0,
+          })
+        ).response.status,
+      ).toBe(409);
+      expect(
+        (await request(jar, "/dashboard")).body.inputs.accounts[0].balance,
+      ).toBe(10000000);
+    });
+    it("binds bank sessions to users, blocks replay and excludes sandbox balances from spending estimates", async () => {
+      const jar: Jar = {};
+      await register(jar);
+      const other: Jar = {};
+      await register(other);
+      await request(other, "/consent", "POST", {
+        accepted: true,
+        version: "manual-planning-2026-10-16",
+      });
+      await request(jar, "/onboarding", "POST", {
+        accepted: true,
+        version: "manual-planning-2026-10-16",
+        daily: 0,
+        reserve: 0,
+        horizon: 30,
+        cashBalance: null,
+        commitments: [],
+      });
+      vi.spyOn(mono, "monoConfigured").mockReturnValue(true);
+      vi.spyOn(mono, "exchangeMonoCode").mockImplementation(async () => {
+        expect(
+          (
+            await request(jar, "/planning-data", "DELETE", {
+              confirmation: "DELETE",
+            })
+          ).response.status,
+        ).toBe(409);
+        expect(
+          (
+            await request(jar, "/account", "DELETE", {
+              password: "LocalTestPassword42!",
+              confirmation: "DELETE MY ACCOUNT",
+            })
+          ).response.status,
+        ).toBe(409);
+        return "provider-account-123456";
+      });
+      vi.spyOn(mono, "fetchMonoAccount").mockResolvedValue({
+        bankName: "Test Bank",
+        accountName: "Test User",
+        last4: "1234",
+        currency: "NGN",
+        balance: 8000000n,
+        status: "connected",
+        syncedAt: new Date(),
+      });
+      const unlink = vi
+        .spyOn(mono, "unlinkMonoAccount")
+        .mockResolvedValue({ status: "successful" });
+      try {
+        expect(
+          (await request(jar, "/banks/session", "POST", {})).response.status,
+        ).toBe(400);
+        const session = await request(jar, "/banks/session", "POST", {
+          accepted: true,
+          version: mono.BANK_CONSENT_VERSION,
+        });
+        expect(session.response.status).toBe(200);
+        const body = {
+          sessionId: session.body.sessionId,
+          code: "one-time-code-12345",
+        };
+        expect(
+          (await request(other, "/banks/exchange", "POST", body)).response
+            .status,
+        ).toBe(409);
+        const results = await Promise.all([
+          request(jar, "/banks/exchange", "POST", body),
+          request(jar, "/banks/exchange", "POST", body),
+        ]);
+        expect(results.map((r) => r.response.status).sort()).toEqual([
+          200, 409,
+        ]);
+        const bank = results.find((r) => r.response.status === 200)!.body.bank;
+        expect(bank.balance).toBe(8000000);
+        expect(bank.sandbox).toBe(true);
+        expect(bank.providerAccountId).toBeUndefined();
+        expect(
+          (await request(jar, "/dashboard")).body.state.safeToSpend,
+        ).toBeNull();
+        expect(
+          (await request(other, `/banks/${bank.id}/refresh`, "POST", {}))
+            .response.status,
+        ).toBe(404);
+        expect(
+          (
+            await request(jar, "/planning-data", "DELETE", {
+              confirmation: "DELETE",
+            })
+          ).response.status,
+        ).toBe(409);
+        const exported = (await request(jar, "/export")).body;
+        expect(JSON.stringify(exported)).not.toContain(
+          "provider-account-123456",
+        );
+        unlink.mockRejectedValueOnce(
+          Object.assign(new Error("Unlink failed"), { status: 502 }),
+        );
+        expect(
+          (await request(jar, `/banks/${bank.id}`, "DELETE", {})).response
+            .status,
+        ).toBe(502);
+        expect((await request(jar, "/banks")).body.banks[0].status).toBe(
+          "disconnecting",
+        );
+        expect(
+          (await request(jar, `/banks/${bank.id}`, "DELETE", {})).response
+            .status,
+        ).toBe(200);
+        expect((await request(jar, "/banks")).body.banks).toEqual([]);
+        expect(
+          (
+            await request(jar, "/planning-data", "DELETE", {
+              confirmation: "DELETE",
+            })
+          ).response.status,
+        ).toBe(200);
+      } finally {
+        vi.restoreAllMocks();
+      }
     });
     it("requires the password for account deletion and invalidates its sessions", async () => {
       const jar: Jar = {};

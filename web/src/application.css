@@ -1,13 +1,13 @@
 :root {
   font-family: "Manrope Variable", sans-serif;
-  color: #202b25;
-  background: #f6f5ef;
+  color: #15152d;
+  background: #ffffff;
   font-synthesis: none;
   font-weight: 450;
-  --ink: #173c32;
-  --muted: #626b63;
-  --line: #e4e4dd;
-  --lime: #e5edb2;
+  --ink: #03031d;
+  --muted: #606079;
+  --line: #e2e4ef;
+  --lime: #ffffff;
 }
 * {
   box-sizing: border-box;
@@ -47,7 +47,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-  outline: 3px solid #b56636;
+  outline: 3px solid #4e62c9;
   outline-offset: 4px;
 }
 h1,
@@ -113,7 +113,7 @@ small {
     transform 0.2s;
 }
 .button:hover {
-  background: #265747;
+  background: #171744;
   transform: translateY(-1px);
 }
 .button > span {
@@ -244,7 +244,7 @@ small {
   color: #fff;
 }
 .promise p {
-  color: #dce4d9;
+  color: #e5e6f5;
   font-size: 15px;
 }
 .promise h2 {
@@ -289,12 +289,12 @@ small {
   font-size: clamp(45px, 5vw, 73px);
 }
 .auth-layout aside p {
-  color: #dce4d9;
+  color: #e5e6f5;
   font-size: 14px;
 }
 .auth-layout aside > .eyebrow,
 .auth-layout aside > span {
-  color: #dce4d9;
+  color: #e5e6f5;
   font-size: 9px;
   letter-spacing: 1.5px;
 }
@@ -547,7 +547,7 @@ select:hover {
 }
 .panel > h2 {
   font-size: 23px;
-  color: #292944;
+  color: #15152d;
   margin-bottom: 24px;
 }
 .panel > p {
@@ -622,13 +622,13 @@ select:hover {
 }
 .spend-card > p {
   font-size: 12px;
-  color: #dce4d9;
+  color: #e5e6f5;
   max-width: 380px;
   margin-bottom: 24px;
 }
 .spend-foot {
   font-size: 9px;
-  color: #becfc1;
+  color: #cbd0ea;
   border-top: 1px solid #ffffff20;
   display: block;
   padding-top: 17px;
@@ -769,7 +769,7 @@ details p {
   margin-bottom: 0;
 }
 .purchase {
-  background: #f1f2e9;
+  background: #f0f2fa;
 }
 .purchase h2 {
   font-size: 23px;
@@ -795,8 +795,8 @@ details p {
   margin: 8px 0;
 }
 .positive {
-  background: #e1edce;
-  color: #3e5d21;
+  background: #edf0fb;
+  color: #29366f;
 }
 .caution {
   background: #fff0d4;
@@ -820,7 +820,7 @@ details p {
   height: 37px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #edf0e7;
+  background: #f0f2fa;
   color: var(--ink);
   font-size: 20px;
 }
@@ -884,7 +884,7 @@ details p {
 }
 .setup-strip {
   border: 1px solid #dfdfbf;
-  background: #f2f4de;
+  background: #f0f2fa;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -924,8 +924,8 @@ details p {
   font-size: 11px;
 }
 .explanation {
-  background: #edf0e7;
-  border-color: #d9e0d3;
+  background: #f0f2fa;
+  border-color: #dbe0ef;
   padding: 40px;
 }
 .large-symbol {

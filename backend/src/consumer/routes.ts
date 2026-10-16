@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from "express";
 import { isDeepStrictEqual } from "node:util";
 import rateLimit from "express-rate-limit";
 import Joi from "joi";
+import { bankRoutes, assertNoPendingBankExchange } from "./banks";
+import { monoConfigured } from "./mono";
 import authService from "../services/prisma/authService";
 import {
   createAuthSession,
@@ -114,7 +116,8 @@ const safeUser = (user: {
 });
 router.get("/capabilities", (_req, res) =>
   res.json({
-    bankConnection: false,
+    bankConnection: monoConfigured(),
+    bankEnvironment: "sandbox",
     emailVerification: false,
     phoneVerification: false,
     whatsapp: false,
@@ -313,6 +316,7 @@ router.get("/dashboard", async (req, res) => {
           ? await snapshot(tx, req.userId, "STATE_REVIEWED")
           : calculate(source),
       history: recent,
+      requiresOnboarding: !req.user.onboardingComplete && !source.planConfirmed,
     };
   });
   res.json(dashboard);
@@ -335,6 +339,84 @@ router.post("/consent", async (req, res) => {
       },
     }),
   );
+  res.json({ ok: true });
+});
+router.use("/banks", bankRoutes(hasConsent));
+router.post("/onboarding", async (req, res) => {
+  const data = validate(
+    Joi.object({
+      accepted: Joi.boolean().valid(true).required(),
+      version: Joi.string().valid(consentVersion).required(),
+      daily: money,
+      reserve: money,
+      horizon: Joi.number().integer().min(7).max(90).required(),
+      cashBalance: Joi.number()
+        .integer()
+        .min(0)
+        .max(MAX_MONEY)
+        .allow(null)
+        .required(),
+      commitments: Joi.array().items(commitmentSchema).max(20).required(),
+    }).unknown(false),
+    req,
+  );
+  await withLockedUser(req.userId, async (tx, user) => {
+    if (
+      user.onboardingComplete ||
+      (await tx.consumerPlan.findUnique({ where: { userId: user.id } }))
+    ) {
+      throw Object.assign(
+        new Error(
+          "Your plan is already set up. Update it from your dashboard.",
+        ),
+        { status: 409 },
+      );
+    }
+    if (
+      (await tx.moneyAccount.count({ where: { userId: user.id } })) ||
+      (await tx.consumerCommitment.count({ where: { userId: user.id } }))
+    ) {
+      throw Object.assign(
+        new Error(
+          "You already have saved entries. Complete your spending plan from the dashboard.",
+        ),
+        { status: 409 },
+      );
+    }
+    await tx.consumerConsent.create({
+      data: {
+        userId: user.id,
+        version: consentVersion,
+        purpose: "manual-planning",
+        accepted: true,
+      },
+    });
+    await tx.consumerPlan.create({
+      data: {
+        userId: user.id,
+        daily: data.daily,
+        reserve: data.reserve,
+        horizon: data.horizon,
+      },
+    });
+    if (data.cashBalance !== null)
+      await tx.moneyAccount.create({
+        data: {
+          userId: user.id,
+          label: "Cash and unlinked money",
+          balance: data.cashBalance,
+        },
+      });
+    for (const commitment of data.commitments)
+      await tx.consumerCommitment.create({
+        data: { userId: user.id, ...commitment },
+      });
+    await tx.user.update({
+      where: { id: user.id },
+      data: { onboardingComplete: true, onboardingStep: 2 },
+    });
+    await snapshot(tx, user.id, "ONBOARDING_COMPLETED");
+  });
   res.json({ ok: true });
 });
 router.put("/plan", async (req, res) => {
@@ -433,6 +515,14 @@ router.get("/export", async (req, res) => {
   const data = await withLockedUser(req.userId, async (tx) => ({
     user: safeUser(req.user),
     inputs: await inputs(tx, req.userId),
+    banks: (
+      await tx.consumerBankConnection.findMany({
+        where: { userId: req.userId },
+      })
+    ).map(({ providerAccountId: _privateId, balance, ...bank }) => ({
+      ...bank,
+      balance: balance === null ? null : Number(balance),
+    })),
     consents: await tx.consumerConsent.findMany({
       where: { userId: req.userId },
     }),
@@ -450,6 +540,19 @@ router.delete("/planning-data", async (req, res) => {
     req,
   );
   await withLockedUser(req.userId, async (tx) => {
+    await assertNoPendingBankExchange(tx, req.userId);
+    if (
+      await tx.consumerBankConnection.count({ where: { userId: req.userId } })
+    )
+      throw Object.assign(
+        new Error(
+          "Disconnect your banks in Balances before erasing your planning data.",
+        ),
+        { status: 409 },
+      );
+    await tx.consumerBankLinkSession.deleteMany({
+      where: { userId: req.userId },
+    });
     await tx.moneyAccount.deleteMany({ where: { userId: req.userId } });
     await tx.consumerCommitment.deleteMany({ where: { userId: req.userId } });
     await tx.consumerPlan.deleteMany({ where: { userId: req.userId } });
@@ -480,6 +583,14 @@ router.delete("/account", async (req, res) => {
   await withLockedUser(req.userId, async (tx, user) => {
     if (verified.id !== user.id || verified.password !== user.password)
       throw Object.assign(new Error("Please sign in again."), { status: 401 });
+    await assertNoPendingBankExchange(tx, user.id);
+    if (await tx.consumerBankConnection.count({ where: { userId: user.id } }))
+      throw Object.assign(
+        new Error(
+          "Disconnect your banks in Balances before deleting your account.",
+        ),
+        { status: 409 },
+      );
     await tx.user.delete({ where: { id: user.id } });
   });
   clearCookies(res);

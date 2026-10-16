@@ -51,10 +51,10 @@ em {
 }
 .money-ledger {
   padding: 20px;
-  background: #e9e8de;
+  background: #f0f1f8;
   transform: rotate(-2deg);
-  border: 1px solid #dadbd0;
-  box-shadow: 8px 10px 0 #e4e3d9;
+  border: 1px solid #daddf0;
+  box-shadow: 8px 10px 0 #e8eaf3;
 }
 .ledger-heading,
 .ledger-caption {
@@ -64,7 +64,7 @@ em {
   font-size: 9px;
   font-weight: 750;
   letter-spacing: 1.1px;
-  color: #435348;
+  color: #565975;
 }
 .ledger-heading {
   padding: 0 2px 18px;
@@ -79,7 +79,7 @@ em {
   gap: 16px;
   align-items: start;
   padding: 32px 23px;
-  border-bottom: 1px solid #cdd2c1;
+  border-bottom: 1px solid #d8dbeb;
 }
 .ledger-index {
   font-size: 10px;
@@ -104,16 +104,16 @@ em {
   font-weight: 400;
 }
 .essentials {
-  background: #fafaf6;
-  color: #25392f;
+  background: #ffffff;
+  color: #15152d;
 }
 .plans {
-  background: #e2e7d5;
-  color: #25392f;
+  background: #edf0fb;
+  color: #15152d;
 }
 .room {
-  background: #173c32;
-  color: #f0f3da;
+  background: #03031d;
+  color: #fff7ff;
   border: 0;
   padding-bottom: 38px;
 }
@@ -153,10 +153,10 @@ em {
   height: 26px;
 }
 .auth-layout aside {
-  background: #173c32;
+  background: #03031d;
 }
 .auth-layout aside .brand {
-  color: #f6f5ef;
+  color: #ffffff;
 }
 .auth-layout aside h1 {
   font-weight: 600;
@@ -194,7 +194,7 @@ em {
     width: min(100%, 520px);
     margin: 0 auto;
     transform: none;
-    box-shadow: 5px 6px 0 #e4e3d9;
+    box-shadow: 5px 6px 0 #e8eaf3;
   }
   .ledger-row {
     padding: 27px 20px;

@@ -43,7 +43,7 @@ Amounts are entered in naira and sent/stored as integer kobo. The browser format
 
 ## What this does not claim
 
-This is a working **manual-planning beta**, not the full documentation's bank-connected MVP. Mono, email/SMS verification, password recovery and Meta WhatsApp are not configured; no connection or verification success is simulated. There is no LLM integration, transaction ingestion/classification, automatic recurring-obligation detection, complete goal progress tracking, or scheduled WhatsApp nudges yet. Provider credentials and their integration flows remain outstanding.
+This is a working **planning beta with Mono sandbox testing**, not the full documentation's bank-connected MVP. Signup has two steps: account details, then a questionnaire that saves the plan, optional cash balance, bills and goals. Bank connection follows within the same interface. Sandbox bank balances are displayed separately and excluded from Safe-to-Spend. Mono supports initial retrieval, manual refresh and disconnect; no connection success is simulated. Email/SMS verification, password recovery and Meta WhatsApp remain unavailable. There is no LLM integration, transaction ingestion/classification, automatic recurring-obligation detection, complete goal progress tracking, or scheduled WhatsApp nudges yet.
 
 Balances are self-reported and become stale after 24 hours. Bills and goal contributions are individual dated entries; there is no automatic repeat schedule. Future income is not assumed. Reservations are planning allocations, never bank locks. The document's rules need validation and approval before broader production rollout; this local implementation is versioned `manual-plan-1.0.0` rather than presented as approved bank-data policy.
 

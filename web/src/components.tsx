@@ -194,7 +194,7 @@ export function Landing({
             </p>
             <p>
               This planning beta saves your entries and calculates from them.
-              Bank connections, verification messages and WhatsApp are not
+              Mono sandbox connections are available for testing. Verification messages and WhatsApp are not
               available yet.
             </p>
             <button className="button light" onClick={() => open("register")}>
@@ -278,7 +278,7 @@ export function Auth({
           </h2>
           <p>
             {mode === "register"
-              ? "Create your account to save a personal money plan."
+              ? "Step 1 of 2: your details. Next, a short form sets up your money plan and bank connection."
               : "Sign in to pick up where you left off."}
           </p>
           <form onSubmit={submit} key={mode}>
@@ -377,8 +377,8 @@ export function Projection({ state }: { state: State }) {
       >
         <defs>
           <linearGradient id="forecast-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#32634e" stopOpacity=".18" />
-            <stop offset="100%" stopColor="#32634e" stopOpacity="0" />
+            <stop offset="0%" stopColor="#344c9e" stopOpacity=".18" />
+            <stop offset="100%" stopColor="#344c9e" stopOpacity="0" />
           </linearGradient>
         </defs>
         <line
@@ -396,7 +396,7 @@ export function Projection({ state }: { state: State }) {
         <polyline
           points={points}
           fill="none"
-          stroke="#173c32"
+          stroke="#03031d"
           strokeWidth="3"
           strokeLinejoin="round"
         />

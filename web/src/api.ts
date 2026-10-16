@@ -12,6 +12,7 @@ export type State = ReturnType<typeof calculate> & {
   stateId?: string;
 };
 export type Dashboard = {
+  requiresOnboarding: boolean;
   user: User;
   consent: boolean;
   inputs: EngineInput;
