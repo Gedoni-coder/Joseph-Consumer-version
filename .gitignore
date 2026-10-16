@@ -42,3 +42,4 @@ web/dist/
 web/test-results/
 web/playwright-report/
 .local/
+.vercel

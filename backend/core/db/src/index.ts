@@ -28,14 +28,17 @@ export const createDatabasePool = () => {
     return new Pool(
         databaseUrl
             ? {
-                  connectionString: databaseUrl
+                  connectionString: databaseUrl,
+                  max: 5,
+                  idleTimeoutMillis: 5000,
+                  connectionTimeoutMillis: 10000
               }
             : {}
     );
 };
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-const pool = createDatabasePool();
+export const pool = createDatabasePool();
 const adapter = new PrismaPg(pool);
 
 export const createPrismaClient = (): PrismaClient =>

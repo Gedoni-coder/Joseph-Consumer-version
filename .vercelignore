@@ -1,0 +1,11 @@
+.git
+.local
+**/node_modules
+**/.env*
+**/dist
+**/test-results
+**/playwright-report
+whatsapp-bot
+backend/legacy-mongo
+*.zip
+*.pdf

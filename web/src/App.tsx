@@ -147,7 +147,7 @@ function Workspace({
                 () =>
                   api("/consent", "POST", {
                     accepted: true,
-                    version: "local-planning-2026-10-15",
+                    version: "manual-planning-2026-10-16",
                   }),
                 "Your choice has been saved.",
               )
@@ -562,7 +562,7 @@ function Workspace({
                   <div>
                     <strong>Bank connections aren’t configured.</strong>
                     <p>
-                      There is no bank sync in this local version. The balances
+                      There is no bank sync in this planning beta. The balances
                       above are the amounts you enter.
                     </p>
                   </div>
@@ -870,7 +870,7 @@ function Workspace({
                     </dl>
                     <Note>
                       Email/SMS verification, password recovery, bank sync and
-                      WhatsApp are not configured. This is a local planning
+                      WhatsApp are not configured. This is a manual planning
                       workspace, not the complete bank-connected beta.
                     </Note>
                     <button
@@ -963,7 +963,7 @@ function Workspace({
                     <h3>Delete my account</h3>
                     <p>
                       Permanently remove your account, sessions, planning data
-                      and consent records from this local database.
+                      and consent records from the JOSEPH database.
                     </p>
                     <form
                       onSubmit={(event) => {

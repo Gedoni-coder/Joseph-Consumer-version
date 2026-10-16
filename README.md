@@ -1,3 +1,17 @@
+# JOSEPH consumer
+
+Live planning beta: **https://joseph-consumer.vercel.app**
+
+The current consumer app is React/TypeScript in `web/`, with an Express/Prisma API in `backend/` and a dedicated hosted PostgreSQL database. It supports real accounts, manual balances, bills and goals, spending forecasts, purchase checks, and privacy controls. Bank connections, verification delivery, and WhatsApp are still pending.
+
+- [Consumer setup](web/README.md)
+- [Deployment and operational limits](docs/CONSUMER_DEPLOYMENT.md)
+- [Implementation and remaining gates](docs/CONSUMER_LOCAL_IMPLEMENTATION.md)
+
+## Historical application notes
+
+The notes below describe the older root HTML application, retained for reference. It is not the deployed consumer frontend.
+
 # JOSEPH AI Family
 
 A vanilla **HTML/CSS/JavaScript** single-page application that provides a suite of economic-AI tools.

@@ -1,4 +1,3 @@
-import express from "express";
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { randomUUID } from "node:crypto";
@@ -71,10 +70,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
           "Use scripts/local.cjs test for an isolated local database.",
         );
       prisma = (await import("../src/config/prisma")).prisma;
-      const routes = (await import("../src/consumer/routes")).default;
-      const app = express();
-      app.use(express.json());
-      app.use("/api/consumer", routes);
+      const app = (await import("../src/consumer-app")).default;
       server = app.listen(0, "127.0.0.1");
       await new Promise<void>((resolve) => server.once("listening", resolve));
       url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/api/consumer`;
@@ -87,6 +83,27 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
       if (prisma) {
         await prisma.user.deleteMany({ where: { id: { in: ids } } });
         await prisma.$disconnect();
+      }
+    });
+    it("exposes only the consumer API and rejects malformed or oversized bodies", async () => {
+      const base = url.replace("/api/consumer", "");
+      const health = await fetch(base + "/api/health");
+      expect(health.status).toBe(200);
+      expect(health.headers.get("x-content-type-options")).toBe("nosniff");
+      for (const route of ["/api/admin", "/api/whatsapp", "/api/auth/login"]) {
+        expect((await fetch(base + route)).status).toBe(404);
+      }
+      for (const [body, status] of [
+        ["{", 400],
+        [JSON.stringify({ data: "x".repeat(33000) }), 413],
+      ] as const) {
+        const response = await fetch(url + "/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Origin: origin },
+          body,
+        });
+        expect(response.status).toBe(status);
+        expect((await response.json()).message).toBeTruthy();
       }
     });
     it("requires consent and rejects cross-origin mutations", async () => {
@@ -104,7 +121,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
             alice,
             "/consent",
             "POST",
-            { accepted: true, version: "local-planning-2026-10-15" },
+            { accepted: true, version: "manual-planning-2026-10-16" },
             "https://unrelated.invalid",
           )
         ).response.status,
@@ -113,7 +130,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         (
           await request(alice, "/consent", "POST", {
             accepted: true,
-            version: "local-planning-2026-10-15",
+            version: "manual-planning-2026-10-16",
           })
         ).response.status,
       ).toBe(200);
@@ -121,7 +138,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         (
           await request(bob, "/consent", "POST", {
             accepted: true,
-            version: "local-planning-2026-10-15",
+            version: "manual-planning-2026-10-16",
           })
         ).response.status,
       ).toBe(200);
@@ -175,9 +192,9 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         ).response.status,
       ).toBe(400);
     });
-    it('reuses an unchanged snapshot instead of duplicating history on refresh', async () => {
-      const first = await request(alice, '/dashboard');
-      const second = await request(alice, '/dashboard');
+    it("reuses an unchanged snapshot instead of duplicating history on refresh", async () => {
+      const first = await request(alice, "/dashboard");
+      const second = await request(alice, "/dashboard");
       expect(second.body.state.id).toBe(first.body.state.id);
     });
     it("isolates user data on read, update and deletion", async () => {
@@ -253,8 +270,10 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         await prisma.financialSnapshot.count({ where: { userId: aliceId } }),
       ).toBe(0);
       expect(await prisma.user.count({ where: { id: ids[1] } })).toBe(1);
-      expect((await request(alice, '/dashboard')).body.consent).toBe(false);
-      expect(await prisma.financialSnapshot.count({ where: { userId: aliceId } })).toBe(0);
+      expect((await request(alice, "/dashboard")).body.consent).toBe(false);
+      expect(
+        await prisma.financialSnapshot.count({ where: { userId: aliceId } }),
+      ).toBe(0);
       expect(
         (
           await request(alice, "/accounts", "POST", {

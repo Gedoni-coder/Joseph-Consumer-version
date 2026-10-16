@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { isDeepStrictEqual } from 'node:util';
+import { isDeepStrictEqual } from "node:util";
 import rateLimit from "express-rate-limit";
 import Joi from "joi";
 import authService from "../services/prisma/authService";
@@ -26,12 +26,15 @@ router.use(
   rateLimit({
     windowMs: 60_000,
     limit: 120,
+    message: {
+      message: "Too many requests. Please wait a minute and try again.",
+    },
     standardHeaders: "draft-8",
     legacyHeaders: false,
   }),
 );
 const COOKIE_PATH = "/api/consumer";
-const consentVersion = "local-planning-2026-10-15";
+const consentVersion = "manual-planning-2026-10-16";
 function cookie(req: Request, name: string) {
   const value = req.headers.cookie
     ?.split(";")
@@ -89,6 +92,9 @@ router.use((req, res, next) => {
 const authLimiter = rateLimit({
   windowMs: 15 * 60_000,
   limit: 20,
+  message: {
+    message: "Too many sign-in attempts. Please wait 15 minutes and try again.",
+  },
   standardHeaders: "draft-8",
   legacyHeaders: false,
 });
@@ -261,8 +267,14 @@ async function snapshot(
       typeof calculate
     >;
     if (
-      isDeepStrictEqual({ ...oldInputs, asOf: null }, { ...source, asOf: null }) &&
-      isDeepStrictEqual({ ...oldResult, generatedAt: null }, { ...result, generatedAt: null })
+      isDeepStrictEqual(
+        { ...oldInputs, asOf: null },
+        { ...source, asOf: null },
+      ) &&
+      isDeepStrictEqual(
+        { ...oldResult, generatedAt: null },
+        { ...result, generatedAt: null },
+      )
     ) {
       return { id: previous.id, ...oldResult };
     }

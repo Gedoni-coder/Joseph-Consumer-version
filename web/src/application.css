@@ -1,13 +1,13 @@
 :root {
   font-family: "Manrope Variable", sans-serif;
-  color: #272839;
-  background: #f7f7f3;
+  color: #202b25;
+  background: #f6f5ef;
   font-synthesis: none;
   font-weight: 450;
-  --ink: #27248f;
-  --muted: #676877;
+  --ink: #173c32;
+  --muted: #626b63;
   --line: #e4e4dd;
-  --lime: #e7f3ab;
+  --lime: #e5edb2;
 }
 * {
   box-sizing: border-box;
@@ -47,7 +47,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-  outline: 3px solid #7974e6;
+  outline: 3px solid #b56636;
   outline-offset: 4px;
 }
 h1,
@@ -95,25 +95,7 @@ small {
   letter-spacing: -1.6px;
   color: var(--ink);
 }
-.brand-mark {
-  background: var(--ink);
-  color: #fff;
-  width: 37px;
-  height: 37px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  font-size: 29px;
-  padding-bottom: 8px;
-  letter-spacing: -4px;
-  padding-right: 5px;
-}
-.brand-dot {
-  font-size: 11px;
-  align-self: flex-start;
-  margin-top: 5px;
-  letter-spacing: 0;
-}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -131,7 +113,7 @@ small {
     transform 0.2s;
 }
 .button:hover {
-  background: #3f3bbb;
+  background: #265747;
   transform: translateY(-1px);
 }
 .button > span {
@@ -214,91 +196,7 @@ small {
   background: #6b914d;
   margin-right: 5px;
 }
-.hero-art {
-  height: 520px;
-  position: relative;
-  isolation: isolate;
-  background: radial-gradient(ellipse at center, #edeedc 0%, #f7f7f300 65%);
-}
-.orbit {
-  position: absolute;
-  border: 1px solid #cbccdf;
-  border-radius: 50%;
-  left: 50%;
-  top: 48%;
-  transform: translate(-50%, -50%) rotate(-25deg);
-  width: 96%;
-  height: 55%;
-}
-.orbit-two {
-  width: 72%;
-  height: 86%;
-  transform: translate(-50%, -50%) rotate(35deg);
-}
-.orbit-three {
-  width: 70%;
-  height: 86%;
-  transform: translate(-50%, -50%) rotate(-30deg);
-}
-.orbit-core {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  transform: translate(-50%, -50%) rotate(-13deg);
-  height: 180px;
-  width: 180px;
-  border-radius: 55px;
-  background: linear-gradient(135deg, #7773dc, #2b258f 70%);
-  color: var(--lime);
-  font-size: 140px;
-  line-height: 145px;
-  font-weight: 650;
-  letter-spacing: -17px;
-  padding-left: 48px;
-  box-shadow:
-    18px 30px 35px #24248f23,
-    inset 4px 4px 0 #ffffff44;
-}
-.orbit-label {
-  position: absolute;
-  padding: 14px 19px;
-  border: 1px solid #e1e1d6;
-  background: #ffffffdb;
-  border-radius: 8px;
-  font-size: 12px;
-  box-shadow: 0 5px 25px #27248f08;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.orbit-label span {
-  font-size: 10px;
-  border-radius: 50%;
-  padding: 6px;
-  background: var(--lime);
-  color: var(--ink);
-  font-weight: 700;
-}
-.label-one {
-  top: 12%;
-  left: 15%;
-}
-.label-two {
-  top: 51%;
-  right: 0;
-}
-.label-three {
-  bottom: 12%;
-  left: 0;
-}
-.art-caption {
-  position: absolute;
-  bottom: 0;
-  left: 20%;
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: #717486;
-}
+
 .manifesto {
   border-top: 1px solid var(--line);
   padding: 90px 48px 100px;
@@ -346,7 +244,7 @@ small {
   color: #fff;
 }
 .promise p {
-  color: #d6d5ef;
+  color: #dce4d9;
   font-size: 15px;
 }
 .promise h2 {
@@ -387,20 +285,16 @@ small {
 .auth-layout aside .brand {
   color: white;
 }
-.auth-layout aside .brand-mark {
-  background: var(--lime);
-  color: var(--ink);
-}
 .auth-layout aside h1 {
   font-size: clamp(45px, 5vw, 73px);
 }
 .auth-layout aside p {
-  color: #d4d3ee;
+  color: #dce4d9;
   font-size: 14px;
 }
 .auth-layout aside > .eyebrow,
 .auth-layout aside > span {
-  color: #d4d3ee;
+  color: #dce4d9;
   font-size: 9px;
   letter-spacing: 1.5px;
 }
@@ -728,13 +622,13 @@ select:hover {
 }
 .spend-card > p {
   font-size: 12px;
-  color: #dddcf2;
+  color: #dce4d9;
   max-width: 380px;
   margin-bottom: 24px;
 }
 .spend-foot {
   font-size: 9px;
-  color: #c4c2ec;
+  color: #becfc1;
   border-top: 1px solid #ffffff20;
   display: block;
   padding-top: 17px;
@@ -926,7 +820,7 @@ details p {
   height: 37px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #f0eff9;
+  background: #edf0e7;
   color: var(--ink);
   font-size: 20px;
 }
@@ -1030,8 +924,8 @@ details p {
   font-size: 11px;
 }
 .explanation {
-  background: #eeedf8;
-  border-color: #e2e0f2;
+  background: #edf0e7;
+  border-color: #d9e0d3;
   padding: 40px;
 }
 .large-symbol {
@@ -1097,9 +991,6 @@ dd {
     padding-left: 60px;
     padding-right: 60px;
   }
-  .hero-art {
-    height: 560px;
-  }
 }
 @media (max-width: 1100px) {
   .workspace {
@@ -1129,31 +1020,7 @@ dd {
   .hero {
     gap: 10px;
   }
-  .hero-art {
-    height: 440px;
-  }
-  .orbit-core {
-    width: 150px;
-    height: 150px;
-    font-size: 115px;
-    line-height: 120px;
-    padding-left: 40px;
-    border-radius: 45px;
-  }
-  .orbit-label {
-    font-size: 10px;
-    padding: 10px;
-    gap: 7px;
-  }
-  .label-one {
-    left: 5%;
-  }
-  .label-two {
-    right: -5px;
-  }
-  .label-three {
-    left: -5px;
-  }
+
   .steps {
     gap: 25px;
   }
@@ -1237,34 +1104,7 @@ dd {
   .hero-description {
     font-size: 14px;
   }
-  .hero-art {
-    height: 380px;
-  }
-  .orbit-core {
-    width: 120px;
-    height: 120px;
-    font-size: 90px;
-    line-height: 98px;
-    padding-left: 32px;
-    border-radius: 35px;
-    letter-spacing: -12px;
-  }
-  .orbit-label {
-    font-size: 9px;
-    gap: 6px;
-    padding: 9px;
-  }
-  .orbit-label span {
-    font-size: 8px;
-    padding: 4px;
-  }
-  .label-two {
-    right: -8px;
-  }
-  .art-caption {
-    font-size: 7px;
-    left: 10%;
-  }
+
   .site-header {
     padding: 24px 30px;
   }
@@ -1323,13 +1163,7 @@ dd {
   .brand {
     font-size: 26px;
   }
-  .brand-mark {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    font-size: 26px;
-    line-height: 30px;
-  }
+
   .site-header nav {
     gap: 15px;
   }
@@ -1356,12 +1190,7 @@ dd {
     font-size: 15px;
     max-width: 340px;
   }
-  .hero-art {
-    height: 350px;
-    max-width: 400px;
-    width: 100%;
-    margin: auto;
-  }
+
   .hero .button {
     width: 100%;
     max-width: 340px;
@@ -1369,34 +1198,7 @@ dd {
   .hero-footnote {
     font-size: 10px;
   }
-  .orbit-core {
-    width: 135px;
-    height: 135px;
-    font-size: 102px;
-    line-height: 110px;
-    padding-left: 37px;
-  }
-  .label-one {
-    top: 10%;
-    left: 12%;
-  }
-  .label-two {
-    right: 0;
-    top: 48%;
-  }
-  .label-three {
-    left: 0;
-    bottom: 10%;
-  }
-  .orbit-label {
-    font-size: 10px;
-    padding: 11px;
-  }
-  .art-caption {
-    bottom: -10px;
-    left: 18%;
-    font-size: 8px;
-  }
+
   .manifesto {
     padding: 55px 24px;
   }

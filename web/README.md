@@ -2,6 +2,8 @@
 
 React/TypeScript/Vite frontend connected to the existing Express/Prisma backend. The former fixtures, scripted chat and signup placeholder have been removed. `web/` is the current consumer frontend; the historical root HTML application is not its entrypoint.
 
+Live planning beta: **https://joseph-consumer.vercel.app**. See [deployment notes](../docs/CONSUMER_DEPLOYMENT.md) for hosting and operational limits.
+
 ## Run locally on Windows
 
 Prerequisites: Node 22.12+, the locked backend/frontend dependencies, PostgreSQL 17. This machine has PostgreSQL at `C:/Program Files/PostgreSQL/17/bin`; set `JOSEPH_PG_BIN` if yours is elsewhere. The helper always uses an isolated repository-local cluster on `127.0.0.1:55439`, never a supplied cloud DATABASE_URL.
@@ -31,7 +33,7 @@ Restore backend packages with the pinned pnpm workspace lockfile before building
 ## Working flows
 
 - Account registration, sign-in, session refresh, sign-out and sign-out everywhere. HttpOnly SameSite=Strict cookies; tokens never enter browser storage. Explicit Origin checks protect mutations.
-- Versioned consent for local manual planning, with financial writes gated on consent. Privacy controls remain accessible without consent.
+- Versioned consent for manual planning, with financial writes gated on consent. Privacy controls remain accessible without consent.
 - Create, update and remove available balances, dated bills and individual goal contributions; confirm daily spending, safety buffer and a 7–90 day horizon.
 - Backend-calculated Safe-to-Spend, dated runway projection, shortfall, restricted answers for missing/stale data, and purchase simulations that do not change balances.
 - PostgreSQL persistence, immutable reproducible snapshots on material state changes, source references, rule versions and reason codes.
@@ -41,9 +43,9 @@ Amounts are entered in naira and sent/stored as integer kobo. The browser format
 
 ## What this does not claim
 
-This is a working **local manual-planning flow**, not the full documentation's bank-connected MVP. Mono, email/SMS verification, password recovery and Meta WhatsApp are not configured; no connection or verification success is simulated. There is no LLM integration, transaction ingestion/classification, automatic recurring-obligation detection, complete goal progress tracking, or scheduled WhatsApp nudges yet. The user explicitly confirmed continuing locally without provider credentials.
+This is a working **manual-planning beta**, not the full documentation's bank-connected MVP. Mono, email/SMS verification, password recovery and Meta WhatsApp are not configured; no connection or verification success is simulated. There is no LLM integration, transaction ingestion/classification, automatic recurring-obligation detection, complete goal progress tracking, or scheduled WhatsApp nudges yet. Provider credentials and their integration flows remain outstanding.
 
-Balances are self-reported and become stale after 24 hours. Bills and goal contributions are individual dated entries; there is no automatic repeat schedule. Future income is not assumed. Reservations are planning allocations, never bank locks. The document's rules need beta validation and approval before public use; this local implementation is versioned `manual-plan-1.0.0` rather than presented as approved bank-data policy.
+Balances are self-reported and become stale after 24 hours. Bills and goal contributions are individual dated entries; there is no automatic repeat schedule. Future income is not assumed. Reservations are planning allocations, never bank locks. The document's rules need validation and approval before broader production rollout; this local implementation is versioned `manual-plan-1.0.0` rather than presented as approved bank-data policy.
 
 The new `/api/consumer` cookie endpoints reuse the local hardened session service. They do not merge the incompatible upstream `feat/Auth` token schema. The old root app and legacy API remain present and require separate review before public deployment.
 
@@ -55,4 +57,4 @@ From `web`, run `npm run build` then `npm test` with the backend running. Playwr
 
 See `../docs/CONSUMER_LOCAL_IMPLEMENTATION.md` for the implementation and remaining gates.
 
-Verified on 15 October 2026: 48 backend tests, eight browser checks across four viewport sizes, both builds, and targeted lint passed. Only the isolated local database was migrated. Nothing was pushed or deployed.
+Verified on 15 October 2026: 48 backend tests, eight browser checks across four viewport sizes, both builds, and targeted lint passed. Only the isolated local database was migrated. This was the local validation baseline. See CONSUMER_DEPLOYMENT.md for the 16 October hosted release.

@@ -3,8 +3,13 @@ import { api, money, type State, type User } from "./api";
 export function Brand() {
   return (
     <a className="brand" href="/" aria-label="JOSEPH home">
-      <span className="brand-mark">j.</span>joseph
-      <span className="brand-dot">®</span>
+      <svg className="brand-symbol" viewBox="0 0 32 36" aria-hidden="true">
+        <path
+          d="M7 3h22v18c0 9-5 13-13 13S3 29 3 22h7c0 4 2 6 6 6s6-2 6-7V10H7z"
+          fill="currentColor"
+        />
+      </svg>
+      <span className="brand-word">JOSEPH</span>
     </a>
   );
 }
@@ -77,19 +82,16 @@ export function Landing({
       <main>
         <section className="hero">
           <div className="hero-copy">
-            <p className="eyebrow">
-              <span className="live-dot" /> A LITTLE CLARITY GOES A LONG WAY
-            </p>
+            <p className="eyebrow">PERSONAL FINANCE, WITH A PLAN</p>
             <h1>
               Your money.
               <br />
-              Your plans.
+              In perspective.
               <br />
-              <em>Room to breathe.</em>
             </h1>
             <p className="hero-description">
-              Know what’s spoken for. See what’s left. Make your next money
-              decision with a plan that adds up.
+              Bills coming up. Plans worth keeping. Know how much room you have
+              before you make your next move.
             </p>
             <button className="button" onClick={() => open("register")}>
               Build my money picture <Arrow />
@@ -99,31 +101,55 @@ export function Landing({
             </p>
           </div>
           <div
-            className="hero-art"
-            aria-label="Your money, organised around your life"
+            className="money-ledger"
+            aria-label="How JOSEPH organises your money plan"
           >
-            <div className="orbit orbit-one" />
-            <div className="orbit orbit-two" />
-            <div className="orbit orbit-three" />
-            <div className="orbit-core">j.</div>
-            <div className="orbit-label label-one">
-              <span>01</span> The essentials
+            <div className="ledger-heading">
+              <span>THE MONEY PICTURE</span>
+              <span>01—03</span>
             </div>
-            <div className="orbit-label label-two">
-              <span>02</span> The bigger plans
+            <div className="ledger-row essentials">
+              <span className="ledger-index">01</span>
+              <div>
+                <h2>Life comes first.</h2>
+                <p>Bills. Everyday spending. Your buffer.</p>
+              </div>
+              <span className="ledger-sign" aria-hidden="true">
+                −
+              </span>
             </div>
-            <div className="orbit-label label-three">
-              <span>03</span> A little breathing room
+            <div className="ledger-row plans">
+              <span className="ledger-index">02</span>
+              <div>
+                <h2>Keep the plan.</h2>
+                <p>Put dates and amounts on your goals.</p>
+              </div>
+              <span className="ledger-sign" aria-hidden="true">
+                −
+              </span>
             </div>
-            <span className="art-caption">MAKE SPACE FOR WHAT MATTERS.</span>
+            <div className="ledger-row room">
+              <span className="ledger-index">03</span>
+              <div>
+                <h2>Know your room.</h2>
+                <p>Check a purchase against what’s ahead.</p>
+              </div>
+              <span className="ledger-sign" aria-hidden="true">
+                =
+              </span>
+            </div>
+            <div className="ledger-caption">
+              <span>YOUR ENTRIES → YOUR FORECAST</span>
+              <span>NGN / ₦</span>
+            </div>
           </div>
         </section>
         <section className="manifesto" id="how">
-          <p className="eyebrow">LESS GUESSWORK. MORE LIVING.</p>
+          <p className="eyebrow">A PRACTICAL ROUTINE</p>
           <h2>
-            A plan for the life
+            Put the numbers
             <br />
-            you’re <em>actually living.</em>
+            in their place.
           </h2>
           <div className="steps">
             <article>
@@ -156,9 +182,9 @@ export function Landing({
           <div>
             <p className="eyebrow">YOUR MONEY STAYS YOURS</p>
             <h2>
-              Clarity.
+              A money plan.
               <br />
-              <em>Without the custody.</em>
+              You stay in control.
             </h2>
           </div>
           <div>
@@ -167,7 +193,7 @@ export function Landing({
               funds.
             </p>
             <p>
-              This local version saves your entries and calculates from them.
+              This planning beta saves your entries and calculates from them.
               Bank connections, verification messages and WhatsApp are not
               available yet.
             </p>
@@ -179,7 +205,7 @@ export function Landing({
       </main>
       <footer className="site-footer">
         <Brand />
-        <p>Made for a little more peace of mind.</p>
+        <p>Personal money planning. Built for Nigeria.</p>
         <span>NGN · Nigeria</span>
       </footer>
     </div>
@@ -302,7 +328,7 @@ export function Auth({
               <Note>
                 Use at least 8 characters, with an uppercase letter, a lowercase
                 letter and a number. Email and phone verification are not
-                available in this local version.
+                available in this planning beta.
               </Note>
             )}
             <ErrorMessage message={error} />
@@ -351,8 +377,8 @@ export function Projection({ state }: { state: State }) {
       >
         <defs>
           <linearGradient id="forecast-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#4442bd" stopOpacity=".18" />
-            <stop offset="100%" stopColor="#4442bd" stopOpacity="0" />
+            <stop offset="0%" stopColor="#32634e" stopOpacity=".18" />
+            <stop offset="100%" stopColor="#32634e" stopOpacity="0" />
           </linearGradient>
         </defs>
         <line
@@ -370,7 +396,7 @@ export function Projection({ state }: { state: State }) {
         <polyline
           points={points}
           fill="none"
-          stroke="#33319b"
+          stroke="#173c32"
           strokeWidth="3"
           strokeLinejoin="round"
         />
@@ -401,8 +427,9 @@ export function Consent({ save, busy }: { save: () => void; busy: boolean }) {
       </h2>
       <p>
         JOSEPH will store the balances, commitments and spending plan you enter,
-        and use them to calculate a personal forecast. These are estimates from
-        your entries, not verified bank information.
+        and use them to calculate a personal forecast. In the hosted app, your
+        information is stored on JOSEPH?s servers. These are estimates from your
+        entries, not verified bank information.
       </p>
       <ul>
         <li>No bank credentials are requested. No money is moved.</li>
@@ -411,12 +438,10 @@ export function Consent({ save, busy }: { save: () => void; busy: boolean }) {
           You can export your information or erase your planning data in
           Privacy.
         </li>
-        <li>
-          You can also permanently delete your account in Privacy.
-        </li>
+        <li>You can also permanently delete your account in Privacy.</li>
       </ul>
       <Note>
-        This consent covers local manual planning only. Bank-data processing and
+        This consent covers manual planning only. Bank-data processing and
         WhatsApp require separate setup and consent before use.
       </Note>
       <form
@@ -427,7 +452,7 @@ export function Consent({ save, busy }: { save: () => void; busy: boolean }) {
       >
         <label className="checkbox">
           <input type="checkbox" required /> I agree to the storage and use of
-          my entries for this local money plan.
+          my entries for my money plan.
         </label>
         <button className="button" disabled={busy}>
           Agree and continue <Arrow />

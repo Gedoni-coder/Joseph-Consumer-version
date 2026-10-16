@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Backend API for JOSEPH AI - Family Finance & Business Management",
   "private": true,
-  "packageManager": "pnpm@10.18.1",
+  "packageManager": "pnpm@10.34.7",
   "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {
