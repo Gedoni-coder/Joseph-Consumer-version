@@ -1,18 +1,16 @@
-/* JOSEPH: a compact wordmark, a quiet canvas, and a working ledger. */
+/* JOSEPH AI: the dove-and-olive-branch identity, navy and white. */
 .brand {
   gap: 10px;
   letter-spacing: -0.05em;
   font-size: 25px;
   font-weight: 800;
 }
-.brand-symbol {
-  width: 27px;
-  height: 31px;
-  flex: 0 0 auto;
-}
-.brand-word {
-  letter-spacing: -0.055em;
-}
+.brand { flex: 0 0 auto; line-height: 0; }
+.brand-logo { display: block; width: 204px; height: auto; aspect-ratio: 3 / 1; }
+.sidebar .brand-logo { width: 176px; }
+.site-footer .brand-logo { width: 180px; }
+.auth-layout aside .brand-logo { width: 240px; max-width: 100%; }
+.brand:focus-visible { outline: 3px solid #6379c1; outline-offset: 5px; }
 .button {
   border-radius: 3px;
 }
@@ -148,10 +146,6 @@ em {
 .site-footer .brand {
   font-size: 20px;
 }
-.site-footer .brand-symbol {
-  width: 22px;
-  height: 26px;
-}
 .auth-layout aside {
   background: #03031d;
 }
@@ -210,10 +204,7 @@ em {
     font-size: 21px;
     gap: 7px;
   }
-  .brand-symbol {
-    width: 23px;
-    height: 27px;
-  }
+  .brand-logo, .sidebar .brand-logo { width: 156px; }
   .site-header nav {
     gap: 16px;
   }
@@ -224,19 +215,18 @@ em {
   }
   .site-header nav {
     gap: 10px;
+    white-space: nowrap;
   }
   .site-header .button.small {
     padding: 10px;
     font-size: 11px;
     gap: 8px;
   }
+  .site-header .button.small > span { display: none; }
   .brand {
     font-size: 18px;
   }
-  .brand-symbol {
-    width: 20px;
-    height: 24px;
-  }
+  .site-header .brand-logo { width: 138px; }
   .hero {
     padding-left: 18px;
     padding-right: 18px;

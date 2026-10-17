@@ -2,14 +2,8 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { api, money, type State, type User } from "./api";
 export function Brand() {
   return (
-    <a className="brand" href="/" aria-label="JOSEPH home">
-      <svg className="brand-symbol" viewBox="0 0 32 36" aria-hidden="true">
-        <path
-          d="M7 3h22v18c0 9-5 13-13 13S3 29 3 22h7c0 4 2 6 6 6s6-2 6-7V10H7z"
-          fill="currentColor"
-        />
-      </svg>
-      <span className="brand-word">JOSEPH</span>
+    <a className="brand" href="/" aria-label="JOSEPH AI home">
+      <img className="brand-logo" src="/joseph-ai-logo.png" alt="JOSEPH AI — dove carrying an olive branch" width="720" height="240" fetchPriority="high" />
     </a>
   );
 }
