@@ -1,9 +1,22 @@
-import { useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { api, money, type State, type User } from "./api";
 export function Brand() {
   return (
     <a className="brand" href="/" aria-label="JOSEPH AI home">
-      <img className="brand-logo" src="/joseph-ai-logo.png" alt="JOSEPH AI — dove carrying an olive branch" width="720" height="240" fetchPriority="high" />
+      <img
+        className="brand-logo"
+        src="/joseph-ai-logo-transparent.png"
+        alt="JOSEPH AI — dove carrying an olive branch"
+        width="720"
+        height="240"
+        fetchPriority="high"
+      />
     </a>
   );
 }
@@ -188,8 +201,8 @@ export function Landing({
             </p>
             <p>
               This planning beta saves your entries and calculates from them.
-              Mono sandbox connections are available for testing. Verification messages and WhatsApp are not
-              available yet.
+              Mono sandbox connections are available for testing. Verification
+              messages and WhatsApp are not available yet.
             </p>
             <button className="button light" onClick={() => open("register")}>
               Start your plan <Arrow />
@@ -355,17 +368,38 @@ export function Auth({
   );
 }
 export function Projection({ state }: { state: State }) {
+  const container = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(560);
+  useEffect(() => {
+    const element = container.current;
+    if (!element) return;
+    const observer = new ResizeObserver(([entry]) =>
+      setWidth(Math.max(210, entry.contentRect.width)),
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   const values = state.projection.map((day) => day.cash);
-  const max = Math.max(state.liquid, state.reserve, 1);
+  const max = Math.max(state.liquid, state.reserve, 100);
   const min = Math.min(0, ...values);
-  const y = (value: number) => 150 - ((value - min) / (max - min || 1)) * 125;
-  const points = values
-    .map((value, i) => `${30 + (i / (values.length - 1)) * 570},${y(value)}`)
-    .join(" ");
+  const y = (value: number) => 210 - ((value - min) / (max - min || 1)) * 165;
+  const left = 68,
+    right = width - 18;
+  const x = (index: number) =>
+    left + (index / Math.max(values.length - 1, 1)) * (right - left);
+  const compact = (value: number) =>
+    new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      notation: "compact",
+      maximumFractionDigits: 1,
+    }).format(value / 100);
+  const tickCount = width < 420 ? 3 : 5;
+  const points = values.map((value, i) => `${x(i)},${y(value)}`).join(" ");
   return (
-    <div className="projection">
+    <div className="projection" ref={container}>
       <svg
-        viewBox="0 0 630 180"
+        viewBox={`0 0 ${width} 270`}
         role="img"
         aria-label={`Projected cash over ${state.horizon} days. Final projected balance ${money(values.at(-1) ?? 0)}.`}
       >
@@ -375,16 +409,36 @@ export function Projection({ state }: { state: State }) {
             <stop offset="100%" stopColor="#344c9e" stopOpacity="0" />
           </linearGradient>
         </defs>
+        <text x="0" y="18" className="axis-title">
+          Amount (₦)
+        </text>
+        {Array.from({ length: 5 }, (_, i) => {
+          const value = min + ((max - min) * i) / 4;
+          return (
+            <g key={i}>
+              <line
+                x1={left}
+                x2={right}
+                y1={y(value)}
+                y2={y(value)}
+                stroke="#e5e8f0"
+              />
+              <text x={left - 10} y={y(value) + 4} textAnchor="end">
+                {compact(value)}
+              </text>
+            </g>
+          );
+        })}
         <line
-          x1="30"
-          x2="600"
+          x1={left}
+          x2={right}
           y1={y(state.reserve)}
           y2={y(state.reserve)}
           stroke="#94938d"
           strokeDasharray="4 6"
         />
         <polygon
-          points={`30,155 ${points} 600,155`}
+          points={`${left},210 ${points} ${right},210`}
           fill="url(#forecast-fill)"
         />
         <polyline
@@ -394,12 +448,54 @@ export function Projection({ state }: { state: State }) {
           strokeWidth="3"
           strokeLinejoin="round"
         />
-        <text x="30" y="174">
-          Today
+        {Array.from({ length: tickCount }, (_, i) => {
+          const index = Math.round((i / (tickCount - 1)) * (values.length - 1));
+          const day = state.projection[index];
+          return (
+            <g key={i}>
+              <line
+                x1={x(index)}
+                x2={x(index)}
+                y1="210"
+                y2="216"
+                stroke="#9299ad"
+              />
+              <text
+                x={x(index)}
+                y="236"
+                textAnchor={
+                  i === 0 ? "start" : i === tickCount - 1 ? "end" : "middle"
+                }
+              >
+                {new Date(day.date + "T12:00:00Z").toLocaleDateString("en-NG", {
+                  day: "numeric",
+                  month: "short",
+                })}
+              </text>
+            </g>
+          );
+        })}
+        <text
+          x={(left + right) / 2}
+          y="263"
+          textAnchor="middle"
+          className="axis-title"
+        >
+          Date
         </text>
-        <text x="600" y="174" textAnchor="end">
-          Day {state.horizon}
-        </text>
+        {state.projection.map((day, i) => (
+          <circle
+            key={day.date}
+            cx={x(i)}
+            cy={y(day.cash)}
+            r="3"
+            fill="#03031d"
+          >
+            <title>
+              {date(day.date)}: {money(day.cash)}
+            </title>
+          </circle>
+        ))}
       </svg>
       <div className="chart-legend">
         <span>

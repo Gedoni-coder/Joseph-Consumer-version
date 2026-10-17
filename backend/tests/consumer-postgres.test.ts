@@ -3,7 +3,11 @@ import type { AddressInfo } from "node:net";
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import * as mono from "../src/consumer/mono";
-import { calculate, type EngineInput } from "../src/consumer/engine";
+import {
+  calculate,
+  nigeriaDate,
+  type EngineInput,
+} from "../src/consumer/engine";
 
 describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
   "consumer HTTP against isolated PostgreSQL",
@@ -458,6 +462,121 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
       } finally {
         vi.restoreAllMocks();
       }
+    });
+    it("persists real purchase history, prevents replay, isolates owners and calculates seven-day burn", async () => {
+      const jar: Jar = {};
+      const id = await register(jar);
+      const other: Jar = {};
+      await register(other);
+      const today = nigeriaDate(new Date());
+      const entry = {
+        requestId: randomUUID(),
+        label: "Groceries",
+        amount: 700000,
+        occurredOn: today,
+      };
+      expect(
+        (await request(jar, "/purchases", "POST", entry)).response.status,
+      ).toBe(409);
+      await request(jar, "/consent", "POST", {
+        accepted: true,
+        version: "manual-planning-2026-10-16",
+      });
+      await request(other, "/consent", "POST", {
+        accepted: true,
+        version: "manual-planning-2026-10-16",
+      });
+      for (const invalid of [
+        { ...entry, amount: 0 },
+        { ...entry, occurredOn: "2099-01-01" },
+        { ...entry, occurredOn: "2026-02-30" },
+      ])
+        expect(
+          (await request(jar, "/purchases", "POST", invalid)).response.status,
+        ).toBe(400);
+      const saved = await Promise.all([
+        request(jar, "/purchases", "POST", entry),
+        request(jar, "/purchases", "POST", entry),
+      ]);
+      expect(saved.map((r) => r.response.status)).toEqual([200, 200]);
+      expect(saved[0].body.purchase.id).toBe(saved[1].body.purchase.id);
+      expect(
+        (await request(jar, "/purchases", "POST", { ...entry, amount: 1 }))
+          .response.status,
+      ).toBe(409);
+      const oldDate = new Date(Date.parse(today + "T00:00:00Z") - 7 * 86400000)
+        .toISOString()
+        .slice(0, 10);
+      await request(jar, "/purchases", "POST", {
+        ...entry,
+        requestId: randomUUID(),
+        label: "Older purchase",
+        amount: 999999,
+        occurredOn: oldDate,
+      });
+      const dashboard = (await request(jar, "/dashboard")).body;
+      expect(dashboard.spending).toMatchObject({
+        count: 1,
+        total: 700000,
+        daily: 100000,
+        days: 7,
+        to: today,
+      });
+      expect(dashboard.inputs.accounts).toEqual([]);
+      expect(dashboard.state.safeToSpend).toBeNull();
+      expect((await request(other, "/purchases")).body.purchases).toEqual([]);
+      expect(
+        (
+          await request(
+            other,
+            "/purchases/" + saved[0].body.purchase.id,
+            "DELETE",
+            {},
+          )
+        ).response.status,
+      ).toBe(404);
+      const history = (await request(jar, "/purchases")).body;
+      expect(history.purchases.map((p: { label: string }) => p.label)).toEqual([
+        "Groceries",
+        "Older purchase",
+      ]);
+      expect((await request(jar, "/export")).body.purchases).toHaveLength(2);
+      await prisma.consumerPurchase.createMany({
+        data: Array.from({ length: 50 }, (_, i) => ({
+          userId: id,
+          requestId: randomUUID(),
+          label: "Pagination " + i,
+          amount: 100n,
+          occurredOn: oldDate,
+        })),
+      });
+      const first = (await request(jar, "/purchases")).body;
+      const second = (await request(jar, "/purchases?offset=50")).body;
+      expect(first.purchases).toHaveLength(50);
+      expect(first.nextOffset).toBe(50);
+      expect(second.purchases).toHaveLength(2);
+      expect(second.nextOffset).toBeNull();
+      expect(
+        new Set([...first.purchases, ...second.purchases].map((p) => p.id))
+          .size,
+      ).toBe(52);
+      expect(
+        (
+          await request(
+            jar,
+            "/purchases/" + saved[0].body.purchase.id,
+            "DELETE",
+            {},
+          )
+        ).response.status,
+      ).toBe(200);
+      expect((await request(jar, "/dashboard")).body.spending.daily).toBeNull();
+      await request(jar, "/planning-data", "DELETE", {
+        confirmation: "DELETE",
+      });
+      expect(
+        await prisma.consumerPurchase.count({ where: { userId: id } }),
+      ).toBe(0);
     });
     it("requires the password for account deletion and invalidates its sessions", async () => {
       const jar: Jar = {};

@@ -12,6 +12,7 @@ export type State = ReturnType<typeof calculate> & {
   stateId?: string;
 };
 export type Dashboard = {
+  spending: { from: string; to: string; days: number; count: number; total: number; daily: number | null };
   requiresOnboarding: boolean;
   user: User;
   consent: boolean;

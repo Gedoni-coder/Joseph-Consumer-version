@@ -1,5 +1,7 @@
 # JOSEPH AI brand assets
 
+The current website logo is the transparent version `web/public/joseph-ai-logo-transparent.png`, replacing the rectangular background at the user's request. See [the current prompt and usage](SPENDING_HISTORY.md). The assets below record the preceding design and the browser icons.
+
 The supplied navy/white dove-and-olive-branch logo was recreated with the user's permission on 17 October 2026 using the built-in imagegen tool. These are refined reproductions, not pixel-identical copies of the original.
 
 - `web/public/joseph-ai-logo.png`: 720 × 240 rectangular wordmark for headers, sign-in and dashboard.

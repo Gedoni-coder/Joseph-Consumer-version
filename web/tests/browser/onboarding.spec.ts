@@ -42,8 +42,68 @@ test("template answers populate the dashboard and its modules once", async ({
     ).toBeVisible();
     await page.getByRole("button", { name: "Continue without a bank" }).click();
     await expect(page.getByTestId("safe-to-spend")).toHaveText("₦35,000");
+    await expect(page.getByTestId("burn-rate")).toHaveText("—/day");
+    await expect(
+      page.getByRole("button", { name: "Bills & goals" }),
+    ).not.toBeVisible();
+    await page.getByRole("button", { name: "Open menu", exact: true }).click();
+    const drawer = page.getByRole("dialog", { name: "Workspace menu" });
+    await expect(
+      drawer.getByRole("navigation").getByRole("button"),
+    ).toHaveCount(4);
+    const privacy = await drawer
+      .getByRole("button", { name: "Privacy & account" })
+      .boundingBox();
+    const plan = await drawer
+      .getByRole("button", { name: "Spending plan", exact: true })
+      .boundingBox();
+    expect(privacy!.y).toBeGreaterThan(plan!.y + plan!.height);
+    await page.screenshot({ path: info.outputPath("side-menu.png") });
+    await page.keyboard.press("Escape");
+    await expect(drawer).not.toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Open menu", exact: true }),
+    ).toBeFocused();
+    await expect(
+      page.locator(".projection").getByText("Amount (₦)", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".projection").getByText("Date", { exact: true }),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "+ Record purchase", exact: true })
+      .click();
+    await page.getByLabel("Purchase", { exact: true }).fill("Groceries");
+    await page.getByLabel("Amount spent").fill("7000");
+    await page
+      .getByRole("button", { name: "Save purchase", exact: true })
+      .click();
+    await expect(page.getByTestId("burn-rate")).toHaveText("₦1,000/day");
+    await expect(
+      page.getByRole("row").filter({ hasText: "Groceries" }),
+    ).toContainText("₦7,000");
+    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦35,000");
     await page.reload();
     await expect(page.getByTestId("safe-to-spend")).toHaveText("₦35,000");
+    await expect(page.getByTestId("burn-rate")).toHaveText("₦1,000/day");
+    await expect(
+      page.getByRole("row").filter({ hasText: "Groceries" }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: info.outputPath("spending-dashboard.png"),
+      fullPage: true,
+    });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    page.once("dialog", (dialog) => dialog.accept());
+    await page
+      .getByRole("button", { name: "Delete purchase Groceries", exact: true })
+      .click();
+    await expect(page.getByTestId("burn-rate")).toHaveText("—/day");
+    await page.getByRole("button", { name: "Open menu", exact: true }).click();
     await page.getByRole("button", { name: "Bills & goals" }).click();
     await expect(
       page.getByRole("button", { name: "Edit Rent", exact: true }),

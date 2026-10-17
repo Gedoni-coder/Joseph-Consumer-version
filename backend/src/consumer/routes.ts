@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import Joi from "joi";
 import { bankRoutes, assertNoPendingBankExchange } from "./banks";
 import { monoConfigured } from "./mono";
+import { spendingSummary } from "./spending";
 import authService from "../services/prisma/authService";
 import {
   createAuthSession,
@@ -19,6 +20,7 @@ import {
   ENGINE_VERSION,
   RULES_VERSION,
   MAX_MONEY,
+  nigeriaDate,
   type EngineInput,
 } from "./engine";
 import type { Prisma } from "@prisma/client";
@@ -310,6 +312,7 @@ router.get("/dashboard", async (req, res) => {
     return {
       user: safeUser(req.user),
       inputs: source,
+      spending: await spendingSummary(tx, req.userId),
       consent: !!consent?.accepted && consent.version === consentVersion,
       state:
         consent?.accepted && consent.version === consentVersion
@@ -342,6 +345,109 @@ router.post("/consent", async (req, res) => {
   res.json({ ok: true });
 });
 router.use("/banks", bankRoutes(hasConsent));
+router.get("/purchases", async (req, res) => {
+  const offset = String(req.query.offset ?? "0");
+  if (!/^\d{1,6}$/.test(offset))
+    throw Object.assign(new Error("Invalid history page."), { status: 400 });
+  const data = await withLockedUser(req.userId, async (tx) => {
+    const records = await tx.consumerPurchase.findMany({
+      where: { userId: req.userId },
+      orderBy: [{ occurredOn: "desc" }, { createdAt: "desc" }, { id: "desc" }],
+      skip: Number(offset),
+      take: 51,
+    });
+    return {
+      purchases: records
+        .slice(0, 50)
+        .map((p) => ({
+          id: p.id,
+          label: p.label,
+          amount: Number(p.amount),
+          occurredOn: p.occurredOn,
+        })),
+      nextOffset: records.length > 50 ? Number(offset) + 50 : null,
+    };
+  });
+  res.json(data);
+});
+router.post("/purchases", async (req, res) => {
+  const body = validate(
+    Joi.object({
+      requestId: Joi.string().guid({ version: "uuidv4" }).required(),
+      label,
+      amount: money.min(1),
+      occurredOn: commitmentSchema.extract("dueDate"),
+    }).unknown(false),
+    req,
+  );
+  if (
+    body.occurredOn < "1900-01-01" ||
+    body.occurredOn > nigeriaDate(new Date())
+  )
+    throw Object.assign(
+      new Error("Choose a purchase date between 1900 and today."),
+      { status: 400 },
+    );
+  const saved = await withLockedUser(req.userId, async (tx) => {
+    await hasConsent(tx, req.userId);
+    const existing = await tx.consumerPurchase.findUnique({
+      where: {
+        userId_requestId: { userId: req.userId, requestId: body.requestId },
+      },
+    });
+    if (existing) {
+      if (
+        existing.label !== body.label ||
+        existing.amount !== BigInt(body.amount) ||
+        existing.occurredOn !== body.occurredOn
+      )
+        throw Object.assign(
+          new Error(
+            "This purchase request was already used. Start a new entry.",
+          ),
+          { status: 409 },
+        );
+      return existing;
+    }
+    const totals = await tx.consumerPurchase.aggregate({
+      where: { userId: req.userId },
+      _count: true,
+      _sum: { amount: true },
+    });
+    if (
+      totals._count >= 10000 ||
+      (totals._sum.amount ?? 0n) + BigInt(body.amount) > BigInt(MAX_MONEY)
+    )
+      throw Object.assign(
+        new Error(
+          "Your purchase history has reached its supported limit. Export your records before removing older entries.",
+        ),
+        { status: 409 },
+      );
+    return tx.consumerPurchase.create({
+      data: { ...body, amount: BigInt(body.amount), userId: req.userId },
+    });
+  });
+  res.json({
+    purchase: {
+      id: saved.id,
+      label: saved.label,
+      amount: Number(saved.amount),
+      occurredOn: saved.occurredOn,
+    },
+  });
+});
+router.delete("/purchases/:id", async (req, res) => {
+  await withLockedUser(req.userId, async (tx) => {
+    await hasConsent(tx, req.userId);
+    const removed = await tx.consumerPurchase.deleteMany({
+      where: { id: String(req.params.id), userId: req.userId },
+    });
+    if (!removed.count)
+      throw Object.assign(new Error("Purchase not found."), { status: 404 });
+  });
+  res.json({ ok: true });
+});
 router.post("/onboarding", async (req, res) => {
   const data = validate(
     Joi.object({
@@ -515,6 +621,17 @@ router.get("/export", async (req, res) => {
   const data = await withLockedUser(req.userId, async (tx) => ({
     user: safeUser(req.user),
     inputs: await inputs(tx, req.userId),
+    purchases: (
+      await tx.consumerPurchase.findMany({
+        where: { userId: req.userId },
+        orderBy: [{ occurredOn: "desc" }, { id: "desc" }],
+      })
+    ).map((p) => ({
+      id: p.id,
+      label: p.label,
+      amount: Number(p.amount),
+      occurredOn: p.occurredOn,
+    })),
     banks: (
       await tx.consumerBankConnection.findMany({
         where: { userId: req.userId },
@@ -554,6 +671,7 @@ router.delete("/planning-data", async (req, res) => {
       where: { userId: req.userId },
     });
     await tx.moneyAccount.deleteMany({ where: { userId: req.userId } });
+    await tx.consumerPurchase.deleteMany({ where: { userId: req.userId } });
     await tx.consumerCommitment.deleteMany({ where: { userId: req.userId } });
     await tx.consumerPlan.deleteMany({ where: { userId: req.userId } });
     await tx.financialSnapshot.deleteMany({ where: { userId: req.userId } });

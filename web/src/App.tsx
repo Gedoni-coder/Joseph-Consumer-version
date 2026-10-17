@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { Onboarding } from './Onboarding';
-import { BankConnections } from './BankConnections';
+import { useEffect, useRef, useState } from "react";
+import { BurnRate, SpendingHistory } from "./Spending";
+import { Onboarding } from "./Onboarding";
+import { BankConnections } from "./BankConnections";
 import { api, kobo, money, type Dashboard, type State, type User } from "./api";
 import {
   Amount,
@@ -36,6 +37,8 @@ function Workspace({
   const [formVersion, setFormVersion] = useState(0);
   const [simulation, setSimulation] = useState<State | null>(null);
   const [connectAfterSetup, setConnectAfterSetup] = useState(false);
+  const menu = useRef<HTMLDialogElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const refresh = async () => setData(await api<Dashboard>("/dashboard"));
   useEffect(() => {
     refresh().catch((error) => setError(error.message));
@@ -65,6 +68,7 @@ function Workspace({
     }
   }
   function navigate(next: Page) {
+    menu.current?.close();
     setPage(next);
     setError("");
     setNotice("");
@@ -74,56 +78,108 @@ function Workspace({
     { id: "accounts", name: "Balances", icon: "◉" },
     { id: "commitments", name: "Bills & goals", icon: "◎" },
     { id: "plan", name: "Spending plan", icon: "≋" },
-    { id: "privacy", name: "Privacy & account", icon: "◇" },
   ];
   const state = data?.state;
   return (
     <div className="workspace">
-      <aside className="sidebar">
-        <Brand />
-        <p className="eyebrow">YOUR LITTLE CORNER</p>
-        <nav aria-label="Your workspace">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              aria-current={page === tab.id ? "page" : undefined}
-              onClick={() => navigate(tab.id)}
-            >
-              <span aria-hidden="true">{tab.icon}</span>
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <div className="avatar">
-            {initialUser.name?.slice(0, 1).toUpperCase()}
-          </div>
-          <div>
-            <strong>{initialUser.name}</strong>
-            <small>Personal account</small>
-          </div>
+      <dialog
+        className="workspace-drawer"
+        ref={menu}
+        id="workspace-menu"
+        aria-label="Workspace menu"
+        onClose={() => setMenuOpen(false)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) menu.current?.close();
+        }}
+      >
+        <aside className="sidebar">
           <button
-            className="text-button"
-            aria-label="Sign out"
-            disabled={busy}
-            onClick={() =>
-              run(
-                async () => {
-                  await api("/logout", "POST", {});
-                  signedOut();
-                },
-                "",
-                false,
-              )
-            }
+            className="drawer-close text-button"
+            autoFocus
+            aria-label="Close menu"
+            onClick={() => menu.current?.close()}
           >
-            ↪
+            ×
           </button>
-        </div>
-      </aside>
+          <Brand />
+          <p className="eyebrow">YOUR LITTLE CORNER</p>
+          <nav aria-label="Your workspace">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                aria-current={page === tab.id ? "page" : undefined}
+                onClick={() => navigate(tab.id)}
+              >
+                <span aria-hidden="true">{tab.icon}</span>
+                {tab.name}
+              </button>
+            ))}
+          </nav>
+          <button
+            className="privacy-nav"
+            aria-current={page === "privacy" ? "page" : undefined}
+            onClick={() => navigate("privacy")}
+          >
+            <span aria-hidden="true">◇</span> Privacy &amp; account
+          </button>
+          <div className="sidebar-bottom">
+            <div className="avatar">
+              {initialUser.name?.slice(0, 1).toUpperCase()}
+            </div>
+            <div>
+              <strong>{initialUser.name}</strong>
+              <small>Personal account</small>
+            </div>
+            <button
+              className="text-button"
+              aria-label="Sign out"
+              disabled={busy}
+              onClick={() =>
+                run(
+                  async () => {
+                    await api("/logout", "POST", {});
+                    signedOut();
+                  },
+                  "",
+                  false,
+                )
+              }
+            >
+              ↪
+            </button>
+          </div>
+        </aside>
+      </dialog>
       <main className="app-main">
         <header className="app-header">
-          <span>YOUR MONEY, IN PERSPECTIVE</span>
+          <div className="workspace-brand">
+            <button
+              className="menu-toggle"
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+              aria-controls="workspace-menu"
+              onClick={() => {
+                menu.current?.showModal();
+                setMenuOpen(true);
+              }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 6h16M4 12h16M4 18h16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+            <Brand />
+          </div>
           <span className="status-pill">Manual planning</span>
         </header>
         <ErrorMessage message={error} />
@@ -142,10 +198,20 @@ function Workspace({
               Retry loading
             </button>
           </section>
-        ) : data.requiresOnboarding && page !== 'privacy' ? (
-          <Onboarding done={async () => { await refresh(); setConnectAfterSetup(true); }} />
-        ) : connectAfterSetup && page !== 'privacy' ? (
-          <BankConnections finish={() => { setConnectAfterSetup(false); navigate('overview'); }} />
+        ) : data.requiresOnboarding && page !== "privacy" ? (
+          <Onboarding
+            done={async () => {
+              await refresh();
+              setConnectAfterSetup(true);
+            }}
+          />
+        ) : connectAfterSetup && page !== "privacy" ? (
+          <BankConnections
+            finish={() => {
+              setConnectAfterSetup(false);
+              navigate("overview");
+            }}
+          />
         ) : !data.consent && page !== "privacy" ? (
           <Consent
             busy={busy}
@@ -231,6 +297,7 @@ function Workspace({
                       Based on your entries · No future income assumed
                     </span>
                   </section>
+                  <BurnRate spending={data.spending} planned={state.daily} />
                   <section className="panel runway-card">
                     <p className="eyebrow">PROJECTED RUNWAY</p>
                     <strong>
@@ -311,9 +378,10 @@ function Workspace({
                         available every day.
                       </p>
                       <p>
-                        Balances are self-reported. Future income and
-                        transactions are not connected. This forecast can change
-                        when you update your entries.
+                        Balances are self-reported. Future income and bank
+                        transactions are not connected. Recorded purchases do
+                        not automatically change balances. This forecast can
+                        change when you update your entries.
                       </p>
                       <p>
                         Calculated{" "}
@@ -390,6 +458,7 @@ function Workspace({
                     )}
                   </section>
                 </div>
+                <SpendingHistory changed={refresh} />
                 <section className="panel">
                   <div className="section-heading">
                     <div>
@@ -867,9 +936,10 @@ function Workspace({
                       </dd>
                     </dl>
                     <Note>
-                      Mono sandbox connections are available in Balances.
-                      Test bank data stays separate from your spending estimates.
-                      Email/SMS verification, password recovery and WhatsApp are not available yet.
+                      Mono sandbox connections are available in Balances. Test
+                      bank data stays separate from your spending estimates.
+                      Email/SMS verification, password recovery and WhatsApp are
+                      not available yet.
                     </Note>
                     <button
                       className="text-button"
@@ -922,9 +992,10 @@ function Workspace({
                     <hr />
                     <h3>Erase my planning data</h3>
                     <p>
-                      Remove all balances, commitments, spending assumptions and
-                      calculation history, and withdraw planning consent. Your
-                      account and consent audit records remain.
+                      Remove all balances, recorded purchases, commitments,
+                      spending assumptions and calculation history, and withdraw
+                      planning consent. Your account and consent audit records
+                      remain.
                     </p>
                     <form
                       onSubmit={(event) => {

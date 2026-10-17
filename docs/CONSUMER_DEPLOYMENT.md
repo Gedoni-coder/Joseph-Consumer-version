@@ -22,6 +22,8 @@ Schema migrations are deliberate: use `prisma migrate deploy` against a direct c
 
 ## Scope
 
+17 October update: transparent navy logo (white on the dark sign-in surface), a keyboard-accessible hamburger drawer with four modules and Privacy & account at the bottom, persistent purchase history, a seven-day recorded-spending burn-rate meter, and dated/NGN-labelled forecast axes. See [spending history notes](SPENDING_HISTORY.md) for calculation semantics, data handling and the logo prompt. Migration `20261017000000_consumer_purchases` was tested on the isolated Neon branch before production.
+
 This release supports real accounts, two-step signup, stored manual balances, dated commitments, spending plans, deterministic forecasts, purchase checks, export, consent withdrawal, and account deletion. The second signup form atomically saves answers into the plan, optional cash balance, bills and goals; retrying cannot overwrite a completed setup. The same flow then offers an optional Mono sandbox connection. Existing completed plans are preserved.
 
 Sandbox bank connections support consent, initial account/balance retrieval, manual refresh and disconnect. Incomplete provider data stays pending rather than becoming a zero balance. Test balances are separate from real manually entered money and never increase Safe-to-Spend. Bank ownership is enforced server-side, link sessions are single-use and expire after ten minutes, and exports omit provider account IDs. Remote unlink failures retain a visible retryable record; connected banks must be disconnected before erasure or account deletion. Concurrent deletion waits for an in-flight bank exchange to finish.

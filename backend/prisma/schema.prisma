@@ -54,6 +54,7 @@ model User {
   consentRecords       ConsumerConsent[]
   bankConnections      ConsumerBankConnection[]
   bankLinkSessions     ConsumerBankLinkSession[]
+  consumerPurchases    ConsumerPurchase[]
 
   @@map("users")
 }
@@ -66,6 +67,20 @@ model ConsumerPlan {
   confirmedAt DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@map("consumer_plans")
+}
+
+model ConsumerPurchase {
+  id          String   @id @default(uuid())
+  userId      String
+  requestId   String
+  label       String
+  amount      BigInt
+  occurredOn  String
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, requestId])
+  @@index([userId, occurredOn, createdAt])
+  @@map("consumer_purchases")
 }
 
 model ConsumerBankLinkSession {
