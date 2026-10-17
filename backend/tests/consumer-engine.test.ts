@@ -36,12 +36,47 @@ const input = (): EngineInput => ({
   ],
 });
 describe("dated financial state engine", () => {
-  it("reserves daily spending, bills, goals and buffer in integer kobo", () => {
+  it("uses remaining balance divided by actual burn, without capping at the horizon", () => {
+    const source = input();
+    source.spending = {
+      from: "2026-10-06",
+      to: "2026-10-15",
+      total: 2_000_000,
+      count: 3,
+      days: 10,
+      daily: 200_000,
+    };
+    expect(calculate(source).burnRateDaily).toBe(200_000);
+    expect(calculate(source).runwayDays).toBe(50);
+    expect(calculate(source, 1_000_000).scenario.afterRunwayDays).toBe(45);
+    source.daily = 900_000;
+    expect(calculate(source).runwayDays).toBe(50);
+    expect(calculate(source).safeToSpend).toBe(216_666);
+    source.accounts[0].balance = 0;
+    expect(calculate(source).runwayDays).toBe(0);
+  });
+  it("does not round a small burn to zero or invent runway from missing or zero spending", () => {
+    const source = input();
+    source.spending = {
+      from: "2026-10-06",
+      to: "2026-10-15",
+      total: 1,
+      count: 1,
+      days: 10,
+      daily: 0.1,
+    };
+    expect(calculate(source).runwayDays).toBe(100_000_000);
+    source.spending.total = 0;
+    expect(calculate(source).runwayDays).toBeNull();
+    source.spending.days = 0;
+    expect(calculate(source).runwayDays).toBeNull();
+  });
+  it("divides available money after bills, goals and buffer into a daily allowance", () => {
     const result = calculate(input());
-    expect(result.safeToSpend).toBe(3_500_000);
+    expect(result.safeToSpend).toBe(216_666);
     expect(result.protectedCash).toBe(3_500_000);
     expect(result.projection.at(-1)?.cash).toBe(4_500_000);
-    expect(result.runwayBeyondHorizon).toBe(true);
+    expect(result.runwayDays).toBeNull();
     expect(result.confidence).toBe("estimated");
   });
   it("accepts the exact safe amount and rejects one kobo more", () => {
@@ -54,7 +89,7 @@ describe("dated financial state engine", () => {
       before = structuredClone(source);
     const result = calculate(source, 1_000_000);
     expect(source).toEqual(before);
-    expect(result.scenario.afterSafeToSpend).toBe(2_500_000);
+    expect(result.scenario.afterSafeToSpend).toBe(183_333);
     expect(result.liquid).toBe(10_000_000);
   });
   it("reconstructs identical results from a stored input snapshot", () => {
@@ -63,26 +98,26 @@ describe("dated financial state engine", () => {
       calculate(source),
     );
   });
-  it("uses dated bills for runway, not cash divided by daily spend", () => {
+  it("keeps dated buffer crossings separate from burn-based runway", () => {
     const source = input();
     source.commitments[0].amount = 9_000_000;
-    expect(calculate(source).runwayDays).toBe(5);
+    expect(calculate(source).planBufferDays).toBe(5);
     source.commitments[0].dueDate = "2026-10-30";
-    expect(calculate(source).runwayDays).toBe(15);
+    expect(calculate(source).planBufferDays).toBe(15);
   });
   it("reserves overdue bills on day zero", () => {
     const source = input();
     source.commitments[0].dueDate = "2026-10-01";
     source.commitments[0].amount = 10_000_000;
-    expect(calculate(source).runwayDays).toBe(0);
+    expect(calculate(source).planBufferDays).toBe(0);
     expect(calculate(source).reasons).toContain("OVERDUE_COMMITMENTS");
   });
   it("includes a bill on the final day but excludes later dates", () => {
     const source = input();
     source.commitments = [{ ...source.commitments[0], dueDate: "2026-11-14" }];
-    expect(calculate(source).safeToSpend).toBe(4_000_000);
+    expect(calculate(source).safeToSpend).toBe(233_333);
     source.commitments[0].dueDate = "2026-11-15";
-    expect(calculate(source).safeToSpend).toBe(6_000_000);
+    expect(calculate(source).safeToSpend).toBe(300_000);
   });
   it("returns uncertain rather than precise answers for stale balances", () => {
     const source = input();
@@ -95,7 +130,7 @@ describe("dated financial state engine", () => {
   it("accepts freshness exactly at the 24-hour boundary", () => {
     const source = input();
     source.accounts[0].confirmedAt = "2026-10-14T10:00:00Z";
-    expect(calculate(source).safeToSpend).toBe(3_500_000);
+    expect(calculate(source).safeToSpend).toBe(216_666);
   });
   it("distinguishes missing data from an explicit zero balance or zero spending", () => {
     const source = input();
@@ -105,14 +140,14 @@ describe("dated financial state engine", () => {
     expect(calculate(source).safeToSpend).toBe(0);
     source.planConfirmed = false;
     expect(calculate(source).safeToSpend).toBeNull();
-    expect(calculate(source).reasons).not.toContain('CONFIRMED_SPENDING_PLAN');
+    expect(calculate(source).reasons).not.toContain("CONFIRMED_SPENDING_PLAN");
   });
   it("handles no spending without infinity or a fabricated runway", () => {
     const source = input();
     source.daily = 0;
     source.commitments = [];
     expect(calculate(source).runwayDays).toBeNull();
-    expect(calculate(source).runwayBeyondHorizon).toBe(true);
+    expect(calculate(source).burnRateDaily).toBeNull();
   });
   it("uses Nigeria calendar boundaries, including month rollover", () => {
     expect(nigeriaDate("2026-10-31T23:30:00Z")).toBe("2026-11-01");
@@ -133,9 +168,10 @@ describe("dated financial state engine", () => {
       const spend = result.safeToSpend!;
       expect(spend).toBeGreaterThanOrEqual(previous);
       expect(spend).toBeLessThanOrEqual(balance);
-      if (!result.shortfall)
-        expect(calculate(source, spend).scenario.affordable).toBe(true);
-      expect(calculate(source, spend + 1).scenario.affordable).toBe(false);
+      expect(spend).toBe(Math.floor(Math.max(0, balance - 1699) / 30));
+      expect(spend * source.horizon).toBeLessThanOrEqual(
+        Math.max(0, balance - 1699),
+      );
       previous = spend;
     }
   });

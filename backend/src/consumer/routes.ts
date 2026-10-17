@@ -225,6 +225,7 @@ async function inputs(
   tx: Prisma.TransactionClient,
   userId: string,
 ): Promise<EngineInput> {
+  const asOf = new Date();
   const plan = await tx.consumerPlan.findUnique({ where: { userId } });
   const accounts = await tx.moneyAccount.findMany({
     where: { userId },
@@ -235,7 +236,8 @@ async function inputs(
     orderBy: [{ dueDate: "asc" }, { id: "asc" }],
   });
   return {
-    asOf: new Date().toISOString(),
+    asOf: asOf.toISOString(),
+    spending: await spendingSummary(tx, userId, asOf),
     horizon: plan?.horizon ?? 30,
     daily: Number(plan?.daily ?? 0),
     reserve: Number(plan?.reserve ?? 0),
@@ -259,8 +261,9 @@ async function snapshot(
   tx: Prisma.TransactionClient,
   userId: string,
   reason: string,
+  source?: EngineInput,
 ) {
-  const source = await inputs(tx, userId);
+  source ??= await inputs(tx, userId);
   const result = calculate(source);
   const previous = await tx.financialSnapshot.findFirst({
     where: { userId },
@@ -312,11 +315,11 @@ router.get("/dashboard", async (req, res) => {
     return {
       user: safeUser(req.user),
       inputs: source,
-      spending: await spendingSummary(tx, req.userId),
+      spending: source.spending!,
       consent: !!consent?.accepted && consent.version === consentVersion,
       state:
         consent?.accepted && consent.version === consentVersion
-          ? await snapshot(tx, req.userId, "STATE_REVIEWED")
+          ? await snapshot(tx, req.userId, "STATE_REVIEWED", source)
           : calculate(source),
       history: recent,
       requiresOnboarding: !req.user.onboardingComplete && !source.planConfirmed,
@@ -357,14 +360,12 @@ router.get("/purchases", async (req, res) => {
       take: 51,
     });
     return {
-      purchases: records
-        .slice(0, 50)
-        .map((p) => ({
-          id: p.id,
-          label: p.label,
-          amount: Number(p.amount),
-          occurredOn: p.occurredOn,
-        })),
+      purchases: records.slice(0, 50).map((p) => ({
+        id: p.id,
+        label: p.label,
+        amount: Number(p.amount),
+        occurredOn: p.occurredOn,
+      })),
       nextOffset: records.length > 50 ? Number(offset) + 50 : null,
     };
   });

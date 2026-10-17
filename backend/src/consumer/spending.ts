@@ -7,21 +7,27 @@ export async function spendingSummary(
   asOf = new Date(),
 ) {
   const today = nigeriaDate(asOf);
-  const from = new Date(Date.parse(today + "T00:00:00Z") - 6 * 86400000)
-    .toISOString()
-    .slice(0, 10);
   const result = await tx.consumerPurchase.aggregate({
-    where: { userId, occurredOn: { gte: from, lte: today } },
+    where: { userId, occurredOn: { lte: today } },
     _sum: { amount: true },
+    _min: { occurredOn: true },
     _count: true,
   });
   const total = Number(result._sum.amount ?? 0);
+  const from = result._min.occurredOn ?? today;
+  // Inclusive calendar days, including days with no purchases. First day = one.
+  const days = result._count
+    ? Math.round(
+        (Date.parse(today + "T00:00:00Z") - Date.parse(from + "T00:00:00Z")) /
+          86400000,
+      ) + 1
+    : 0;
   return {
     from,
     to: today,
-    days: 7,
+    days,
     count: result._count,
     total,
-    daily: result._count ? Math.round(total / 7) : null,
+    daily: days ? total / days : null,
   };
 }

@@ -377,3 +377,9 @@ body:has(.workspace-drawer[open]) {
     transition: none;
   }
 }
+
+.spend-card .daily-unit {
+  font-size: 0.32em;
+  font-weight: 600;
+  margin-left: 0.2em;
+}

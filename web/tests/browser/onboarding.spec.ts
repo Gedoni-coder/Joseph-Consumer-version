@@ -41,8 +41,9 @@ test("template answers populate the dashboard and its modules once", async ({
       page.getByRole("heading", { name: "Bring your bank into the picture." }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Continue without a bank" }).click();
-    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦35,000");
+    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦2,166.66/day");
     await expect(page.getByTestId("burn-rate")).toHaveText("—/day");
+    await expect(page.getByTestId("projected-runway")).toHaveText("—days");
     await expect(
       page.getByRole("button", { name: "Bills & goals" }),
     ).not.toBeVisible();
@@ -78,14 +79,16 @@ test("template answers populate the dashboard and its modules once", async ({
     await page
       .getByRole("button", { name: "Save purchase", exact: true })
       .click();
-    await expect(page.getByTestId("burn-rate")).toHaveText("₦1,000/day");
+    await expect(page.getByTestId("burn-rate")).toHaveText("₦7,000/day");
+    await expect(page.getByTestId("projected-runway")).toHaveText("14.3days");
     await expect(
       page.getByRole("row").filter({ hasText: "Groceries" }),
     ).toContainText("₦7,000");
-    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦35,000");
+    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦2,166.66/day");
     await page.reload();
-    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦35,000");
-    await expect(page.getByTestId("burn-rate")).toHaveText("₦1,000/day");
+    await expect(page.getByTestId("safe-to-spend")).toHaveText("₦2,166.66/day");
+    await expect(page.getByTestId("burn-rate")).toHaveText("₦7,000/day");
+    await expect(page.getByTestId("projected-runway")).toHaveText("14.3days");
     await expect(
       page.getByRole("row").filter({ hasText: "Groceries" }),
     ).toBeVisible();
@@ -103,6 +106,7 @@ test("template answers populate the dashboard and its modules once", async ({
       .getByRole("button", { name: "Delete purchase Groceries", exact: true })
       .click();
     await expect(page.getByTestId("burn-rate")).toHaveText("—/day");
+    await expect(page.getByTestId("projected-runway")).toHaveText("—days");
     await page.getByRole("button", { name: "Open menu", exact: true }).click();
     await page.getByRole("button", { name: "Bills & goals" }).click();
     await expect(

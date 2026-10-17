@@ -276,7 +276,7 @@ function Workspace({
                 <div className="summary-grid">
                   <section className="spend-card">
                     <div>
-                      <span>Safe to spend · {state.horizon}-day plan</span>
+                      <span>Safe to spend today</span>
                       <span className="status-pill">
                         {state.confidence === "restricted"
                           ? "More information needed"
@@ -285,13 +285,14 @@ function Workspace({
                     </div>
                     <strong data-testid="safe-to-spend">
                       {money(state.safeToSpend)}
+                      <small className="daily-unit">/day</small>
                     </strong>
                     <p>
                       {state.safeToSpend === null
                         ? state.reasons.includes("BALANCE_STALE")
                           ? "Update your balances. They were last confirmed more than 24 hours ago."
                           : "Add current balances and confirm your spending plan first."
-                        : "Room for a purchase today, after your daily spending, dated commitments and buffer."}
+                        : `Daily allowance across your next ${state.horizon} days, after setting aside bills, goals and your buffer.`}
                     </p>
                     <span className="spend-foot">
                       Based on your entries · No future income assumed
@@ -300,18 +301,20 @@ function Workspace({
                   <BurnRate spending={data.spending} planned={state.daily} />
                   <section className="panel runway-card">
                     <p className="eyebrow">PROJECTED RUNWAY</p>
-                    <strong>
-                      {state.confidence === "restricted"
+                    <strong data-testid="projected-runway">
+                      {state.runwayDays === null
                         ? "—"
-                        : state.runwayBeyondHorizon
-                          ? `${state.horizon}+`
-                          : state.runwayDays}
+                        : new Intl.NumberFormat("en-NG", {
+                            maximumFractionDigits: 1,
+                          }).format(state.runwayDays)}
                       <small>days</small>
                     </strong>
                     <p>
-                      {state.runwayBeyondHorizon
-                        ? "Your plan stays above your buffer throughout this horizon."
-                        : "Time until projected cash falls below your chosen buffer."}
+                      {state.confidence === "restricted"
+                        ? "Confirm current balances and your spending plan to see your runway."
+                        : state.runwayDays === null
+                          ? "Record spending to estimate your runway. A zero burn rate has no finite estimate."
+                          : "Remaining balance ÷ average daily burn rate. Future bills and income are not included in this ratio."}
                     </p>
                     <button
                       className="text-button"
@@ -436,15 +439,19 @@ function Workspace({
                         <p>
                           {simulation.scenario.affordable === null
                             ? "There is not enough current information for an answer."
-                            : `After ${money(simulation.scenario.purchase)}, your spending room would be ${money(simulation.scenario.afterSafeToSpend)}.`}
+                            : `After ${money(simulation.scenario.purchase)}, your daily allowance would be ${money(simulation.scenario.afterSafeToSpend)}/day.`}
                         </p>
                         {simulation.scenario.affordable !== null && (
                           <p>
                             Projected runway:{" "}
-                            {simulation.scenario.afterRunwayBeyondHorizon
-                              ? `${simulation.horizon}+`
-                              : simulation.scenario.afterRunwayDays}{" "}
-                            days.
+                            {simulation.scenario.afterRunwayDays === null
+                              ? "unavailable"
+                              : new Intl.NumberFormat("en-NG", {
+                                  maximumFractionDigits: 1,
+                                }).format(
+                                  simulation.scenario.afterRunwayDays,
+                                )}
+                            {simulation.scenario.afterRunwayDays === null ? "." : " days."}
                             {simulation.scenario.shortfall > 0
                               ? ` Shortfall: ${money(simulation.scenario.shortfall)}.`
                               : ""}
@@ -892,14 +899,14 @@ function Workspace({
                       next salary will arrive or guess your expenses.
                     </p>
                     <p>
-                      Safe-to-Spend is the most you could spend today while
-                      funding this plan and keeping your buffer through the
-                      entire horizon.
+                      Safe to Spend is your daily allowance: available balances
+                      minus bills, goals and your buffer, divided by the number
+                      of days in your planning horizon.
                     </p>
                     <p>
-                      Everyday spending is already budgeted separately.
-                      Safe-to-Spend is additional spending room, not a daily
-                      allowance.
+                      This allowance includes everyday spending. Your forecast
+                      and purchase checks use the daily spending you entered to
+                      show whether that plan fits your available money.
                     </p>
                     <button
                       className="text-button"

@@ -167,7 +167,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         reserve: 1_000_000,
         horizon: 30,
       });
-      expect(plan.body.state.safeToSpend).toBe(6_000_000);
+      expect(plan.body.state.safeToSpend).toBe(300_000);
     });
     it("validates amounts and calendar dates without saving bad data", async () => {
       expect(
@@ -230,7 +230,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
       const result = await request(alice, "/simulate", "POST", {
         amount: 2_000_000,
       });
-      expect(result.body.scenario.afterSafeToSpend).toBe(4_000_000);
+      expect(result.body.scenario.afterSafeToSpend).toBe(233_333);
       const snapshot = await prisma.financialSnapshot.findUniqueOrThrow({
         where: { id: result.body.stateId },
       });
@@ -463,7 +463,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         vi.restoreAllMocks();
       }
     });
-    it("persists real purchase history, prevents replay, isolates owners and calculates seven-day burn", async () => {
+    it("persists real purchase history, prevents replay, isolates owners and calculates elapsed-day burn", async () => {
       const jar: Jar = {};
       const id = await register(jar);
       const other: Jar = {};
@@ -516,14 +516,41 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
       });
       const dashboard = (await request(jar, "/dashboard")).body;
       expect(dashboard.spending).toMatchObject({
-        count: 1,
-        total: 700000,
-        daily: 100000,
-        days: 7,
+        count: 2,
+        total: 1699999,
+        daily: 1699999 / 8,
+        days: 8,
+        from: oldDate,
         to: today,
       });
       expect(dashboard.inputs.accounts).toEqual([]);
       expect(dashboard.state.safeToSpend).toBeNull();
+      await request(jar, "/accounts", "POST", {
+        label: "Remaining cash",
+        balance: 10_000_000,
+      });
+      await request(jar, "/plan", "PUT", {
+        daily: 100_000,
+        reserve: 1_000_000,
+        horizon: 30,
+      });
+      const withBalance = (await request(jar, "/dashboard")).body;
+      expect(withBalance.state.safeToSpend).toBe(300_000);
+      expect(withBalance.state.runwayDays).toBeCloseTo(
+        10_000_000 / (1699999 / 8),
+      );
+      const simulated = (
+        await request(jar, "/simulate", "POST", { amount: 1_000_000 })
+      ).body;
+      expect(simulated.scenario.afterRunwayDays).toBeCloseTo(
+        9_000_000 / (1699999 / 8),
+      );
+      const recorded = await prisma.financialSnapshot.findUniqueOrThrow({
+        where: { id: withBalance.state.id },
+      });
+      expect(calculate(recorded.inputs as unknown as EngineInput)).toEqual(
+        recorded.result,
+      );
       expect((await request(other, "/purchases")).body.purchases).toEqual([]);
       expect(
         (
@@ -570,7 +597,9 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
           )
         ).response.status,
       ).toBe(200);
-      expect((await request(jar, "/dashboard")).body.spending.daily).toBeNull();
+      expect((await request(jar, "/dashboard")).body.spending.daily).toBe(
+        1004999 / 8,
+      );
       await request(jar, "/planning-data", "DELETE", {
         confirmation: "DELETE",
       });

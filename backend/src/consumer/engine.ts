@@ -1,8 +1,9 @@
 /** Financial truth lives here, never in a language model or the browser.
- * Integer kobo throughout. Dates use the Nigeria calendar; input snapshots are replayable.
+ * Balances/amounts use integer kobo; average daily rates retain division precision.
+ * Dates use the Nigeria calendar; input snapshots are replayable.
  */
-export const ENGINE_VERSION = "fse-1.0.0";
-export const RULES_VERSION = "manual-plan-1.0.0";
+export const ENGINE_VERSION = "fse-1.1.0";
+export const RULES_VERSION = "daily-plan-1.1.0";
 export const MAX_MONEY = 1_000_000_000_000;
 export type AccountInput = {
   id: string;
@@ -25,6 +26,14 @@ export type EngineInput = {
   planConfirmed: boolean;
   accounts: AccountInput[];
   commitments: CommitmentInput[];
+  spending?: {
+    from: string;
+    to: string;
+    days: number;
+    count: number;
+    total: number;
+    daily: number | null;
+  };
 };
 export function nigeriaDate(value: string | Date): string {
   return new Date(new Date(value).getTime() + 3_600_000)
@@ -49,11 +58,8 @@ export function calculate(input: EngineInput, purchase = 0) {
       day: Math.max(0, dayOffset(item.dueDate, today)),
     }))
     .filter((item) => item.day <= input.horizon);
-  const reasons: string[] = [
-    "MANUAL_BALANCES",
-    "NO_BANK_HISTORY",
-  ];
-  if (input.planConfirmed) reasons.push('CONFIRMED_SPENDING_PLAN');
+  const reasons: string[] = ["MANUAL_BALANCES", "NO_BANK_HISTORY"];
+  if (input.planConfirmed) reasons.push("CONFIRMED_SPENDING_PLAN");
   const missing = !input.accounts.length || !input.planConfirmed;
   const stale = input.accounts.some(
     (account) =>
@@ -95,20 +101,24 @@ export function calculate(input: EngineInput, purchase = 0) {
     };
   }
   const baseline = project(0);
-  // Monotone candidate simulation: find the largest whole-kobo spend meeting every dated guardrail.
-  let low = 0,
-    high = liquid;
-  while (low < high) {
-    const candidate = Math.ceil((low + high) / 2);
-    if (project(candidate).passes) low = candidate;
-    else high = candidate - 1;
-  }
   const restricted = missing || stale;
   const after = project(purchase);
   const protectedCash = due.reduce(
     (sum, item) => sum + item.amount,
     input.reserve,
   );
+  // Today's allowance includes everyday spending; do not reserve it a second time.
+  const dailyAllowance = (balance: number) =>
+    Math.floor(Math.max(0, balance - protectedCash) / input.horizon);
+  // Keep the unrounded average for runway, including very small recorded amounts.
+  const burnRateDaily =
+    input.spending && input.spending.count > 0 && input.spending.days > 0
+      ? input.spending.total / input.spending.days
+      : null;
+  const runway = (balance: number) =>
+    restricted || burnRateDaily === null || burnRateDaily <= 0
+      ? null
+      : Math.max(0, balance) / burnRateDaily;
   if (!baseline.passes) reasons.push("PLAN_SHORTFALL");
   return {
     engineVersion: ENGINE_VERSION,
@@ -119,9 +129,10 @@ export function calculate(input: EngineInput, purchase = 0) {
     daily: input.daily,
     reserve: input.reserve,
     horizon: input.horizon,
-    safeToSpend: restricted ? null : low,
-    runwayDays: restricted ? null : baseline.runwayDays,
-    runwayBeyondHorizon: !restricted && baseline.runwayDays === null,
+    safeToSpend: restricted ? null : dailyAllowance(liquid),
+    burnRateDaily,
+    runwayDays: runway(liquid),
+    planBufferDays: restricted ? null : baseline.runwayDays,
     confidence: restricted ? "restricted" : "estimated",
     reasons,
     shortfall: Math.max(0, input.reserve - baseline.minimum),
@@ -130,9 +141,9 @@ export function calculate(input: EngineInput, purchase = 0) {
     scenario: {
       purchase,
       affordable: restricted ? null : after.passes,
-      afterSafeToSpend: restricted ? null : Math.max(0, low - purchase),
-      afterRunwayDays: restricted ? null : after.runwayDays,
-      afterRunwayBeyondHorizon: !restricted && after.runwayDays === null,
+      afterSafeToSpend: restricted ? null : dailyAllowance(liquid - purchase),
+      afterRunwayDays: runway(liquid - purchase),
+      afterPlanBufferDays: restricted ? null : after.runwayDays,
       shortfall: Math.max(0, input.reserve - after.minimum),
     },
   };

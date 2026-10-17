@@ -22,7 +22,7 @@ Schema migrations are deliberate: use `prisma migrate deploy` against a direct c
 
 ## Scope
 
-17 October update: transparent navy logo (white on the dark sign-in surface), a keyboard-accessible hamburger drawer with four modules and Privacy & account at the bottom, persistent purchase history, a seven-day recorded-spending burn-rate meter, and dated/NGN-labelled forecast axes. See [spending history notes](SPENDING_HISTORY.md) for calculation semantics, data handling and the logo prompt. Migration `20261017000000_consumer_purchases` was tested on the isolated Neon branch before production.
+17 October update: transparent navy logo (white on the dark sign-in surface), a keyboard-accessible hamburger drawer with four modules and Privacy & account at the bottom, persistent purchase history, daily Safe to Spend, burn rate across the recorded calendar period, balance/actual-burn projected runway, and dated/NGN-labelled forecast axes. See [spending history notes](SPENDING_HISTORY.md) for calculation semantics, data handling and the logo prompt. Migration `20261017000000_consumer_purchases` was tested on the isolated Neon branch before production. The daily calculation correction requires no further schema migration.
 
 This release supports real accounts, two-step signup, stored manual balances, dated commitments, spending plans, deterministic forecasts, purchase checks, export, consent withdrawal, and account deletion. The second signup form atomically saves answers into the plan, optional cash balance, bills and goals; retrying cannot overwrite a completed setup. The same flow then offers an optional Mono sandbox connection. Existing completed plans are preserved.
 

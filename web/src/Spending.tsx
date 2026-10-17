@@ -35,7 +35,7 @@ export function BurnRate({
       <div>
         <p className="eyebrow">YOUR SPENDING PACE</p>
         <h2 id="burn-heading">Burn rate</h2>
-        <p>Average daily spending over the last 7 days.</p>
+        <p>Total recorded spending divided by elapsed calendar days.</p>
       </div>
       <div className="burn-dial">
         <svg
@@ -43,7 +43,7 @@ export function BurnRate({
           role="img"
           aria-label={
             rate === null
-              ? "No recorded purchases in the last seven days"
+              ? "No recorded purchases yet"
               : `Burn rate ${money(rate)} per day. Scale zero to ${money(ceiling)} per day.`
           }
         >
@@ -101,7 +101,7 @@ export function BurnRate({
         <strong>
           {rate === null
             ? "Your spending history starts here."
-            : `${money(spending.total)} recorded in 7 days`}
+            : `${money(spending.total)} ÷ ${spending.days} ${spending.days === 1 ? "day" : "days"}`}
         </strong>
         <p>
           {rate === null
@@ -114,8 +114,8 @@ export function BurnRate({
             : "Set your everyday spending in Spending plan to add a comparison."}
         </p>
         <span className="note">
-          Based only on recorded purchases. Bank transactions are not imported
-          yet.
+          From your first recorded purchase through today, including days with
+          no spending. Bank transactions are not imported yet.
         </span>
       </div>
     </section>
