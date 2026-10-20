@@ -74,10 +74,10 @@ function Workspace({
     setNotice("");
   }
   const tabs: { id: Page; name: string; icon: string }[] = [
-    { id: "overview", name: "My overview", icon: "◫" },
-    { id: "accounts", name: "Balances", icon: "◉" },
+    { id: "overview", name: "Track", icon: "◫" },
+    { id: "accounts", name: "Manage", icon: "◉" },
     { id: "commitments", name: "Bills & goals", icon: "◎" },
-    { id: "plan", name: "Spending plan", icon: "≋" },
+    { id: "plan", name: "Plan", icon: "≋" },
   ];
   const state = data?.state;
   return (
@@ -648,8 +648,8 @@ function Workspace({
                   }
                 >
                   {data.inputs.planConfirmed
-                    ? "See my overview"
-                    : "Next: spending plan"}{" "}
+                    ? "Open Track"
+                    : "Next: Plan"}{" "}
                   <Arrow />
                 </button>
               </>
@@ -943,7 +943,7 @@ function Workspace({
                       </dd>
                     </dl>
                     <Note>
-                      Mono sandbox connections are available in Balances. Test
+                      Mono sandbox connections are available in Manage. Test
                       bank data stays separate from your spending estimates.
                       Email/SMS verification, password recovery and WhatsApp are
                       not available yet.

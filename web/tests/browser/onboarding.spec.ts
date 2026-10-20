@@ -56,7 +56,7 @@ test("template answers populate the dashboard and its modules once", async ({
       .getByRole("button", { name: "Privacy & account" })
       .boundingBox();
     const plan = await drawer
-      .getByRole("button", { name: "Spending plan", exact: true })
+      .getByRole("button", { name: "Plan", exact: true })
       .boundingBox();
     expect(privacy!.y).toBeGreaterThan(plan!.y + plan!.height);
     await page.screenshot({ path: info.outputPath("side-menu.png") });

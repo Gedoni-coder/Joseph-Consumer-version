@@ -53,7 +53,7 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
   await expect(page.getByRole("status")).toContainText("Balance saved");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
   await page
-    .getByRole("button", { name: "Spending plan", exact: true })
+    .getByRole("button", { name: "Plan", exact: true })
     .click();
   await page.getByLabel("Everyday spending per day").fill("1000");
   await page.getByLabel("Minimum safety buffer").fill("10000");
@@ -78,7 +78,7 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
   await page.getByRole("button", { name: "Save commitment" }).click();
   await expect(page.getByRole("status")).toContainText("Commitment saved");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
-  await page.getByRole("button", { name: "My overview" }).click();
+  await page.getByRole("button", { name: "Track" }).click();
   await expect(page.getByTestId("safe-to-spend")).toHaveText("₦2,166.66/day");
   await page.getByLabel("Purchase amount").fill("10000");
   await page.getByRole("button", { name: "Check this purchase" }).click();
@@ -117,7 +117,7 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page.getByTestId("safe-to-spend")).toHaveText("₦2,166.66/day");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
-  await page.getByRole("button", { name: "Balances", exact: true }).click();
+  await page.getByRole("button", { name: "Manage", exact: true }).click();
   await page.getByRole("button", { name: "Update My current account" }).click();
   await page
     .getByRole("spinbutton", { name: "Available balance", exact: true })
@@ -131,7 +131,7 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
   await page.getByRole("button", { name: "Save commitment" }).click();
   await expect(page.getByRole("status")).toContainText("Commitment saved");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
-  await page.getByRole("button", { name: "My overview" }).click();
+  await page.getByRole("button", { name: "Track" }).click();
   await expect(page.getByTestId("safe-to-spend")).toHaveText("₦2,666.66/day");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
   await page.getByRole("button", { name: "Privacy & account" }).click();
@@ -150,7 +150,7 @@ test("real account, persistent plan, purchase checks, edits, export and withdraw
   await page.getByRole("button", { name: "Erase planning data" }).click();
   await expect(page.getByRole("status")).toContainText("Planning data erased.");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
-  await page.getByRole("button", { name: "My overview" }).click();
+  await page.getByRole("button", { name: "Track" }).click();
   await expect(
     page.getByRole("button", { name: "Agree and continue" }),
   ).toBeVisible();

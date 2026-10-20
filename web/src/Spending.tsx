@@ -111,7 +111,7 @@ export function BurnRate({
         <p>
           {planned > 0
             ? `Your planned everyday spending is ${money(planned)}/day.`
-            : "Set your everyday spending in Spending plan to add a comparison."}
+            : "Set your everyday spending in Plan to add a comparison."}
         </p>
         <span className="note">
           From your first recorded purchase through today, including days with
@@ -209,7 +209,7 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
           <p className="note">
             This adds to your history and burn rate. It does not change your
             balances. If this purchase is not reflected in your available
-            balance, update it in Balances.
+            balance, update it in Manage.
           </p>
           <button className="button" disabled={busy}>
             {busy ? "Saving…" : "Save purchase"}
