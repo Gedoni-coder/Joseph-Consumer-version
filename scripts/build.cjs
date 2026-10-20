@@ -17,3 +17,5 @@ run(
   [path.join(root, "web/node_modules/vite/bin/vite.js"), "build"],
   path.join(root, "web"),
 );
+
+// SR

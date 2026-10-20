@@ -221,3 +221,5 @@ export function Onboarding({ done }: { done: () => Promise<void> }) {
     </section>
   );
 }
+
+// SR

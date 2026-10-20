@@ -1,5 +1,7 @@
 # Frontend Integration - Dynamic Interpretation Scrolls
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Summary
 
 The frontend now fetches and displays **real-time dynamic data** for the Micro and Macro Economic Interpretation scrolls instead of showing hardcoded content.

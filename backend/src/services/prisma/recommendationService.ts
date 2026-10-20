@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
  * Strategy Recommendation Service
- * Handles AI-generated strategy recommendations
+ * Stores and retrieves strategy recommendations
  */
 
 import { prisma } from '../../config/prisma';
@@ -112,3 +112,5 @@ export async function bulkMarkViewed(userId, recommendationIds) {
     data: { viewed: true, viewedAt: new Date() }
   });
 }
+
+// SR

@@ -153,3 +153,5 @@ describe('persisted authentication sessions', () => {
         expect((await auth.verifyCredentials(user.email, 'NewPassword123!')).id).toBe(user.id);
     });
 });
+
+// SR

@@ -378,3 +378,5 @@ function generateHelpMessage() {
 
 // Export intent definitions for use in other handlers
 export { Intents, IntentPatterns };
+
+// SR

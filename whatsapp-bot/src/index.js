@@ -108,3 +108,5 @@ startBot().catch(err => {
   console.error('💥 Fatal bot error:', err.message);
   process.exit(1);
 });
+
+// SR

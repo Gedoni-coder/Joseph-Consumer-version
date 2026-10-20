@@ -1,5 +1,7 @@
 # Interpretation Module - Complete Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## ✅ Implementation Status: COMPLETE
 
 The Interpretation module is fully implemented with models, controllers, routes, and seeders.

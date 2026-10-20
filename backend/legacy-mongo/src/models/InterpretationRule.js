@@ -414,3 +414,5 @@ interpretationRuleSchema.statics.generateInsights = async function(indicatorValu
 // EXPORT
 // ==========================================
 export default mongoose.model('InterpretationRule', interpretationRuleSchema);
+
+// SR

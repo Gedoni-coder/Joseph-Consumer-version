@@ -365,3 +365,5 @@ economicDataSchema.statics.invalidateType = async function(type) {
 // EXPORT
 // ==========================================
 export default mongoose.model('EconomicData', economicDataSchema);
+
+// SR

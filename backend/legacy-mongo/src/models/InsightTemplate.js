@@ -406,3 +406,5 @@ insightTemplateSchema.statics.seedIndustryTemplates = async function() {
 // ==========================================
 
 export default mongoose.model('InsightTemplate', insightTemplateSchema);
+
+// SR

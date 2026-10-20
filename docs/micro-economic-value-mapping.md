@@ -1,5 +1,7 @@
 # Micro Economic Scroll — Value Mapping to Finance Modules
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 **Purpose:** Map all hardcoded values in the Micro Economic Interpretation scroll to their source element IDs in Personal Finance and Business Finance modules. Values will be updated deterministically by reading from DOM elements.
 
 ---

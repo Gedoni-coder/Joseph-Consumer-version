@@ -10,3 +10,5 @@ export const LOG_TYPE = {
 } as const;
 
 export type LogType = (typeof LOG_TYPE)[keyof typeof LOG_TYPE];
+
+// SR

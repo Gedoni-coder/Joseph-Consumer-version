@@ -277,3 +277,5 @@ export default {
   CURRENCIES,
   DEFAULTS
 };
+
+// SR

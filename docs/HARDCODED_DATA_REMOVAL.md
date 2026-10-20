@@ -1,5 +1,7 @@
 # Hardcoded Data Removal - Implementation Complete
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## ✅ Status: COMPLETE
 
 All hardcoded economic indicator values and interpretation rule thresholds have been made dynamic and configurable.

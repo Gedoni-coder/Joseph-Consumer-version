@@ -1,5 +1,7 @@
 # Strategy Module - Complete Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## ✅ Implementation Status: COMPLETE
 
 The Strategy module has been implemented with comprehensive pricing strategy, procurement management, and goal tracking capabilities.

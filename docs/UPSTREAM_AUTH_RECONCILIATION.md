@@ -1,6 +1,8 @@
 # Upstream authentication comparison — 13 October 2026
 
-Local Git Credential Manager successfully fetched the private repository. The ChatGPT GitHub connector still returns 404, so PR metadata and review discussions were not retrieved.
+> Historical review. Current consumer deployment details are maintained in [CONSUMER_DEPLOYMENT.md](CONSUMER_DEPLOYMENT.md).
+
+This historical comparison records repository refs fetched on 13 October 2026. Pull-request discussion was not part of the review. Refer to CONSUMER_DEPLOYMENT.md for the current runtime.
 
 Verified refs:
 
@@ -22,6 +24,4 @@ Before deployment, choose one canonical cookie/session architecture and port the
 
 The new landing page is self-contained and does not call either auth contract. Neither migration was applied. No remote branch, pull request, or deployment was changed.
 
-## Local environment note
-
-The system disk filled during frontend setup. Only generated `.pnpm-store` and `backend/node_modules` inside this checkout were removed to recover space. Backend source, lockfile, commits and earlier validation artifacts remain intact. Reinstall backend dependencies before rerunning its checks. Disk capacity is still low and may constrain further installation or database setup.
+SR

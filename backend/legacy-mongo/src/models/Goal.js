@@ -558,3 +558,5 @@ goalSchema.statics.getSummary = async function(userId) {
 // EXPORT
 // ==========================================
 export default mongoose.model('Goal', goalSchema);
+
+// SR

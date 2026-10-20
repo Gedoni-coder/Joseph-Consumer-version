@@ -2142,3 +2142,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   console.log('✅ app.js initialized - routing enabled');
 });
+
+// SR

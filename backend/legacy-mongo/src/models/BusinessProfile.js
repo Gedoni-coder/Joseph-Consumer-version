@@ -399,3 +399,5 @@ businessProfileSchema.statics.getWithRecommendations = async function(userId) {
 // EXPORT
 // ==========================================
 export default mongoose.model('BusinessProfile', businessProfileSchema);
+
+// SR

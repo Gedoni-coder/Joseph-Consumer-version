@@ -399,3 +399,5 @@ economicNewsSchema.statics.getUrgent = async function() {
 // EXPORT
 // ==========================================
 export default mongoose.model('EconomicNews', economicNewsSchema);
+
+// SR

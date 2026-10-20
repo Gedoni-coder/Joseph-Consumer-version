@@ -1,5 +1,7 @@
 # Authentication security foundation
 
+> Historical review. Current consumer deployment details are maintained in [CONSUMER_DEPLOYMENT.md](CONSUMER_DEPLOYMENT.md).
+
 This local change enforces admin authorization and replaces the active authentication controller's refresh-token persistence stubs with database-backed sessions. It is a first security pass, not a production-readiness certification.
 
 ## Source and scope
@@ -56,3 +58,5 @@ No database migration, deployment, remote push or PR update was performed for th
 Password-reset email delivery is still unimplemented: the existing generic success response does not mean an email was sent. WhatsApp OTP generation/delivery and secret logging, public phone-profile lookup, signed provider webhooks and bot/API contract mismatches still require remediation. The unused older token service remains in the tree and should not be wired back in without review.
 
 Cookie sessions, consent, Mono ingestion, authoritative financial-state calculations, exact monetary representation, frontend integration and operational checks remain outside this patch. The supplied technical documentation is the target specification, not evidence these features already exist.
+
+SR

@@ -1,5 +1,7 @@
 # DREAM MODULE - Database Schema & API Design
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Overview
 The Dream module fetches, caches, and serves 85+ economic indicators for Nigeria. Data is sourced from external APIs (Trading Economics, CBN, etc.) and cached locally.
 

@@ -381,3 +381,5 @@ userThresholdSettingsSchema.statics.getDefaultThresholds = function() {
 // ==========================================
 
 export default mongoose.model('UserThresholdSettings', userThresholdSettingsSchema);
+
+// SR

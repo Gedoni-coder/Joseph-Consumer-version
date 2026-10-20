@@ -187,3 +187,5 @@ test("keyboard navigation and reduced motion", async ({ page }) => {
     ),
   ).toBe(true);
 });
+
+// SR

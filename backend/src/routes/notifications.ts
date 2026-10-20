@@ -26,3 +26,5 @@ router.put('/toggle-all', notificationsController.toggleAll);
 router.put('/threshold', notificationsController.setThreshold);
 
 export default router;
+
+// SR

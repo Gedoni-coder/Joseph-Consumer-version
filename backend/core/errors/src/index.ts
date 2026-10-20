@@ -2,3 +2,5 @@ export { createAppError, isAppError, normalizeError, throwAppError } from './app
 export type { AppError, AppErrorOptions, NormalizeErrorOptions } from './app-error'
 export { ERROR_CODE, ERROR_STATUS_CODE_MAPPING } from './constants'
 export type { ErrorCodeValue } from './constants'
+
+// SR

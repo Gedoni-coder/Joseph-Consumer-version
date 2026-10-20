@@ -508,3 +508,5 @@ transactionSchema.statics.findNeedingConfirmation = function(userId) {
 // EXPORT
 // ==========================================
 export default mongoose.model('Transaction', transactionSchema);
+
+// SR

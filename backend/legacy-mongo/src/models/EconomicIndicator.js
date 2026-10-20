@@ -477,3 +477,5 @@ economicIndicatorSchema.statics.getHealthScore = async function() {
 // EXPORT
 // ==========================================
 export default mongoose.model('EconomicIndicator', economicIndicatorSchema);
+
+// SR

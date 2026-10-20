@@ -81,3 +81,5 @@ describe('admin HTTP authorization boundary', () => {
         expect(updateIndicator).not.toHaveBeenCalled();
     });
 });
+
+// SR

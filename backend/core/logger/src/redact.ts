@@ -58,3 +58,5 @@ export const redactFactory = (options: RedactFactoryOptions = {}) => {
 
     return (data: unknown) => cloneAndRedact(data, fieldsToRedact, mask);
 };
+
+// SR

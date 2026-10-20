@@ -1,5 +1,7 @@
 # JOSEPH AI - Dynamic Backend Architecture Plan
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Tech Stack
 - **Framework**: Express.js (Node.js)
 - **Database**: MongoDB with Mongoose ODM

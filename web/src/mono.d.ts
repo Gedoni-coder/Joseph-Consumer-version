@@ -17,3 +17,5 @@ declare module "@mono.co/connect.js" {
     close(): void;
   }
 }
+
+// SR

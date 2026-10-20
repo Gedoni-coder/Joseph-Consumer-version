@@ -2,7 +2,7 @@
 
 This release replaces the top module navigation with an accessible side drawer, opened by the hamburger beside the brand. It contains four modules; Privacy & account and sign-out are at the bottom. The native modal dialog traps focus, closes with Escape and returns focus to its trigger.
 
-The logo uses real alpha transparency. Navy artwork appears on white surfaces; a CSS filter renders the same transparent artwork white on the navy sign-in panel. Source asset: `web/public/joseph-ai-logo-transparent.png` (720 × 240). It was recreated with the built-in imagegen tool using the prompt below, then resized proportionally with alpha preserved.
+The logo uses real alpha transparency. Navy artwork appears on white surfaces; a CSS filter renders the same transparent artwork white on the navy sign-in panel. Source asset: `web/public/joseph-ai-logo-transparent.png` (720 × 240). Preserve the aspect ratio and alpha channel when exporting additional sizes.
 
 ## Spending records
 
@@ -24,8 +24,4 @@ Correction validation: 53 non-database checks and 14 isolated PostgreSQL checks 
 
 The forecast remains based on confirmed account balances, spending assumptions and dated commitments. It now labels the horizontal axis with actual dates and the vertical axis with NGN amounts; compact amounts, negative balances and the safety buffer share the same scale. Point tooltips show the full date and amount.
 
-## Transparent logo generation prompt
-
-Validation: production builds and targeted backend lint passed. All 48 non-database backend checks passed; the 14 database checks passed on a separate rerun after the initial combined run hit a cold-start timeout. All six desktop/mobile browser regressions passed, including saved history, burn-rate recalculation, drawer keyboard behaviour and privacy actions. Additional desktop/320px onboarding checks passed. The additive purchase migration passed on the existing isolated Neon test branch and then production.
-
-Edit the attached JOSEPH AI logo into a polished production website logo with REAL TRANSPARENCY. Preserve the exact words JOSEPH AI, the distinctive left-facing dove carrying an olive branch, raised wings, and their basic arrangement (dove above the AI at the right). Remove the navy rectangular background completely. Change all lettering and dove/branch linework to solid deep navy #03031d so the logo is clearly legible on a white website. True alpha transparency everywhere else, no white rectangle and no simulated checkerboard. Refine the lettering into clean bold sans serif with crisp spacing, and the dove into confident consistent clean strokes readable at small header sizes. Tight composition with minimal transparent margins, approximately 3:1 wide logo canvas. No shadows, glows, gradients, texture, decoration, border, tagline, mockup or presentation sheet. One finished transparent navy logo.
+SR

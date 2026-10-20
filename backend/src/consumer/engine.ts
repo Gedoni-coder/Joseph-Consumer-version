@@ -1,4 +1,4 @@
-/** Financial truth lives here, never in a language model or the browser.
+/** Server-side financial calculations and replayable input contracts.
  * Balances/amounts use integer kobo; average daily rates retain division precision.
  * Dates use the Nigeria calendar; input snapshots are replayable.
  */
@@ -148,3 +148,5 @@ export function calculate(input: EngineInput, purchase = 0) {
     },
   };
 }
+
+// SR

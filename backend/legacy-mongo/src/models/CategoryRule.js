@@ -468,3 +468,5 @@ categoryRuleSchema.statics.bulkImport = async function(userId, rules) {
 // EXPORT
 // ==========================================
 export default mongoose.model('CategoryRule', categoryRuleSchema);
+
+// SR

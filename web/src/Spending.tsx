@@ -339,3 +339,5 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
     </section>
   );
 }
+
+// SR

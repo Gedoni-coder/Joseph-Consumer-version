@@ -1,5 +1,7 @@
 # Dynamic Scroll Content Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Summary
 
 The Micro and Macro Economic Interpretation scrolls now fetch **real-time dynamic data** from the Finance and Dream modules instead of displaying hardcoded values.

@@ -1,5 +1,7 @@
 # Finance & Strategy Modules - Complete Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Overview
 
 The Finance and Strategy modules are now **fully implemented** with comprehensive backend APIs, models, and routes. This document summarizes what's available for frontend integration.

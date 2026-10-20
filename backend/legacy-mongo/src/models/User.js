@@ -427,3 +427,5 @@ userSchema.statics.findByVerificationToken = function(token) {
 // EXPORT
 // ==========================================
 export default mongoose.model('User', userSchema);
+
+// SR

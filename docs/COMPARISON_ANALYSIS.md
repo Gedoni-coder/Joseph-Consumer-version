@@ -1,5 +1,7 @@
 # JOSEPH AI Application Comparison & Migration Plan
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## 🔍 APPLICATION OVERVIEW
 
 ### **Original App** (Current Working Directory - HTML/JS/CSS)

@@ -1,5 +1,7 @@
 # Finance Module Dynamic UI Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Summary
 
 The Finance module UI now fetches and displays **real-time dynamic data** from the backend instead of hardcoded values. Both Personal Finance and Business Finance sections are fully dynamic.

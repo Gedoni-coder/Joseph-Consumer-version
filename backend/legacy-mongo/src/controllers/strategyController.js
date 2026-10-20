@@ -1251,3 +1251,5 @@ export default {
   // Dashboard
   getStrategyDashboard
 };
+
+// SR

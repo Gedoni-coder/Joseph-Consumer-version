@@ -1,5 +1,7 @@
 # Dual ORM Setup - Mongoose & Prisma
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Overview
 
 Your backend now supports **both MongoDB (Mongoose) and PostgreSQL (Prisma)**! You can switch between them using a single environment variable.

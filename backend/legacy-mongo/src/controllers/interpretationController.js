@@ -1038,3 +1038,5 @@ export default {
   getMicroEconomicInterpretation,
   getMacroEconomicInterpretation
 };
+
+// SR

@@ -31,3 +31,5 @@ router.put('/accent-color', preferencesController.setAccentColor);
 router.put('/font-size', preferencesController.setFontSize);
 
 export default router;
+
+// SR

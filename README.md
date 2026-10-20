@@ -1,62 +1,39 @@
 # JOSEPH consumer
 
-Live planning beta: **https://joseph-consumer.vercel.app**
+Live planning beta: https://joseph-consumer.vercel.app
 
-The current consumer app is React/TypeScript in `web/`, with an Express/Prisma API in `backend/` and a dedicated hosted PostgreSQL database. It supports real accounts, manual balances, bills and goals, spending forecasts, purchase checks, and privacy controls. Bank connections, verification delivery, and WhatsApp are still pending.
+The consumer application uses React, TypeScript and Vite in web/, with an Express API, Prisma and PostgreSQL in backend/. The deployment entry point is api/index.js; only /api/health and /api/consumer are mounted in production.
 
-- [Consumer setup](web/README.md)
-- [Deployment and operational limits](docs/CONSUMER_DEPLOYMENT.md)
-- [Implementation and remaining gates](docs/CONSUMER_LOCAL_IMPLEMENTATION.md)
+## Engineering references
 
-## Historical application notes
+- [Local development](web/README.md)
+- [Deployment and operations](docs/CONSUMER_DEPLOYMENT.md)
+- [Implementation boundaries](docs/CONSUMER_LOCAL_IMPLEMENTATION.md)
+- [Spending history](docs/SPENDING_HISTORY.md)
+- [Brand assets](docs/BRAND_ASSETS.md)
 
-The notes below describe the older root HTML application, retained for reference. It is not the deployed consumer frontend.
+## Current scope
 
-# JOSEPH AI Family
+Track displays daily Safe to Spend, observed daily burn rate, projected runway, dated cash-flow forecasts and purchase history. Manage maintains manual balances and optional Mono sandbox connections. Plan maintains the daily spending assumption, safety buffer and horizon. Bills & goals maintains dated commitments.
 
-A vanilla **HTML/CSS/JavaScript** single-page application that provides a suite of economic-AI tools.
+Authentication uses server-issued cookie sessions. Planning data is user-owned and supports export, consent withdrawal and deletion. Sandbox balances remain separate from planning balances. Bank transaction ingestion, live bank linking, verification delivery, password recovery and the WhatsApp channel are not enabled in the consumer release.
 
-## Overview
-- index.html – entry point.
-- pp.js – SPA router & UI logic.
-- styles.css – custom styling (not included in this repo snapshot).
+## Build and checks
 
-## Quick Start
-`ash
-# Clone / open the folder
-cd " C:/Users/HP/Desktop/JOSEPHAIFAMILY\
+Use Node 24 and the repository lockfiles. From the repository root:
 
-# Install dev dependencies (Jest for tests)
-npm install
+    npm ci
+    node scripts/install.cjs
+    npm run build
 
-# Run a local dev server (http-server is bundled via npx)
-npm start # http://localhost:8080
-`
+For isolated PostgreSQL tests and browser checks, follow web/README.md. Configure production secrets through the deployment platform; never commit local environment files.
 
-## Testing
-We use **Jest** with the **jsdom** environment to unit-test the routing helpers.
-`ash
-npm test
-`
-The test suite lives in ests/app.test.js.
+## Historical code
 
-## Project Structure
-`
-JOSEPH AI Family/
-+- index.html # HTML entry point
-+- app.js # SPA router & UI helpers
-+- tests/
-¦ +- app.test.js # Jest tests
-+- package.json # npm scripts & dev deps
-+- README.md # you are here!
-`
+The root HTML/JavaScript frontend, backend/legacy-mongo, backend/legacy-sqlite-migrations and whatsapp-bot are retained historical implementations. They are not deployed by the consumer entry point. Older module documents describe those implementations; the consumer reference above is authoritative for the current dashboard.
 
-## Contributing
-1. Fork the repository.
-2. Create a feature branch.
-3. Ensure 
-pm test passes.
-4. Submit a pull request.
+## Source conventions
 
-## License
-MIT – feel free to adapt and improve.
+Use comments to explain constraints and decisions rather than restating code. Document public contracts, validation rules and operational procedures beside their owning modules. Maintain SR as a trailing source comment. Do not add comments to JSON or lockfiles, or edit applied migration SQL for cosmetic changes.
+
+SR

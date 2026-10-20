@@ -61,3 +61,5 @@ export const createAuthDatabase = () => {
     });
     return { database, all: (table: string) => [...tables[table].values()].map(row => structuredClone(row)) };
 };
+
+// SR

@@ -7,3 +7,5 @@ case "$commit_msg_file" in
 esac
 
 pnpm --dir backend exec commitlint --config commitlint.config.cjs --edit "$commit_msg_file"
+
+# SR

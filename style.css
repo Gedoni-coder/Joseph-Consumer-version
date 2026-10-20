@@ -1,6 +1,5 @@
 /* ============================================
    JOSEPH AI — ENTERPRISE DESIGN SYSTEM
-   Inspired by: Shopify, Claude, AWS, Vercel, WhatsApp
    Primary: Navy Blue #24248f (rgb(36, 36, 143), hsl(240, 60%, 35%))
    ============================================ */
 
@@ -11643,3 +11642,5 @@ a:not(.btn):hover::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* SR */

@@ -126,3 +126,5 @@ export const hasActiveSession = async (userId: string, sessionId: unknown): Prom
     const session = await prisma.userSession.findUnique({ where: { id: sessionId } });
     return Boolean(session && session.userId === userId && !session.revokedAt && session.expiresAt > new Date());
 };
+
+// SR

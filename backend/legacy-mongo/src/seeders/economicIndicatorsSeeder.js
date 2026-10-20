@@ -1242,3 +1242,5 @@ export default {
   INDICATORS,
   EVENTS
 };
+
+// SR

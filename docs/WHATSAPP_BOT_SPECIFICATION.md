@@ -1,5 +1,7 @@
 # JOSEPH AI WhatsApp Bot - Technical Specification
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 **Version:** 2.0  
 **Date:** July 21, 2026  
 **Architecture:** Provider Pattern (Baileys / Meta Cloud API — switchable)  

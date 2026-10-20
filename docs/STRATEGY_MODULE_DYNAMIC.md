@@ -1,5 +1,7 @@
 # Strategy Module Dynamic UI Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## Summary
 
 The Strategy module UI now fetches and displays **real-time dynamic data** from the backend APIs instead of hardcoded values. All strategy components are now connected to live data sources.

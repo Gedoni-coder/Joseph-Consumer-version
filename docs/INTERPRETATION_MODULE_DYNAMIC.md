@@ -1,5 +1,7 @@
 # Fully Dynamic Interpretation Module - Complete
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## ✅ Status: COMPLETE
 
 The Interpretation module now supports full customization with industry-specific templates and user overrides for insight generation.

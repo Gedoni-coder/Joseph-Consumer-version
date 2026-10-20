@@ -50,3 +50,5 @@ describe("elapsed calendar spending", () => {
     ).toMatchObject({ days: 0, total: 0, daily: null });
   });
 });
+
+// SR

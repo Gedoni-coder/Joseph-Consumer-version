@@ -209,3 +209,5 @@ export class BaileysProvider extends BaseProvider {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
+
+// SR

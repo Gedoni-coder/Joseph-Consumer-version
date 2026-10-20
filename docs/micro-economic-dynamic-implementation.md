@@ -1,5 +1,7 @@
 # Micro Economic Scroll — Dynamic Value Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## ✅ IMPLEMENTATION COMPLETE
 
 A robust, deterministic system for updating Micro Economic Interpretation scroll values from Finance modules without API calls.

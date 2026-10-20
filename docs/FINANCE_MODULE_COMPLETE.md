@@ -1,5 +1,7 @@
 # Finance Module - Complete Implementation
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## ✅ Implementation Status: COMPLETE
 
 The Finance module has been implemented from scratch with comprehensive controllers and routes for budget tracking, capital management, runway calculations, and credit monitoring.

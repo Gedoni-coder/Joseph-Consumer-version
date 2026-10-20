@@ -488,3 +488,5 @@ insightSchema.statics.getCountsByStatus = async function(userId) {
 // EXPORT
 // ==========================================
 export default mongoose.model('Insight', insightSchema);
+
+// SR

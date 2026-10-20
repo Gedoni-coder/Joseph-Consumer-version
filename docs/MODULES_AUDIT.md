@@ -1,5 +1,7 @@
 # MODULES DATA AUDIT
 
+> Historical module reference. These contracts are not the deployed consumer API. For current runtime boundaries, see [Consumer implementation](CONSUMER_LOCAL_IMPLEMENTATION.md).
+
 ## SUMMARY TABLE
 
 ┌───────────────┬────────────────┬────────────┬─────────────┐   

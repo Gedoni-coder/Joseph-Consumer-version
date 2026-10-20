@@ -548,3 +548,5 @@ creditEntrySchema.statics.findByCustomer = function(userId, identifier) {
 // EXPORT
 // ==========================================
 export default mongoose.model('CreditEntry', creditEntrySchema);
+
+// SR

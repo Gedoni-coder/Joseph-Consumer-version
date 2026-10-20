@@ -122,3 +122,5 @@ describe('authentication HTTP flows with transactional database double', () => {
         expect((await me(refreshed.body.accessToken)).status).toBe(401);
     });
 });
+
+// SR
