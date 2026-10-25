@@ -96,11 +96,12 @@ describe('authentication HTTP flows with transactional database double', () => {
 
     it('resets once, invalidates existing sessions and exposes no reset credential in the public response', async () => {
         const user = await register();
+        const issued = vi.spyOn(auth.default, 'generatePasswordReset');
         const request = await post('/api/auth/request-password-reset', { email: 'one@example.com' });
         expect(request.status).toBe(200);
         expect(request.body).not.toHaveProperty('resetToken');
-        // Delivery is a separate, still-unimplemented provider boundary.
-        const reset = await auth.generatePasswordReset('one@example.com');
+        // Observe the internal issuance without requesting a second token during cooldown.
+        const reset = await issued.mock.results[0].value;
         const payload = { token: reset.token, newPassword: 'ChangedPassword456!' };
         const results = await Promise.all([post('/api/auth/reset-password', payload), post('/api/auth/reset-password', payload)]);
         expect(results.map(r => r.status).sort()).toEqual([200, 400]);

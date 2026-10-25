@@ -295,6 +295,49 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
       ).toBe(200);
       expect((await request(old, "/me")).response.status).toBe(401);
     });
+    it("consumes a recovery token once against PostgreSQL and revokes the old session", async () => {
+      const jar: Jar = {};
+      const id = await register(jar);
+      const user = await prisma.user.findUniqueOrThrow({ where: { id } });
+      const auth = await import("../src/services/prisma/authService");
+      const issued = await Promise.all([
+        auth.generatePasswordReset(user.email),
+        auth.generatePasswordReset(user.email),
+      ]);
+      expect(issued.filter((result) => result.token)).toHaveLength(1);
+      const token = issued.find((result) => result.token)!.token;
+      const old = { ...jar };
+      const resets = await Promise.all([
+        request({}, "/reset-password", "POST", {
+          token,
+          password: "NewLocalPassword42!",
+        }),
+        request({}, "/reset-password", "POST", {
+          token,
+          password: "NewLocalPassword42!",
+        }),
+      ]);
+      expect(resets.map((result) => result.response.status).sort()).toEqual([
+        200, 400,
+      ]);
+      expect((await request(old, "/me")).response.status).toBe(401);
+      expect(
+        (
+          await request({}, "/login", "POST", {
+            email: user.email,
+            password: "LocalTestPassword42!",
+          })
+        ).response.status,
+      ).toBe(401);
+      expect(
+        (
+          await request({}, "/login", "POST", {
+            email: user.email,
+            password: "NewLocalPassword42!",
+          })
+        ).response.status,
+      ).toBe(200);
+    });
     it("sets up the onboarding modules atomically and prevents a replay from replacing them", async () => {
       const jar: Jar = {};
       const id = await register(jar);

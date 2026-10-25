@@ -25,7 +25,7 @@ backend/scripts/local.cjs runs an isolated PostgreSQL cluster and API bound to l
 ## Outstanding work
 
 - Live bank linking, transaction ingestion, normalization, deduplication, automatic refresh and verified webhooks.
-- Email/phone verification, account recovery and reviewed terms/privacy flows.
+- Email/phone verification, recovery email delivery configuration and reviewed terms/privacy flows.
 - Recurring commitments, transaction correction workflows and complete goal progress schedules.
 - WhatsApp account linking, consent, message delivery, scheduled reminders and financial-response integration.
 - Shared rate-limit storage, monitoring, backup/restore procedures and operational acceptance checks.

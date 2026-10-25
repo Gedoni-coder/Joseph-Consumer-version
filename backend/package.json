@@ -56,6 +56,7 @@
     "@app-core/repository": "workspace:*",
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.1.0",
+    "@vercel/functions": "3.0.0",
     "axios": "^1.7.2",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^2.4.3",
@@ -67,6 +68,7 @@
     "joi": "^17.13.1",
     "jsonwebtoken": "^9.0.2",
     "node-cron": "^3.0.3",
+    "nodemailer": "^10.2.1",
     "pg": "^8.16.3",
     "zod": "^4.4.3"
   },
@@ -80,6 +82,7 @@
     "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^25.0.3",
+    "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.16.0",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",

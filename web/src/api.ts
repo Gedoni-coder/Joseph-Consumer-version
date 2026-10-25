@@ -12,7 +12,14 @@ export type State = ReturnType<typeof calculate> & {
   stateId?: string;
 };
 export type Dashboard = {
-  spending: { from: string; to: string; days: number; count: number; total: number; daily: number | null };
+  spending: {
+    from: string;
+    to: string;
+    days: number;
+    count: number;
+    total: number;
+    daily: number | null;
+  };
   requiresOnboarding: boolean;
   user: User;
   consent: boolean;
@@ -36,7 +43,13 @@ export async function api<T>(
   if (
     response.status === 401 &&
     retry &&
-    !["/login", "/register", "/refresh"].includes(path)
+    ![
+      "/login",
+      "/register",
+      "/refresh",
+      "/forgot-password",
+      "/reset-password",
+    ].includes(path)
   ) {
     refresh ??= fetch("/api/consumer/refresh", {
       method: "POST",

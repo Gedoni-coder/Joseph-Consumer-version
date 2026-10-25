@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { BurnRate, SpendingHistory } from "./Spending";
 import { Onboarding } from "./Onboarding";
 import { BankConnections } from "./BankConnections";
+import { PasswordRecovery } from "./PasswordRecovery";
 import { api, kobo, money, type Dashboard, type State, type User } from "./api";
 import {
   Amount,
@@ -448,10 +449,10 @@ function Workspace({
                               ? "unavailable"
                               : new Intl.NumberFormat("en-NG", {
                                   maximumFractionDigits: 1,
-                                }).format(
-                                  simulation.scenario.afterRunwayDays,
-                                )}
-                            {simulation.scenario.afterRunwayDays === null ? "." : " days."}
+                                }).format(simulation.scenario.afterRunwayDays)}
+                            {simulation.scenario.afterRunwayDays === null
+                              ? "."
+                              : " days."}
                             {simulation.scenario.shortfall > 0
                               ? ` Shortfall: ${money(simulation.scenario.shortfall)}.`
                               : ""}
@@ -647,9 +648,7 @@ function Workspace({
                     navigate(data.inputs.planConfirmed ? "overview" : "plan")
                   }
                 >
-                  {data.inputs.planConfirmed
-                    ? "Open Track"
-                    : "Next: Plan"}{" "}
+                  {data.inputs.planConfirmed ? "Open Track" : "Next: Plan"}{" "}
                   <Arrow />
                 </button>
               </>
@@ -945,8 +944,7 @@ function Workspace({
                     <Note>
                       Mono sandbox connections are available in Manage. Test
                       bank data stays separate from your spending estimates.
-                      Email/SMS verification, password recovery and WhatsApp are
-                      not available yet.
+                      Email/SMS verification and WhatsApp are not available yet.
                     </Note>
                     <button
                       className="text-button"
@@ -1103,19 +1101,48 @@ function Workspace({
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState<"landing" | "login" | "register">("landing");
+  const [resetLink] = useState(() => {
+    const hash = window.location.hash;
+    return hash.startsWith("#reset-password=")
+      ? hash.slice("#reset-password=".length)
+      : null;
+  });
+  const [mode, setMode] = useState<
+    "landing" | "login" | "register" | "forgot" | "reset"
+  >(resetLink !== null ? "reset" : "landing");
   useEffect(() => {
+    if (resetLink !== null) {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+      setLoading(false);
+      return;
+    }
     api<{ user: User }>("/me")
       .then((result) => setUser(result.user))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [resetLink]);
   if (loading)
     return (
       <main className="loading">
         <Brand />
         <p>Making a little space…</p>
       </main>
+    );
+  if (mode === "forgot" || mode === "reset")
+    return (
+      <PasswordRecovery
+        key={mode}
+        token={mode === "reset" ? resetLink : null}
+        back={() => {
+          setUser(null);
+          setMode("login");
+        }}
+        requestNew={() => setMode("forgot")}
+      />
     );
   if (user)
     return (
@@ -1134,6 +1161,7 @@ export default function App() {
         setMode={setMode}
         done={setUser}
         back={() => setMode("landing")}
+        forgot={() => setMode("forgot")}
       />
     );
   return <Landing open={setMode} />;

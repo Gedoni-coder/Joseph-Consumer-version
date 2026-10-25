@@ -43,7 +43,7 @@ Amounts are entered in naira and sent/stored as integer kobo. The browser format
 
 ## Release boundaries
 
-This is a working **planning beta with Mono sandbox testing**, not the full documentation's bank-connected MVP. Signup has two steps: account details, then a questionnaire that saves the plan, optional cash balance, bills and goals. Bank connection follows within the same interface. Sandbox bank balances are displayed separately and excluded from Safe-to-Spend. Mono supports initial retrieval, manual refresh and disconnect; no connection success is simulated. Email/SMS verification, password recovery and Meta WhatsApp remain unavailable. There is no transaction ingestion/classification, automatic recurring-obligation detection, complete goal progress tracking, or scheduled WhatsApp nudges yet.
+This is a working **planning beta with Mono sandbox testing**, not the full documentation's bank-connected MVP. Signup has two steps: account details, then a questionnaire that saves the plan, optional cash balance, bills and goals. Bank connection follows within the same interface. Sandbox bank balances are displayed separately and excluded from Safe-to-Spend. Mono supports initial retrieval, manual refresh and disconnect; no connection success is simulated. Email/SMS verification and Meta WhatsApp remain unavailable. There is no transaction ingestion/classification, automatic recurring-obligation detection, complete goal progress tracking, or scheduled WhatsApp nudges yet.
 
 Balances are self-reported and become stale after 24 hours. Bills and goal contributions are individual dated entries; there is no automatic repeat schedule. Future income is not assumed. Reservations are planning allocations, never bank locks. The active financial engine is versioned `fse-1.1.0`, with rules `daily-plan-1.1.0`.
 
@@ -58,5 +58,7 @@ From `web`, run `npm run build` then `npm test` with the backend running. Playwr
 See `../docs/CONSUMER_LOCAL_IMPLEMENTATION.md` for the implementation and remaining gates.
 
 Verified on 15 October 2026: 48 backend tests, eight browser checks across four viewport sizes, both builds, and targeted lint passed. Only the isolated local database was migrated. This was the local validation baseline. See CONSUMER_DEPLOYMENT.md for the 16 October hosted release.
+
+Password recovery uses expiring, single-use email links and requires the SMTP settings documented in the deployment guide. It remains unavailable until mail delivery is configured.
 
 SR

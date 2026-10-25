@@ -223,11 +223,13 @@ export function Auth({
   setMode,
   done,
   back,
+  forgot,
 }: {
   mode: "login" | "register";
   setMode: (mode: "login" | "register") => void;
   done: (user: User) => void;
   back: () => void;
+  forgot: () => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -331,6 +333,16 @@ export function Auth({
                 maxLength={72}
               />
             </label>
+            {mode === "login" && (
+              <button
+                type="button"
+                className="text-button"
+                disabled={busy}
+                onClick={forgot}
+              >
+                Forgot password?
+              </button>
+            )}
             {mode === "register" && (
               <Note>
                 Use at least 8 characters, with an uppercase letter, a lowercase

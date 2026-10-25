@@ -1,6 +1,6 @@
 # JOSEPH consumer deployment
 
-Public planning beta: https://joseph-consumer.vercel.app
+Public planning beta: https://josephai.online (also https://joseph-consumer.vercel.app).
 
 ## Runtime
 
@@ -28,9 +28,9 @@ This release supports real accounts, two-step signup, stored manual balances, da
 
 Sandbox bank connections support consent, initial account/balance retrieval, manual refresh and disconnect. Incomplete provider data stays pending rather than becoming a zero balance. Test balances are separate from real manually entered money and never increase Safe-to-Spend. Bank ownership is enforced server-side, link sessions are single-use and expire after ten minutes, and exports omit provider account IDs. Remote unlink failures retain a visible retryable record; connected banks must be disconnected before erasure or account deletion. Concurrent deletion waits for an in-flight bank exchange to finish.
 
-Bank transaction ingestion, automatic/webhook sync, live bank linking, email/phone verification, password recovery and the WhatsApp channel remain unavailable. The app records manual-planning consent `manual-planning-2026-10-16` and separate bank consent `mono-sandbox-2026-10-16`. Server-calculated forecasts are estimates based on user entries; no money is moved or locked.
+Bank transaction ingestion, automatic/webhook sync, live bank linking, email/phone verification and the WhatsApp channel remain unavailable. The app records manual-planning consent `manual-planning-2026-10-16` and separate bank consent `mono-sandbox-2026-10-16`. Server-calculated forecasts are estimates based on user entries; no money is moved or locked.
 
-Before broader production rollout: configure provider flows, approve terms/privacy and calculation policies, add operational monitoring and account recovery, and replace process-local rate-limit counters with shared storage or platform-wide enforcement. Current counters protect each running instance but are not a global quota across serverless instances.
+Before broader production rollout: configure provider flows, approve terms/privacy and calculation policies, configure recovery email delivery and operational monitoring, and replace process-local rate-limit counters with shared storage or platform-wide enforcement. Current counters protect each running instance but are not a global quota across serverless instances.
 
 ## Verification on 16 October 2026
 
@@ -41,5 +41,15 @@ Backend tests: 48 existing tests passed; the revised consumer entrypoint suite p
 Chrome flows passed locally at desktop, tablet, mobile, and 320px widths. The initial combined run hit the shared IP rate limit on its fourth full account flow; the isolated 320px rerun passed. The deployed desktop and mobile flows passed registration, consent, persistence/reload, purchase calculations, login, edits, export, erasure and account deletion. Landing and dashboard screenshots were reviewed.
 
 `node backend/scripts/local.cjs test` uses only the isolated loopback database. `npm test --prefix web` runs the browser suite. Set `JOSEPH_TEST_URL` to a deployed origin to test remotely without starting a local preview. Use disposable QA accounts; successful tests delete their accounts. Test traces contain test credentials and stay ignored. Safari/Firefox and unconfigured external-provider flows are not verified.
+
+## Password recovery
+
+The consumer API exposes `POST /forgot-password` with `{ email }` and `POST /reset-password` with `{ token, password }`. The sign-in page links to recovery. Email links use a URL fragment; the browser removes it immediately and keeps the token only in memory. Reopening the email link is required after a page reload.
+
+Configure `SMTP_HOST`, `SMTP_PORT` (465 or 587), `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM` and `PASSWORD_RESET_ORIGIN` on the production deployment. For this domain, use `PASSWORD_RESET_ORIGIN=https://josephai.online`. Use mailbox SMTP credentials, not the hosting-dashboard password; keep `SMTP_PASS` in the deployment secret store. Port 465 uses implicit TLS and port 587 requires STARTTLS. Certificate validation remains enabled. Email delivery is disabled until all settings are present; the endpoint returns 503 instead of claiming that a link was sent. `/capabilities.passwordRecovery` reports configuration availability, not a successful mailbox delivery test.
+
+Requests receive the same generic acknowledgement for active, missing and inactive accounts. Account lookup and SMTP delivery run in a Vercel `waitUntil` task, outside response timing and within the function timeout. Delivery failures log a fixed operational error without recipients, tokens or SMTP responses. There is no automatic retry queue; the user can request another email after the one-minute cooldown. Monitor delivery errors and test an owned mailbox before enabling recovery for customers.
+
+Tokens contain 32 random bytes; only SHA-256 hashes are stored in the existing user reset fields. They expire after one hour and are consumed under the per-user database lock. Successful resets revoke all sessions and clear authentication cookies. Signed-in password changes also invalidate outstanding reset links. A database-backed one-minute issuance cooldown protects each account across instances; the IP limiter allows five requests per 15 minutes per instance. No schema migration is required.
 
 SR

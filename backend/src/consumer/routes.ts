@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from "express";
 import { isDeepStrictEqual } from "node:util";
 import rateLimit from "express-rate-limit";
 import Joi from "joi";
+import { waitUntil } from "@vercel/functions";
+import { recoveryConfigured, sendRecoveryEmail } from "./recovery-mail";
 import { bankRoutes, assertNoPendingBankExchange } from "./banks";
 import { monoConfigured } from "./mono";
 import { spendingSummary } from "./spending";
@@ -122,6 +124,7 @@ router.get("/capabilities", (_req, res) =>
     bankEnvironment: "sandbox",
     emailVerification: false,
     phoneVerification: false,
+    passwordRecovery: recoveryConfigured(),
     whatsapp: false,
     mode: "manual-planning",
     consentVersion,
@@ -157,6 +160,82 @@ router.post("/login", authLimiter, validateLogin, async (req, res) => {
     }),
   );
   res.json({ user: safeUser(user) });
+});
+const recoveryLimiter = rateLimit({
+  windowMs: 15 * 60_000,
+  limit: 5,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: {
+    message: "Too many reset requests. Please try again in 15 minutes.",
+  },
+});
+router.post("/forgot-password", recoveryLimiter, async (req, res) => {
+  if (typeof req.body?.email === "string")
+    req.body.email = req.body.email.trim().toLowerCase();
+  const { email } = validate(
+    Joi.object({
+      email: Joi.string().trim().lowercase().email().max(254).required(),
+    }).unknown(false),
+    req,
+  );
+  if (!recoveryConfigured())
+    return res.status(503).json({
+      message:
+        "Password recovery is temporarily unavailable. Please try again later.",
+    });
+  // Keep delivery and account lookup out of response timing; Vercel retains the task.
+  waitUntil(
+    (async () => {
+      const result = await authService.generatePasswordReset(email);
+      if (result.token) await sendRecoveryEmail(email, result.token);
+    })().catch(() => {
+      // Never log the recipient, token, SMTP credentials or provider response.
+      console.error("Password recovery delivery failed.");
+    }),
+  );
+  res
+    .status(202)
+    .json({
+      message:
+        "If an active account matches that email, you will receive a reset link. Check your inbox and spam folder.",
+    });
+});
+router.post("/reset-password", authLimiter, async (req, res) => {
+  const { token, password } = validate(
+    Joi.object({
+      token: Joi.string()
+        .pattern(/^[a-f0-9]{64}$/)
+        .required(),
+      password: Joi.string()
+        .min(8)
+        .max(72)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+        .custom((value, helpers) =>
+          Buffer.byteLength(value, "utf8") > 72
+            ? helpers.error("any.invalid")
+            : value,
+        )
+        .required(),
+    }).unknown(false),
+    req,
+  );
+  try {
+    await authService.resetPasswordWithToken(token, password);
+  } catch (error) {
+    if ((error as Error).message === "INVALID_OR_EXPIRED_TOKEN")
+      return res
+        .status(400)
+        .json({
+          message:
+            "This reset link has expired or has already been used. Request a new link.",
+        });
+    throw error;
+  }
+  clearCookies(res);
+  res.json({
+    message: "Your password has been changed. Sign in with your new password.",
+  });
 });
 router.post("/refresh", async (req, res) => {
   try {

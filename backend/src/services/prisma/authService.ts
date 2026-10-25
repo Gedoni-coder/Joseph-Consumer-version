@@ -202,7 +202,9 @@ export async function changeUserPassword(userId, currentPassword, newPassword) {
     if (!(await comparePassword(currentPassword, user.password))) {
       throw new Error('INVALID_CURRENT_PASSWORD');
     }
-    await tx.user.update({ where: { id: userId }, data: { password: hashedPassword } });
+    await tx.user.update({ where: { id: userId }, data: {
+      password: hashedPassword, resetPasswordToken: null, resetPasswordExpires: null
+    } });
     await revokeUserSessionsInTransaction(tx, userId);
     return true;
   });
@@ -214,27 +216,26 @@ export async function changeUserPassword(userId, currentPassword, newPassword) {
 export async function generatePasswordReset(email) {
   const user = await findUserByEmail(email);
 
-  if (!user) {
+  if (!user || !user.isActive) {
     // Don't reveal if email exists
     return { success: true, token: null };
   }
 
-  const resetToken = generateResetToken();
-  const hashedToken = hashResetToken(resetToken);
-  const expiresAt = getResetTokenExpiry();
-
-  // Store reset token (you'd need a passwordResetTokens table or field)
-  // For now, we'll update the user with reset token info
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      // Add these fields to your Prisma schema if not present
-      resetPasswordToken: hashedToken,
-      resetPasswordExpires: expiresAt
-    }
+  return withLockedUser(user.id, async (tx, current) => {
+    // A durable cooldown prevents repeated requests across serverless instances.
+    const issuedAt = current.resetPasswordExpires?.getTime() - 3_600_000;
+    if (current.resetPasswordToken && issuedAt > Date.now() - 60_000)
+      return { success: true, token: null };
+    const resetToken = generateResetToken();
+    await tx.user.update({
+      where: { id: user.id },
+      data: {
+        resetPasswordToken: hashResetToken(resetToken),
+        resetPasswordExpires: getResetTokenExpiry()
+      }
+    });
+    return { success: true, token: resetToken };
   });
-
-  return { success: true, token: resetToken };
 }
 
 /**
