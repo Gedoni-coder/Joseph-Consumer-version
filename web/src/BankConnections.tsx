@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { api, money } from "./api";
 import { Arrow, ErrorMessage } from "./components";
+import { useNotice } from "./useNotice";
 type Bank = {
   id: string;
   bankName: string;
@@ -23,7 +24,7 @@ export function BankConnections({ finish }: { finish?: () => void }) {
   const [accepted, setAccepted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useNotice();
   const cleanup = useRef<() => void>(() => {});
   async function reload() {
     setData(await api<Banks>("/banks"));

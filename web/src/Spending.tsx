@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { api, kobo, money, type Dashboard } from "./api";
 import { Amount, date, ErrorMessage } from "./components";
+import { useNotice } from "./useNotice";
 type Purchase = {
   id: string;
   label: string;
@@ -126,7 +127,7 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
   const [history, setHistory] = useState<History | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useNotice();
   const [open, setOpen] = useState(false);
   const requestId = useRef(crypto.randomUUID());
   const reload = async () => setHistory(await api<History>("/purchases"));

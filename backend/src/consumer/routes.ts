@@ -194,12 +194,10 @@ router.post("/forgot-password", recoveryLimiter, async (req, res) => {
       console.error("Password recovery delivery failed.");
     }),
   );
-  res
-    .status(202)
-    .json({
-      message:
-        "If an active account matches that email, you will receive a reset link. Check your inbox and spam folder.",
-    });
+  res.status(202).json({
+    message:
+      "If an active account matches that email, you will receive a reset link. Check your inbox and spam folder.",
+  });
 });
 router.post("/reset-password", authLimiter, async (req, res) => {
   const { token, password } = validate(
@@ -224,12 +222,10 @@ router.post("/reset-password", authLimiter, async (req, res) => {
     await authService.resetPasswordWithToken(token, password);
   } catch (error) {
     if ((error as Error).message === "INVALID_OR_EXPIRED_TOKEN")
-      return res
-        .status(400)
-        .json({
-          message:
-            "This reset link has expired or has already been used. Request a new link.",
-        });
+      return res.status(400).json({
+        message:
+          "This reset link has expired or has already been used. Request a new link.",
+      });
     throw error;
   }
   clearCookies(res);
@@ -288,6 +284,15 @@ function validate(schema: Joi.ObjectSchema, req: Request) {
   if (error)
     throw Object.assign(new Error(error.details[0].message), { status: 400 });
   return value;
+}
+function validateCommitmentDate(dueDate: string, original?: string) {
+  if (dueDate < nigeriaDate(new Date()) && dueDate !== original)
+    throw Object.assign(
+      new Error(
+        "Choose today or a future date for a new or rescheduled commitment.",
+      ),
+      { status: 400 },
+    );
 }
 async function hasConsent(tx: Prisma.TransactionClient, userId: string) {
   const consent = await tx.consumerConsent.findFirst({
@@ -546,6 +551,8 @@ router.post("/onboarding", async (req, res) => {
     }).unknown(false),
     req,
   );
+  for (const commitment of data.commitments)
+    validateCommitmentDate(commitment.dueDate);
   await withLockedUser(req.userId, async (tx, user) => {
     if (
       user.onboardingComplete ||
@@ -624,6 +631,7 @@ for (const resource of ["accounts", "commitments"] as const) {
     resource === "accounts" ? "BALANCE_REFRESH" : "COMMITMENT_CHANGED";
   router.post("/" + resource, async (req, res) => {
     const data = validate(schema, req);
+    if (resource === "commitments") validateCommitmentDate(data.dueDate);
     const result = await withLockedUser(req.userId, async (tx) => {
       await hasConsent(tx, req.userId);
       const count =
@@ -654,6 +662,12 @@ for (const resource of ["accounts", "commitments"] as const) {
     const state = await withLockedUser(req.userId, async (tx) => {
       await hasConsent(tx, req.userId);
       const where = { id: String(req.params.id), userId: req.userId };
+      if (resource === "commitments") {
+        const existing = await tx.consumerCommitment.findFirst({ where });
+        if (!existing)
+          throw Object.assign(new Error("Record not found."), { status: 404 });
+        validateCommitmentDate(data.dueDate, existing.dueDate);
+      }
       const changed =
         resource === "accounts"
           ? await tx.moneyAccount.updateMany({

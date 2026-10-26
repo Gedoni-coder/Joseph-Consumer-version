@@ -197,6 +197,54 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
         ).response.status,
       ).toBe(400);
     });
+    it("rejects backdated commitments while preserving existing overdue bills", async () => {
+      const today = nigeriaDate(new Date());
+      const past = new Date(Date.parse(today + "T00:00:00Z") - 86400000)
+        .toISOString()
+        .slice(0, 10);
+      const entry = {
+        label: "Date validation",
+        amount: 100,
+        kind: "bill",
+        dueDate: past,
+      };
+      expect(
+        (await request(alice, "/commitments", "POST", entry)).response.status,
+      ).toBe(400);
+      expect(
+        await prisma.consumerCommitment.count({
+          where: { userId: aliceId, label: entry.label },
+        }),
+      ).toBe(0);
+      const created = await request(alice, "/commitments", "POST", {
+        ...entry,
+        dueDate: today,
+      });
+      expect(created.response.status).toBe(201);
+      const path = "/commitments/" + created.body.id;
+      expect((await request(alice, path, "PUT", entry)).response.status).toBe(
+        400,
+      );
+      // Simulate a saved bill becoming overdue as the calendar advances.
+      await prisma.consumerCommitment.update({
+        where: { id: created.body.id },
+        data: { dueDate: past },
+      });
+      expect(
+        (await request(alice, path, "PUT", { ...entry, amount: 200 })).response
+          .status,
+      ).toBe(200);
+      expect((await request(bob, path, "PUT", entry)).response.status).toBe(
+        404,
+      );
+      expect(
+        (await request(alice, path, "PUT", { ...entry, dueDate: today }))
+          .response.status,
+      ).toBe(200);
+      expect((await request(alice, path, "DELETE", {})).response.status).toBe(
+        200,
+      );
+    });
     it("reuses an unchanged snapshot instead of duplicating history on refresh", async () => {
       const first = await request(alice, "/dashboard");
       const second = await request(alice, "/dashboard");
@@ -352,7 +400,7 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
           {
             label: "Rent",
             amount: 1000000,
-            dueDate: "2026-12-01",
+            dueDate: nigeriaDate(new Date(Date.now() + 5 * 86400000)),
             kind: "bill",
           },
         ],
@@ -365,6 +413,18 @@ describe.runIf(process.env.JOSEPH_LOCAL_TEST === "true")(
       expect(await prisma.consumerPlan.count({ where: { userId: id } })).toBe(
         0,
       );
+      const pastDate = nigeriaDate(new Date(Date.now() - 86400000));
+      const backdated = await request(jar, "/onboarding", "POST", {
+        ...setup,
+        commitments: [{ ...setup.commitments[0], dueDate: pastDate }],
+      });
+      expect(backdated.response.status).toBe(400);
+      expect(await prisma.consumerPlan.count({ where: { userId: id } })).toBe(
+        0,
+      );
+      expect(
+        await prisma.consumerCommitment.count({ where: { userId: id } }),
+      ).toBe(0);
       expect(
         (await request(jar, "/onboarding", "POST", setup)).response.status,
       ).toBe(200);

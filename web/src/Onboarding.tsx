@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { api, kobo } from "./api";
 import { Amount, Arrow, ErrorMessage } from "./components";
+import { CommitmentDate } from "./CommitmentDate";
 
 type Entry = { id: number; kind: "bill" | "goal" };
 export function Onboarding({ done }: { done: () => Promise<void> }) {
@@ -156,7 +157,7 @@ export function Onboarding({ done }: { done: () => Promise<void> }) {
                 />
                 <label>
                   Next payment date
-                  <input type="date" name={`date-${entry.id}`} required />
+                  <CommitmentDate name={`date-${entry.id}`} />
                 </label>
               </div>
             </div>

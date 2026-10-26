@@ -7,6 +7,59 @@
 .workspace {
   display: block;
 }
+.workspace .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fff;
+  box-shadow: 0 1px 0 #e1e5ef;
+}
+.workspace-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.workspace-refresh {
+  min-height: 44px;
+  white-space: nowrap;
+}
+.workspace :is(input, select, textarea, button, [tabindex]) {
+  scroll-margin-top: 110px;
+}
+.balance-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 24px;
+}
+.balance-summary > div {
+  padding: 22px;
+  background: #f4f6fb;
+  border: 1px solid #e1e5ef;
+  border-radius: 10px;
+  min-width: 0;
+}
+.balance-summary span {
+  display: block;
+  margin-bottom: 10px;
+  color: #4a526b;
+  font-size: 14px;
+  font-weight: 600;
+}
+.balance-summary strong {
+  display: block;
+  font-size: clamp(22px, 2.3vw, 32px);
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+.balance-summary small {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.workspace .summary-grid {
+  margin-bottom: 24px;
+}
 .workspace-brand {
   display: flex;
   align-items: center;
@@ -331,11 +384,24 @@ body:has(.workspace-drawer[open]) {
     height: 90px;
     gap: 8px;
   }
-  .app-header > .status-pill {
-    font-size: 10px;
-    padding: 5px 8px;
-    white-space: normal;
-    text-align: center;
+  .workspace-actions > .status-pill {
+    display: none;
+  }
+  .workspace-actions {
+    gap: 0;
+  }
+  .workspace-brand .brand-logo {
+    width: clamp(110px, 30vw, 142px);
+  }
+  .balance-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .balance-summary > div {
+    padding: 16px 18px;
+  }
+  .balance-summary span {
+    margin-bottom: 6px;
   }
   .burn-card {
     grid-template-columns: 1fr;

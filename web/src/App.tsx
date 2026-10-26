@@ -3,6 +3,8 @@ import { BurnRate, SpendingHistory } from "./Spending";
 import { Onboarding } from "./Onboarding";
 import { BankConnections } from "./BankConnections";
 import { PasswordRecovery } from "./PasswordRecovery";
+import { useNotice } from "./useNotice";
+import { CommitmentDate } from "./CommitmentDate";
 import { api, kobo, money, type Dashboard, type State, type User } from "./api";
 import {
   Amount,
@@ -32,7 +34,7 @@ function Workspace({
   const [page, setPage] = useState<Page>("overview");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState("");
+  const [notice, setNotice] = useNotice();
   const [account, setAccount] = useState<AccountInput | null>(null);
   const [commitment, setCommitment] = useState<CommitmentInput | null>(null);
   const [formVersion, setFormVersion] = useState(0);
@@ -181,7 +183,25 @@ function Workspace({
             </button>
             <Brand />
           </div>
-          <span className="status-pill">Manual planning</span>
+          <div className="workspace-actions">
+            <span className="status-pill">Manual planning</span>
+            <button
+              className="text-button workspace-refresh"
+              disabled={busy || !data}
+              onClick={() =>
+                run(
+                  async () => {
+                    await refresh();
+                    setSimulation(null);
+                  },
+                  "Your picture is up to date.",
+                  false,
+                )
+              }
+            >
+              <span aria-hidden="true">↻</span> Refresh
+            </button>
+          </div>
         </header>
         <ErrorMessage message={error} />
         {notice && (
@@ -239,16 +259,24 @@ function Workspace({
                       <em>Let’s see where you stand.</em>
                     </h1>
                   </div>
-                  <button
-                    className="text-button"
-                    disabled={busy}
-                    onClick={() =>
-                      run(refresh, "Your picture is up to date.", false)
-                    }
-                  >
-                    ↻ Refresh
-                  </button>
                 </div>
+                <section className="balance-summary" aria-label="Plan balances">
+                  <div>
+                    <span>Available balances</span>
+                    <strong>{money(state.liquid)}</strong>
+                  </div>
+                  <div>
+                    <span>Reserved in your plan</span>
+                    <strong>{money(state.protectedCash)}</strong>
+                  </div>
+                  <div>
+                    <span>Planned daily spending</span>
+                    <strong>
+                      {money(state.daily)}
+                      <small> / day</small>
+                    </strong>
+                  </div>
+                </section>
                 {(!data.inputs.accounts.length ||
                   !data.inputs.planConfirmed) && (
                   <section className="setup-strip">
@@ -324,23 +352,6 @@ function Workspace({
                       Review my assumptions <Arrow />
                     </button>
                   </section>
-                </div>
-                <div className="stats-row">
-                  <div>
-                    <span>Available balances</span>
-                    <strong>{money(state.liquid)}</strong>
-                  </div>
-                  <div>
-                    <span>Reserved in your plan</span>
-                    <strong>{money(state.protectedCash)}</strong>
-                  </div>
-                  <div>
-                    <span>Everyday spending</span>
-                    <strong>
-                      {money(state.daily)}
-                      <small> / day</small>
-                    </strong>
-                  </div>
                 </div>
                 {state.shortfall > 0 && (
                   <div className="warning">
@@ -789,11 +800,9 @@ function Workspace({
                       />
                       <label>
                         Due date
-                        <input
+                        <CommitmentDate
                           name="dueDate"
-                          type="date"
-                          required
-                          defaultValue={commitment?.dueDate}
+                          original={commitment?.dueDate}
                         />
                       </label>
                       <button className="button full" disabled={busy}>
