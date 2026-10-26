@@ -2,7 +2,17 @@ packages:
   - "."
   - "core/*"
 
+allowBuilds:
+  '@prisma/engines': true
+  prisma: true
+
 overrides:
+  '@vercel/cli-config>zod': '^4.6.7'
+  'body-parser@>=2.0.0 <2.4.0': '^2.4.0'
+  'fast-uri@>=3.0.0 <3.1.9': '^3.1.9'
+  'follow-redirects@<1.16.1': '^1.16.1'
+  'ip-address@>=10.0.0 <10.7.4': '^10.7.4'
+  'source-map-js@<1.2.2': '^1.2.2'
   '@hono/node-server@<1.19.10': '>=1.19.10'
   '@hono/node-server@<1.19.13': '>=1.19.13'
   ajv@<6.14.0: '>=6.14.0'

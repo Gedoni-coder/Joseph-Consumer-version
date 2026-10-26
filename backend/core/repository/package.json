@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "@app-core/db": "workspace:*",
-    "@prisma/client": "^7.1.0"
+    "@prisma/client": "^7.10.1"
   }
 }
