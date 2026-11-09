@@ -68,6 +68,27 @@ test("keeps workspace controls available and distinguishes new dates from histor
   await page.route("**/api/consumer/purchases", (route) =>
     route.fulfill({ json: { purchases: [], nextOffset: null } }),
   );
+  await page.route("**/api/consumer/progress", (route) =>
+    route.fulfill({
+      json: {
+        weekStart: today,
+        weekEnd: today,
+        total: 0,
+        count: 0,
+        categories: [],
+        xp: { totalMilli: 0, weekMilli: 0, streak: 0, checkedInToday: false },
+        previous: {
+          weekStart: yesterday,
+          weekEnd: yesterday,
+          total: 0,
+          count: 0,
+          categories: [],
+          reviewed: false,
+          canReview: false,
+        },
+      },
+    }),
+  );
   await page.goto("/");
   const summary = page.getByRole("region", { name: "Plan balances" });
   await expect(summary).toBeVisible();
@@ -116,7 +137,9 @@ test("keeps workspace controls available and distinguishes new dates from histor
   expect(await due.evaluate((el: HTMLInputElement) => el.validity.valid)).toBe(
     true,
   );
-  await page.getByRole("button", { name: "Edit Overdue bill", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Edit Overdue bill", exact: true })
+    .click();
   await expect(due).toHaveValue(yesterday);
   expect(await due.evaluate((el: HTMLInputElement) => el.validity.valid)).toBe(
     true,

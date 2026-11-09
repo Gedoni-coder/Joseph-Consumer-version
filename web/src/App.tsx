@@ -5,6 +5,7 @@ import { BankConnections } from "./BankConnections";
 import { PasswordRecovery } from "./PasswordRecovery";
 import { useNotice } from "./useNotice";
 import { CommitmentDate } from "./CommitmentDate";
+import { WeeklyProgress } from "./Progress";
 import { api, kobo, money, type Dashboard, type State, type User } from "./api";
 import {
   Amount,
@@ -478,6 +479,7 @@ function Workspace({
                   </section>
                 </div>
                 <SpendingHistory changed={refresh} />
+                <WeeklyProgress refreshKey={data} />
                 <section className="panel">
                   <div className="section-heading">
                     <div>
@@ -837,6 +839,7 @@ function Workspace({
                     </p>
                   </div>
                 </div>
+                <WeeklyProgress planning refreshKey={data} />
                 <div className="content-grid">
                   <section className="panel">
                     <h2>Your spending assumptions</h2>

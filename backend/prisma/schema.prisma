@@ -55,6 +55,9 @@ model User {
   bankConnections      ConsumerBankConnection[]
   bankLinkSessions     ConsumerBankLinkSession[]
   consumerPurchases    ConsumerPurchase[]
+  categoryBudgets      ConsumerCategoryBudget[]
+  xpEntries            ConsumerXpEntry[]
+  weeklyReviews        ConsumerWeeklyReview[]
 
   @@map("users")
 }
@@ -76,11 +79,51 @@ model ConsumerPurchase {
   label       String
   amount      BigInt
   occurredOn  String
+  category    String   @default("uncategorized")
+  xpEligible  Boolean  @default(false)
+  deletedAt   DateTime?
   createdAt   DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, requestId])
   @@index([userId, occurredOn, createdAt])
   @@map("consumer_purchases")
+}
+
+model ConsumerCategoryBudget {
+  userId    String
+  weekStart String
+  category  String
+  amount    BigInt
+  updatedAt DateTime @updatedAt
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([userId, weekStart, category])
+  @@map("consumer_category_budgets")
+}
+
+model ConsumerXpEntry {
+  id           String @id @default(uuid())
+  userId       String
+  rule         String
+  sourceKey    String
+  revision     Int
+  weekStart    String
+  baseMilliXp  Int
+  boosterMilliXp Int @default(0)
+  rulesVersion String
+  createdAt    DateTime @default(now())
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, rule, sourceKey, revision])
+  @@index([userId, weekStart])
+  @@map("consumer_xp_entries")
+}
+
+model ConsumerWeeklyReview {
+  userId     String
+  weekStart  String
+  reviewedAt DateTime @default(now())
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([userId, weekStart])
+  @@map("consumer_weekly_reviews")
 }
 
 model ConsumerBankLinkSession {

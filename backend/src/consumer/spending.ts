@@ -8,7 +8,7 @@ export async function spendingSummary(
 ) {
   const today = nigeriaDate(asOf);
   const result = await tx.consumerPurchase.aggregate({
-    where: { userId, occurredOn: { lte: today } },
+    where: { userId, deletedAt: null, occurredOn: { lte: today } },
     _sum: { amount: true },
     _min: { occurredOn: true },
     _count: true,

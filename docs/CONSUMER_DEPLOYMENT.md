@@ -42,6 +42,14 @@ Chrome flows passed locally at desktop, tablet, mobile, and 320px widths. The in
 
 `node backend/scripts/local.cjs test` uses only the isolated loopback database. `npm test --prefix web` runs the browser suite. Set `JOSEPH_TEST_URL` to a deployed origin to test remotely without starting a local preview. Use disposable QA accounts; successful tests delete their accounts. Test traces contain test credentials and stay ignored. Safari/Firefox and unconfigured external-provider flows are not verified.
 
+## Category budgets and XP release — 9 November 2026
+
+Apply migration `20261108000000_category_budgets_track_xp` before deploying the corresponding consumer API. It adds nullable/defaulted purchase metadata and new budget, review and XP tables without changing existing balances or awarding historical XP. The migration and migration status check passed on Neon branch `test-track-xp-20261108`, copied from production. Reverting application code does not require dropping these additive tables; after new purchases have been removed, revert only to code that understands `deletedAt` so removed records cannot reappear.
+
+Validation: 88 backend tests passed, targeted TypeScript lint passed, and production builds passed. Three real-account browser flows passed at desktop, 390px and 320px widths, covering category budgets, recorded spending, XP, reload and deletion. Three additional browser regression checks passed for sticky controls and commitment dates. Backend and frontend dependency audits reported no known vulnerabilities after the Joi and follow-redirects patches.
+
+See [spending history](SPENDING_HISTORY.md) for reward eligibility, reversal, retention and weekly-boundary rules. Competitive rankings, under-budget bonuses, paid multipliers, team rewards and games are not enabled.
+
 ## Password recovery
 
 The consumer API exposes `POST /forgot-password` with `{ email }` and `POST /reset-password` with `{ token, password }`. The sign-in page links to recovery. Email links use a URL fragment; the browser removes it immediately and keeps the token only in memory. Reopening the email link is required after a page reload.

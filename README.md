@@ -1,6 +1,6 @@
 # JOSEPH consumer
 
-Live planning beta: https://joseph-consumer.vercel.app
+Live planning beta: https://josephai.online
 
 The consumer application uses React, TypeScript and Vite in web/, with an Express API, Prisma and PostgreSQL in backend/. The deployment entry point is api/index.js; only /api/health and /api/consumer are mounted in production.
 
@@ -14,7 +14,7 @@ The consumer application uses React, TypeScript and Vite in web/, with an Expres
 
 ## Current scope
 
-Track displays daily Safe to Spend, observed daily burn rate, projected runway, dated cash-flow forecasts and purchase history. Manage maintains manual balances and optional Mono sandbox connections. Plan maintains the daily spending assumption, safety buffer and horizon. Bills & goals maintains dated commitments.
+Track displays daily Safe to Spend, observed daily burn rate, projected runway, dated cash-flow forecasts, categorized purchase history and weekly XP. Manage maintains manual balances and optional Mono sandbox connections. Plan maintains the daily spending assumption, safety buffer, horizon and weekly category limits. Bills & goals maintains dated commitments.
 
 Authentication uses server-issued cookie sessions. Planning data is user-owned and supports export, consent withdrawal and deletion. Sandbox balances remain separate from planning balances. Bank transaction ingestion, live bank linking, verification delivery and the WhatsApp channel are not enabled in the consumer release.
 
@@ -36,6 +36,6 @@ The root HTML/JavaScript frontend, backend/legacy-mongo, backend/legacy-sqlite-m
 
 Use comments to explain constraints and decisions rather than restating code. Document public contracts, validation rules and operational procedures beside their owning modules. Maintain SR as a trailing source comment. Do not add comments to JSON or lockfiles, or edit applied migration SQL for cosmetic changes.
 
-Password recovery uses expiring, single-use email links and requires the SMTP settings documented in the deployment guide. It remains unavailable until mail delivery is configured.
+Password recovery uses expiring, single-use email links and requires the SMTP settings documented in the deployment guide. Production SMTP is configured for hello@josephai.online; support@josephai.online is its public support alias. Configuration availability does not confirm inbox delivery.
 
 SR

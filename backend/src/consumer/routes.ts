@@ -7,6 +7,8 @@ import { recoveryConfigured, sendRecoveryEmail } from "./recovery-mail";
 import { bankRoutes, assertNoPendingBankExchange } from "./banks";
 import { monoConfigured } from "./mono";
 import { spendingSummary } from "./spending";
+import { CATEGORIES, shiftDay, weekOf } from "./progress-rules";
+import { reconcileTrackXp, weeklyProgress } from "./progress";
 import authService from "../services/prisma/authService";
 import {
   createAuthSession,
@@ -432,13 +434,108 @@ router.post("/consent", async (req, res) => {
   res.json({ ok: true });
 });
 router.use("/banks", bankRoutes(hasConsent));
+const purchaseCategory = Joi.string().valid(
+  ...CATEGORIES.map((c) => c.id),
+  "uncategorized",
+);
+router.get("/progress", async (req, res) => {
+  res.json(
+    await withLockedUser(req.userId, (tx) => weeklyProgress(tx, req.userId)),
+  );
+});
+router.put("/category-budgets", async (req, res) => {
+  const body = validate(
+    Joi.object({
+      weekStart: commitmentSchema.extract("dueDate"),
+      budgets: Joi.array()
+        .items(
+          Joi.object({
+            category: Joi.string()
+              .valid(...CATEGORIES.map((c) => c.id))
+              .required(),
+            amount: money,
+          }).unknown(false),
+        )
+        .unique("category")
+        .max(CATEGORIES.length)
+        .required(),
+    }).unknown(false),
+    req,
+  );
+  const data = await withLockedUser(req.userId, async (tx) => {
+    await hasConsent(tx, req.userId);
+    if (body.weekStart !== weekOf(nigeriaDate(new Date())))
+      throw Object.assign(
+        new Error("The week has changed. Refresh your plan before saving."),
+        { status: 409 },
+      );
+    if (
+      body.budgets.reduce(
+        (total: number, budget: { amount: number }) => total + budget.amount,
+        0,
+      ) > MAX_MONEY
+    )
+      throw Object.assign(
+        new Error("Your combined limits exceed the supported amount."),
+        { status: 400 },
+      );
+    await tx.consumerCategoryBudget.deleteMany({
+      where: { userId: req.userId, weekStart: body.weekStart },
+    });
+    if (body.budgets.length)
+      await tx.consumerCategoryBudget.createMany({
+        data: body.budgets.map(
+          (budget: { category: string; amount: number }) => ({
+            ...budget,
+            amount: BigInt(budget.amount),
+            userId: req.userId,
+            weekStart: body.weekStart,
+          }),
+        ),
+      });
+    return weeklyProgress(tx, req.userId);
+  });
+  res.json(data);
+});
+router.post("/weekly-review", async (req, res) => {
+  const body = validate(
+    Joi.object({ weekStart: commitmentSchema.extract("dueDate") }).unknown(
+      false,
+    ),
+    req,
+  );
+  const data = await withLockedUser(req.userId, async (tx) => {
+    await hasConsent(tx, req.userId);
+    if (body.weekStart !== shiftDay(weekOf(nigeriaDate(new Date())), -7))
+      throw Object.assign(
+        new Error("Only the last completed week is available for review."),
+        { status: 400 },
+      );
+    const progress = await weeklyProgress(tx, req.userId);
+    if (!progress.previous.canReview)
+      throw Object.assign(
+        new Error("There are no eligible check-ins to review for that week."),
+        { status: 400 },
+      );
+    await tx.consumerWeeklyReview.upsert({
+      where: {
+        userId_weekStart: { userId: req.userId, weekStart: body.weekStart },
+      },
+      create: { userId: req.userId, weekStart: body.weekStart },
+      update: {},
+    });
+    await reconcileTrackXp(tx, req.userId);
+    return weeklyProgress(tx, req.userId);
+  });
+  res.json(data);
+});
 router.get("/purchases", async (req, res) => {
   const offset = String(req.query.offset ?? "0");
   if (!/^\d{1,6}$/.test(offset))
     throw Object.assign(new Error("Invalid history page."), { status: 400 });
   const data = await withLockedUser(req.userId, async (tx) => {
     const records = await tx.consumerPurchase.findMany({
-      where: { userId: req.userId },
+      where: { userId: req.userId, deletedAt: null },
       orderBy: [{ occurredOn: "desc" }, { createdAt: "desc" }, { id: "desc" }],
       skip: Number(offset),
       take: 51,
@@ -449,6 +546,7 @@ router.get("/purchases", async (req, res) => {
         label: p.label,
         amount: Number(p.amount),
         occurredOn: p.occurredOn,
+        category: p.category,
       })),
       nextOffset: records.length > 50 ? Number(offset) + 50 : null,
     };
@@ -462,6 +560,7 @@ router.post("/purchases", async (req, res) => {
       label,
       amount: money.min(1),
       occurredOn: commitmentSchema.extract("dueDate"),
+      category: purchaseCategory.default("uncategorized"),
     }).unknown(false),
     req,
   );
@@ -482,6 +581,8 @@ router.post("/purchases", async (req, res) => {
     });
     if (existing) {
       if (
+        existing.deletedAt !== null ||
+        existing.category !== body.category ||
         existing.label !== body.label ||
         existing.amount !== BigInt(body.amount) ||
         existing.occurredOn !== body.occurredOn
@@ -495,7 +596,7 @@ router.post("/purchases", async (req, res) => {
       return existing;
     }
     const totals = await tx.consumerPurchase.aggregate({
-      where: { userId: req.userId },
+      where: { userId: req.userId, deletedAt: null },
       _count: true,
       _sum: { amount: true },
     });
@@ -509,9 +610,29 @@ router.post("/purchases", async (req, res) => {
         ),
         { status: 409 },
       );
-    return tx.consumerPurchase.create({
-      data: { ...body, amount: BigInt(body.amount), userId: req.userId },
+    const now = new Date();
+    const duplicate = await tx.consumerPurchase.findFirst({
+      where: {
+        userId: req.userId,
+        amount: BigInt(body.amount),
+        createdAt: { gte: new Date(now.getTime() - 60000) },
+      },
+      select: { id: true },
     });
+    const purchase = await tx.consumerPurchase.create({
+      data: {
+        ...body,
+        amount: BigInt(body.amount),
+        userId: req.userId,
+        createdAt: now,
+        xpEligible:
+          !duplicate &&
+          body.category !== "uncategorized" &&
+          body.occurredOn === nigeriaDate(now),
+      },
+    });
+    await reconcileTrackXp(tx, req.userId);
+    return purchase;
   });
   res.json({
     purchase: {
@@ -519,17 +640,40 @@ router.post("/purchases", async (req, res) => {
       label: saved.label,
       amount: Number(saved.amount),
       occurredOn: saved.occurredOn,
+      category: saved.category,
     },
   });
 });
 router.delete("/purchases/:id", async (req, res) => {
   await withLockedUser(req.userId, async (tx) => {
     await hasConsent(tx, req.userId);
-    const removed = await tx.consumerPurchase.deleteMany({
-      where: { id: String(req.params.id), userId: req.userId },
+    const removed = await tx.consumerPurchase.updateMany({
+      where: { id: String(req.params.id), userId: req.userId, deletedAt: null },
+      data: { deletedAt: new Date(), label: "Removed purchase" },
     });
     if (!removed.count)
       throw Object.assign(new Error("Purchase not found."), { status: 404 });
+    await reconcileTrackXp(tx, req.userId);
+  });
+  res.json({ ok: true });
+});
+router.put("/purchases/:id/category", async (req, res) => {
+  const body = validate(
+    Joi.object({ category: purchaseCategory.required() }).unknown(false),
+    req,
+  );
+  await withLockedUser(req.userId, async (tx) => {
+    await hasConsent(tx, req.userId);
+    const changed = await tx.consumerPurchase.updateMany({
+      where: { id: String(req.params.id), userId: req.userId, deletedAt: null },
+      data: {
+        category: body.category,
+        ...(body.category === "uncategorized" ? { xpEligible: false } : {}),
+      },
+    });
+    if (!changed.count)
+      throw Object.assign(new Error("Purchase not found."), { status: 404 });
+    await reconcileTrackXp(tx, req.userId);
   });
   res.json({ ok: true });
 });
@@ -725,7 +869,22 @@ router.get("/export", async (req, res) => {
       label: p.label,
       amount: Number(p.amount),
       occurredOn: p.occurredOn,
+      category: p.category,
+      deletedAt: p.deletedAt,
+      xpEligible: p.xpEligible,
     })),
+    categoryBudgets: (
+      await tx.consumerCategoryBudget.findMany({
+        where: { userId: req.userId },
+      })
+    ).map((b) => ({ ...b, amount: Number(b.amount) })),
+    xpEntries: await tx.consumerXpEntry.findMany({
+      where: { userId: req.userId },
+      orderBy: { createdAt: "asc" },
+    }),
+    weeklyReviews: await tx.consumerWeeklyReview.findMany({
+      where: { userId: req.userId },
+    }),
     banks: (
       await tx.consumerBankConnection.findMany({
         where: { userId: req.userId },
@@ -766,6 +925,11 @@ router.delete("/planning-data", async (req, res) => {
     });
     await tx.moneyAccount.deleteMany({ where: { userId: req.userId } });
     await tx.consumerPurchase.deleteMany({ where: { userId: req.userId } });
+    await tx.consumerCategoryBudget.deleteMany({
+      where: { userId: req.userId },
+    });
+    await tx.consumerXpEntry.deleteMany({ where: { userId: req.userId } });
+    await tx.consumerWeeklyReview.deleteMany({ where: { userId: req.userId } });
     await tx.consumerCommitment.deleteMany({ where: { userId: req.userId } });
     await tx.consumerPlan.deleteMany({ where: { userId: req.userId } });
     await tx.financialSnapshot.deleteMany({ where: { userId: req.userId } });

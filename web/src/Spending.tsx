@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { api, kobo, money, type Dashboard } from "./api";
 import { Amount, date, ErrorMessage } from "./components";
 import { useNotice } from "./useNotice";
+import { CATEGORIES } from "../../backend/src/consumer/progress-rules";
 type Purchase = {
   id: string;
   label: string;
   amount: number;
   occurredOn: string;
+  category: string;
 };
 type History = { purchases: Purchase[]; nextOffset: number | null };
 const today = () => new Date(Date.now() + 3600000).toISOString().slice(0, 10);
@@ -172,6 +174,7 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
                 label: String(values.get("label")).trim(),
                 amount: kobo(values.get("amount")),
                 occurredOn: values.get("occurredOn"),
+                category: values.get("category"),
               });
               requestId.current = crypto.randomUUID();
               form.reset();
@@ -196,6 +199,19 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
             />
           </label>
           <Amount label="Amount spent" name="amount" />
+          <label>
+            Category
+            <select name="category" required defaultValue="">
+              <option value="" disabled>
+                Choose a category
+              </option>
+              {CATEGORIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+          </label>
           <label>
             Purchase date
             <input
@@ -251,7 +267,39 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
                 {history.purchases.map((p) => (
                   <tr key={p.id}>
                     <td className="history-amount">{money(p.amount)}</td>
-                    <td>{p.label}</td>
+                    <td>
+                      {p.label}
+                      <label className="purchase-category">
+                        <span className="sr-only">Category for {p.label}</span>
+                        <select
+                          value={p.category || "uncategorized"}
+                          disabled={busy}
+                          onChange={async (event) => {
+                            setBusy(true);
+                            setError("");
+                            try {
+                              await api(`/purchases/${p.id}/category`, "PUT", {
+                                category: event.target.value,
+                              });
+                              await reload();
+                              await changed();
+                              setNotice("Purchase category updated.");
+                            } catch (e) {
+                              setError((e as Error).message);
+                            } finally {
+                              setBusy(false);
+                            }
+                          }}
+                        >
+                          <option value="uncategorized">Uncategorized</option>
+                          {CATEGORIES.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </td>
                     <td>
                       <time dateTime={p.occurredOn}>{date(p.occurredOn)}</time>
                     </td>
@@ -337,6 +385,11 @@ export function SpendingHistory({ changed }: { changed: () => Promise<void> }) {
           history.
         </div>
       )}
+      <p className="note">
+        Removing a purchase corrects your spending and XP. A minimal record of
+        its amount and date is retained to prevent duplicate rewards; erasing
+        your planning data also removes these records.
+      </p>
     </section>
   );
 }

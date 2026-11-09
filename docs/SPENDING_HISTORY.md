@@ -10,6 +10,20 @@ An authenticated user can record an amount, purchase description and actual purc
 
 Recording a past purchase does not adjust an already-entered account balance: doing so could double-deduct spending already reflected in that balance. The form explains when a manual balance update is needed. Purchase simulations remain separate from actual purchase records. Bank transactions are not yet imported, so the list contains recorded purchases only.
 
+## Category budgets and Track XP
+
+Category limits apply to a single Monday–Sunday week in Africa/Lagos. `PUT /api/consumer/category-budgets` replaces the authenticated user's current-week limits; the supplied `weekStart` must match the server's current week. Blank categories have no limit and zero is an explicit zero-spend target. These limits are comparisons, not reserves, and never change Safe to Spend. Prior-week budgets remain available for review. New weeks start without limits.
+
+Purchases accept a category from `progress-rules.ts`. Legacy records default to `uncategorized`; categorizing them updates spending summaries without retroactive rewards. New browser submissions require a category. `PUT /purchases/:id/category` is owner-scoped. Monetary values remain integer kobo.
+
+The server awards T1 (6 XP for the first eligible purchase on its actual recording day), T2 (0.5 XP per additional eligible purchase), T3 (24 XP per completed, non-overlapping seven-day streak block), and T5 (12 XP for explicitly reviewing the last completed week with eligible check-ins). A purchase with the same amount recorded in the previous 60 seconds is retained in spending but does not earn XP. Historical entries do not earn XP. T5 belongs to the reviewed week's total. There is no paid multiplier or competitive ranking in this release.
+
+Awards and purchase mutations share the per-user transaction lock. The versioned ledger stores integer thousandths of XP, with separate base and booster columns. Reconciliation appends positive or negative deltas and never edits an existing award. Replayed requests cannot duplicate XP. Removing a purchase recalculates dependent daily, streak and review awards. Removed rows retain amount, date, category and reward eligibility, with their description replaced, so deletion cannot bypass duplicate checks; they are excluded from spending queries. Exports include this audit history. Planning-data erasure and account deletion remove purchases, category limits, reviews and the XP ledger.
+
+Migration `20261108000000_category_budgets_track_xp` is additive and must precede the application release. Existing purchases receive no XP on migration. Rules are defined by `track-1.0.0`; changing reward values requires a versioned migration strategy, not editing historical awards.
+
+The under-budget award (T4) is not enabled: it needs budget locking and a weekly settlement policy. Grow lessons, teams, games, tournament qualification, subscriptions and boosters remain outside this release.
+
 ## Burn rate and forecast
 
 Daily calculation correction (17 October): Safe to Spend = max(0, available balances - bills/goals due within the horizon - safety buffer) / planning days, rounded down to whole kobo. It includes everyday spending rather than subtracting that spending a second time. The existing horizon is a rolling number of days from today, not a fixed end date.

@@ -77,9 +77,33 @@ test("template answers populate the dashboard and its modules once", async ({
     await page.getByLabel("Purchase", { exact: true }).fill("Groceries");
     await page.getByLabel("Amount spent").fill("7000");
     await page
+      .getByRole("combobox", { name: "Category", exact: true })
+      .selectOption("food");
+    await page
       .getByRole("button", { name: "Save purchase", exact: true })
       .click();
     await expect(page.getByTestId("burn-rate")).toHaveText("₦7,000/day");
+    await expect(page.getByTestId("weekly-xp")).toHaveText("6 XP");
+    await page.getByRole("button", { name: "Open menu", exact: true }).click();
+    await page.getByRole("button", { name: "Plan", exact: true }).click();
+    await page.getByLabel("Food & groceries").fill("10000");
+    await page.getByLabel("Transport", { exact: true }).fill("0");
+    await page.getByRole("button", { name: "Save weekly limits" }).click();
+    await expect(
+      page.getByText("Your weekly category limits are saved."),
+    ).toBeVisible();
+    await page.screenshot({
+      path: info.outputPath("category-plan.png"),
+      fullPage: true,
+    });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await page.getByRole("button", { name: "Open menu", exact: true }).click();
+    await page.getByRole("button", { name: "Track", exact: true }).click();
+    await expect(page.getByText("₦3,000 left", { exact: true })).toBeVisible();
     await expect(page.getByTestId("projected-runway")).toHaveText("14.3days");
     await expect(
       page.getByRole("row").filter({ hasText: "Groceries" }),
@@ -106,6 +130,7 @@ test("template answers populate the dashboard and its modules once", async ({
       .getByRole("button", { name: "Delete purchase Groceries", exact: true })
       .click();
     await expect(page.getByTestId("burn-rate")).toHaveText("—/day");
+    await expect(page.getByTestId("weekly-xp")).toHaveText("0 XP");
     await expect(page.getByTestId("projected-runway")).toHaveText("—days");
     await page.getByRole("button", { name: "Open menu", exact: true }).click();
     await page.getByRole("button", { name: "Bills & goals" }).click();

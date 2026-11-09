@@ -34,6 +34,7 @@ describe("elapsed calendar spending", () => {
     });
     expect(aggregate.mock.calls[0][0].where).toEqual({
       userId: "owner",
+      deletedAt: null,
       occurredOn: { lte: "2026-11-01" },
     });
   });
