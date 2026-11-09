@@ -86,8 +86,12 @@ test("template answers populate the dashboard and its modules once", async ({
     await expect(page.getByTestId("weekly-xp")).toHaveText("6 XP");
     await page.getByRole("button", { name: "Open menu", exact: true }).click();
     await page.getByRole("button", { name: "Plan", exact: true }).click();
-    await page.getByLabel("Food & groceries").fill("10000");
-    await page.getByLabel("Transport", { exact: true }).fill("0");
+    await page
+      .getByRole("spinbutton", { name: "Food & groceries", exact: true })
+      .fill("10000");
+    await page
+      .getByRole("spinbutton", { name: "Transport", exact: true })
+      .fill("0");
     await page.getByRole("button", { name: "Save weekly limits" }).click();
     await expect(
       page.getByText("Your weekly category limits are saved."),
