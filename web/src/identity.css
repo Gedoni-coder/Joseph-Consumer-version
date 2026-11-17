@@ -37,6 +37,10 @@ em {
   letter-spacing: -0.075em;
   margin: 24px 0 28px;
 }
+.hero-subline {
+  display: block;
+  margin-top: clamp(38px, 4.5vw, 60px);
+}
 .hero h1 br:last-child {
   display: none;
 }

@@ -3,6 +3,13 @@ import { BurnRate, SpendingHistory } from "./Spending";
 import { Onboarding } from "./Onboarding";
 import { BankConnections } from "./BankConnections";
 import { PasswordRecovery } from "./PasswordRecovery";
+import { OnboardingFlow } from "./pages/onboarding/OnboardingFlow";
+import { GrowModule } from "./pages/workspace/grow/GrowModule";
+import { GamesModule } from "./pages/workspace/games/GamesModule";
+import { PlanModule } from "./pages/workspace/plan/PlanModule";
+import { TrackModule } from "./pages/workspace/track/TrackModule";
+import { ManageModule } from "./pages/workspace/manage/ManageModule";
+import { XpBubbleEffect, triggerXpCelebration } from "./components/XpBubbleEffect";
 import { useNotice } from "./useNotice";
 import { CommitmentDate } from "./CommitmentDate";
 import { WeeklyProgress } from "./Progress";
@@ -1107,6 +1114,7 @@ function Workspace({
           locks your money.
         </footer>
       </main>
+      <XpBubbleEffect />
     </div>
   );
 }
@@ -1120,8 +1128,20 @@ export default function App() {
       : null;
   });
   const [mode, setMode] = useState<
-    "landing" | "login" | "register" | "forgot" | "reset"
-  >(resetLink !== null ? "reset" : "landing");
+    | "landing"
+    | "login"
+    | "register"
+    | "forgot"
+    | "reset"
+    | "onboarding"
+    | "grow"
+    | "games"
+    | "plan"
+    | "track"
+    | "manage"
+  >(resetLink !== null ? "reset" : "games");
+  const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3 | 4>(1);
+
   useEffect(() => {
     if (resetLink !== null) {
       window.history.replaceState(
@@ -1132,11 +1152,297 @@ export default function App() {
       setLoading(false);
       return;
     }
+    // Allow reviewing onboarding and screens without waiting on /me failure
     api<{ user: User }>("/me")
       .then((result) => setUser(result.user))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [resetLink]);
+
+  const previewSwitcher = (
+    <nav
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 99999,
+        background: "#08091f",
+        borderBottom: "1px solid #1e2246",
+        padding: "8px 12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        color: "#ffffff",
+        fontSize: "12px",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.35)",
+        overflowX: "auto",
+        WebkitOverflowScrolling: "touch",
+        whiteSpace: "nowrap",
+        gap: "12px",
+      }}
+      aria-label="Development Screen Navigator"
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+        <div
+          style={{
+            width: "28px",
+            height: "28px",
+            borderRadius: "6px",
+            background: "#24248f",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "3px",
+            boxShadow: "0 2px 6px rgba(36, 36, 143, 0.4)",
+          }}
+        >
+          <img
+            src="/brand/dove-transparent-white.png"
+            alt="Joseph AI Dove"
+            style={{ width: "20px", height: "20px", objectFit: "contain" }}
+          />
+        </div>
+        <span style={{ fontWeight: 800, color: "#ffffff", letterSpacing: "0.5px", fontFamily: "Outfit, sans-serif" }}>
+          JOSEPH AI
+        </span>
+        <span style={{ fontSize: "10px", color: "#94a3b8", background: "rgba(255,255,255,0.08)", padding: "2px 8px", borderRadius: "99px" }}>
+          Mobile Ready
+        </span>
+      </div>
+
+      <div style={{ display: "flex", gap: "6px", alignItems: "center", flexShrink: 0 }}>
+        <button
+          type="button"
+          onClick={() => {
+            setMode("onboarding");
+            setOnboardingStep(1);
+          }}
+          style={{
+            padding: "5px 10px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 700,
+            background: mode === "onboarding" && onboardingStep === 1 ? "#2563eb" : "#191c38",
+            color: mode === "onboarding" && onboardingStep === 1 ? "#ffffff" : "#cbd5e1",
+            border: "1px solid " + (mode === "onboarding" && onboardingStep === 1 ? "#3b82f6" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Screen 1: Account
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setMode("onboarding");
+            setOnboardingStep(2);
+          }}
+          style={{
+            padding: "5px 10px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 700,
+            background: mode === "onboarding" && onboardingStep === 2 ? "#2563eb" : "#191c38",
+            color: mode === "onboarding" && onboardingStep === 2 ? "#ffffff" : "#cbd5e1",
+            border: "1px solid " + (mode === "onboarding" && onboardingStep === 2 ? "#3b82f6" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Screen 2: Budget
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setMode("onboarding");
+            setOnboardingStep(3);
+          }}
+          style={{
+            padding: "5px 10px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 700,
+            background: mode === "onboarding" && onboardingStep === 3 ? "#2563eb" : "#191c38",
+            color: mode === "onboarding" && onboardingStep === 3 ? "#ffffff" : "#cbd5e1",
+            border: "1px solid " + (mode === "onboarding" && onboardingStep === 3 ? "#3b82f6" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Screen 3: Tracking
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setMode("onboarding");
+            setOnboardingStep(4);
+          }}
+          style={{
+            padding: "5px 10px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 700,
+            background: mode === "onboarding" && onboardingStep === 4 ? "#2563eb" : "#191c38",
+            color: mode === "onboarding" && onboardingStep === 4 ? "#ffffff" : "#cbd5e1",
+            border: "1px solid " + (mode === "onboarding" && onboardingStep === 4 ? "#3b82f6" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Screen 4: Team Gate
+        </button>
+
+        <span style={{ color: "#475569", margin: "0 2px" }}>|</span>
+
+        <button
+          type="button"
+          onClick={() => setMode("grow")}
+          style={{
+            padding: "5px 12px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 800,
+            background: mode === "grow" ? "#10b981" : "#191c38",
+            color: mode === "grow" ? "#03031d" : "#34d399",
+            border: "1px solid " + (mode === "grow" ? "#34d399" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            boxShadow: mode === "grow" ? "0 0 14px rgba(16, 185, 129, 0.45)" : "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          🌱 GROW Academy
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMode("games")}
+          style={{
+            padding: "5px 12px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 800,
+            background: mode === "games" ? "#f59e0b" : "#191c38",
+            color: mode === "games" ? "#03031d" : "#fbbf24",
+            border: "1px solid " + (mode === "games" ? "#f59e0b" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            boxShadow: mode === "games" ? "0 0 14px rgba(245, 158, 11, 0.45)" : "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          🎮 Games & Tournaments
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMode("plan")}
+          style={{
+            padding: "5px 12px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 800,
+            background: mode === "plan" ? "#38bdf8" : "#191c38",
+            color: mode === "plan" ? "#03031d" : "#38bdf8",
+            border: "1px solid " + (mode === "plan" ? "#38bdf8" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            boxShadow: mode === "plan" ? "0 0 14px rgba(56, 189, 248, 0.45)" : "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          📋 PLAN Envelopes
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMode("track")}
+          style={{
+            padding: "5px 12px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 800,
+            background: mode === "track" ? "#818cf8" : "#191c38",
+            color: mode === "track" ? "#03031d" : "#a5b4fc",
+            border: "1px solid " + (mode === "track" ? "#818cf8" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            boxShadow: mode === "track" ? "0 0 14px rgba(129, 140, 248, 0.45)" : "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          📊 TRACK Consistency
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMode("manage")}
+          style={{
+            padding: "5px 12px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 800,
+            background: mode === "manage" ? "#c084fc" : "#191c38",
+            color: mode === "manage" ? "#03031d" : "#d8b4fe",
+            border: "1px solid " + (mode === "manage" ? "#c084fc" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            boxShadow: mode === "manage" ? "0 0 14px rgba(192, 132, 252, 0.45)" : "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          ⚙️ MANAGE Assets
+        </button>
+
+        <span style={{ color: "#475569", margin: "0 2px" }}>|</span>
+
+        <button
+          type="button"
+          onClick={() => setMode("landing")}
+          style={{
+            padding: "5px 10px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 700,
+            background: mode === "landing" ? "#2563eb" : "#191c38",
+            color: mode === "landing" ? "#ffffff" : "#cbd5e1",
+            border: "1px solid " + (mode === "landing" ? "#3b82f6" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            whiteSpace: "nowrap",
+          }}
+        >
+          🌐 Landing
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setMode("login")}
+          style={{
+            padding: "5px 10px",
+            borderRadius: "6px",
+            fontSize: "11px",
+            fontWeight: 700,
+            background: mode === "login" ? "#2563eb" : "#191c38",
+            color: mode === "login" ? "#ffffff" : "#cbd5e1",
+            border: "1px solid " + (mode === "login" ? "#3b82f6" : "#282d56"),
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+            whiteSpace: "nowrap",
+          }}
+        >
+          🔑 Sign In
+        </button>
+      </div>
+    </nav>
+  );
+
   if (loading)
     return (
       <main className="loading">
@@ -1144,39 +1450,140 @@ export default function App() {
         <p>Making a little space…</p>
       </main>
     );
+
   if (mode === "forgot" || mode === "reset")
     return (
-      <PasswordRecovery
-        key={mode}
-        token={mode === "reset" ? resetLink : null}
-        back={() => {
-          setUser(null);
-          setMode("login");
-        }}
-        requestNew={() => setMode("forgot")}
-      />
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <PasswordRecovery
+          key={mode}
+          token={mode === "reset" ? resetLink : null}
+          back={() => {
+            setUser(null);
+            setMode("login");
+          }}
+          requestNew={() => setMode("forgot")}
+        />
+      </div>
     );
-  if (user)
+
+  if (user && mode !== "onboarding" && mode !== "landing")
     return (
-      <Workspace
-        initialUser={user}
-        signedOut={() => {
-          setUser(null);
-          setMode("login");
-        }}
-      />
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <Workspace
+          initialUser={user}
+          signedOut={() => {
+            setUser(null);
+            setMode("login");
+          }}
+        />
+        <XpBubbleEffect />
+      </div>
     );
-  if (mode !== "landing")
+
+  if (mode === "grow") {
     return (
-      <Auth
-        mode={mode}
-        setMode={setMode}
-        done={setUser}
-        back={() => setMode("landing")}
-        forgot={() => setMode("forgot")}
-      />
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <div style={{ flex: 1 }}>
+          <GrowModule />
+        </div>
+        <XpBubbleEffect />
+      </div>
     );
-  return <Landing open={setMode} />;
+  }
+
+  if (mode === "games") {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <div style={{ flex: 1 }}>
+          <GamesModule />
+        </div>
+        <XpBubbleEffect />
+      </div>
+    );
+  }
+
+  if (mode === "plan") {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <div style={{ flex: 1 }}>
+          <PlanModule />
+        </div>
+        <XpBubbleEffect />
+      </div>
+    );
+  }
+
+  if (mode === "track") {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <div style={{ flex: 1 }}>
+          <TrackModule />
+        </div>
+        <XpBubbleEffect />
+      </div>
+    );
+  }
+
+  if (mode === "manage") {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <div style={{ flex: 1 }}>
+          <ManageModule />
+        </div>
+        <XpBubbleEffect />
+      </div>
+    );
+  }
+
+  if (mode === "onboarding" || mode === "register") {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <div style={{ flex: 1 }}>
+          <OnboardingFlow
+            currentStep={onboardingStep}
+            onStepChange={setOnboardingStep}
+            onComplete={(_summary) => {
+              triggerXpCelebration(50, "League Welcome Bounty (+50 XP)");
+              alert("🎉 Onboarding Flow Completed successfully! Ready for the League.");
+              setMode("landing");
+            }}
+            onBackToLogin={() => setMode("login")}
+          />
+        </div>
+        <XpBubbleEffect />
+      </div>
+    );
+  }
+
+  if (mode === "login") {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        {previewSwitcher}
+        <Auth
+          mode="login"
+          setMode={setMode}
+          done={setUser}
+          back={() => setMode("landing")}
+          forgot={() => setMode("forgot")}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {previewSwitcher}
+      <Landing open={setMode} />
+    </div>
+  );
 }
 
 // SR

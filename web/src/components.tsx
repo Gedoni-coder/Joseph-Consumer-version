@@ -91,10 +91,10 @@ export function Landing({
           <div className="hero-copy">
             <p className="eyebrow">PERSONAL FINANCE, WITH A PLAN</p>
             <h1>
-              Your money.
-              <br />
-              In perspective.
-              <br />
+              <span>Plan, Track, Manage your Finances effortlessly</span>
+              <span className="hero-subline">
+                Learn to Grow your Finances like a pro
+              </span>
             </h1>
             <p className="hero-description">
               Bills coming up. Plans worth keeping. Know how much room you have
